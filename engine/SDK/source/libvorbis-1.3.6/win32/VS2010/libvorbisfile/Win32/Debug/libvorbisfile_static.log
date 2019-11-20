@@ -1,0 +1,38 @@
+﻿Построение начато 13.10.2019 17:51:51.
+     1>Проект "C:\Users\VAX\Documents\Visual Studio 2010\Projects\engine\SDK\source\libvorbis-1.3.6\win32\VS2010\libvorbisfile\libvorbisfile_static.vcxproj" в узле 3 (целевые объекты build).
+     1>InitializeBuildStatus:
+         Создание "Win32\Debug\libvorbisfile.unsuccessfulbuild", так как было задано "AlwaysCreate".
+       ClCompile:
+         E:\VS2010\VC\bin\CL.exe /c /I..\..\..\include /I..\..\..\..\libogg\include /I"..\..\..\..\libogg-1.3.2\include" /I..\..\..\..\libogg\include /I..\..\..\..\..\..\..\core\ogg\libogg\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D LIBVORBISFILE_EXPORTS /D _VC80_UPGRADE=0x0710 /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Debug\\" /Fd"Win32\Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt ..\..\..\lib\vorbisfile.c
+         vorbisfile.c
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(258): warning C4244: функция: преобразование "ogg_int64_t" в "long", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(272): warning C4244: =: преобразование "ogg_int64_t" в "int", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(544): warning C4244: return: преобразование "ogg_int64_t" в "int", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(565): warning C4244: return: преобразование "ogg_int64_t" в "int", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(568): warning C4244: return: преобразование "ogg_int64_t" в "int", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(578): warning C4244: return: преобразование "ogg_int64_t" в "int", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(640): warning C4244: return: преобразование "ogg_int64_t" в "int", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(873): warning C4244: функция: преобразование "ogg_int64_t" в "long", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(1011): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 e:\vs2010\vc\include\stdio.h(234): см. объявление "fopen"
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(1117): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(1118): warning C4244: return: преобразование "double" в "long", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(1122): warning C4244: return: преобразование "double" в "long", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(1150): warning C4244: =: преобразование "double" в "long", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(1763): warning C4244: =: преобразование "ogg_int64_t" в "long", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(1800): warning C4244: инициализация: преобразование "double" в "ogg_int64_t", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(1830): warning C4244: инициализация: преобразование "double" в "ogg_int64_t", возможна потеря данных
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\sdk\source\libvorbis-1.3.6\lib\vorbisfile.c(2166): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(1151,5): warning MSB8012: TargetPath(C:\Users\VAX\Documents\Visual Studio 2010\Projects\engine\SDK\source\libvorbis-1.3.6\win32\VS2010\Win32\Debug\libvorbisfile.lib) не соответствует значению свойства выходного файла (C:\Users\VAX\Documents\Visual Studio 2010\Projects\engine\SDK\source\libvorbis-1.3.6\win32\VS2010\Win32\Debug\libvorbisfile_static.lib) для Library. Это может привести к неправильному построению проекта. Чтобы исправить это, убедитесь, что значения свойств $(OutDir), $(TargetName) и $(TargetExt) соответствуют значению, указанному в %(Lib.OutputFile).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(1153,5): warning MSB8012: TargetName(libvorbisfile) не соответствует значению свойства выходного файла (libvorbisfile_static) для Library. Это может привести к неправильному построению проекта. Чтобы исправить это, убедитесь, что значения свойств $(OutDir), $(TargetName) и $(TargetExt) соответствуют значению, указанному в %(Lib.OutputFile).
+       Lib:
+         E:\VS2010\VC\bin\Lib.exe /OUT:"C:\Users\VAX\Documents\Visual Studio 2010\Projects\engine\SDK\source\libvorbis-1.3.6\win32\VS2010\Win32\Debug\libvorbisfile_static.lib" /NOLOGO Win32\Debug\vorbisfile.obj
+         libvorbisfile_static.vcxproj -> C:\Users\VAX\Documents\Visual Studio 2010\Projects\engine\SDK\source\libvorbis-1.3.6\win32\VS2010\Win32\Debug\libvorbisfile.lib
+       FinalizeBuildStatus:
+         Файл "Win32\Debug\libvorbisfile.unsuccessfulbuild" удаляется.
+         Обращение к "Win32\Debug\libvorbisfile.lastbuildstate".
+     1>Построение проекта "C:\Users\VAX\Documents\Visual Studio 2010\Projects\engine\SDK\source\libvorbis-1.3.6\win32\VS2010\libvorbisfile\libvorbisfile_static.vcxproj" завершено (целевые объекты build).
+
+Построение успешно завершено.
+
+Затраченное время: 00:00:03.44

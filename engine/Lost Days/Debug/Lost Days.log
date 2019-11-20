@@ -1,0 +1,35 @@
+﻿Построение начато 20.10.2019 17:00:04.
+     1>Проект "C:\Users\VAX\documents\visual studio 2010\Projects\engine\Lost Days\Lost Days.vcxproj" в узле 2 (целевые объекты build).
+     1>InitializeBuildStatus:
+         Обращение к "Debug\Lost Days.unsuccessfulbuild".
+       ClCompile:
+         E:\VS2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
+         Main.cpp
+         f:\directx sdk\sdk 10\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.h(27): warning C4005: DIRECTINPUT_VERSION: изменение макроопределения
+                 f:\directx sdk\sdk 10\include\dinput.h(42): см. предыдущее определение "DIRECTINPUT_VERSION"
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(527): warning C4552: -: оператор не имеет результата; требуется оператор с побочным действием
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(528): warning C4552: -: оператор не имеет результата; требуется оператор с побочным действием
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(560): error C2065: verticesPos_: необъявленный идентификатор
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(560): error C2228: выражение слева от ".push_back" должно представлять класс, структуру или объединение
+                 тип: 'unknown-type'
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(560): error C2065: verticesPos_: необъявленный идентификатор
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(560): error C2228: выражение слева от ".push_back" должно представлять класс, структуру или объединение
+                 тип: 'unknown-type'
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(561): error C2065: verticesPos_: необъявленный идентификатор
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(561): error C2228: выражение слева от ".push_back" должно представлять класс, структуру или объединение
+                 тип: 'unknown-type'
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(570): error C2065: indices_: необъявленный идентификатор
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(570): error C2228: выражение слева от ".push_back" должно представлять класс, структуру или объединение
+                 тип: 'unknown-type'
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(571): error C2065: indices_: необъявленный идентификатор
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(571): error C2228: выражение слева от ".push_back" должно представлять класс, структуру или объединение
+                 тип: 'unknown-type'
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(572): error C2065: indices_: необъявленный идентификатор
+     1>c:\users\vax\documents\visual studio 2010\projects\engine\lost days\main.cpp(572): error C2228: выражение слева от ".push_back" должно представлять класс, структуру или объединение
+                 тип: 'unknown-type'
+     1>Построение проекта "C:\Users\VAX\documents\visual studio 2010\Projects\engine\Lost Days\Lost Days.vcxproj" завершено (целевые объекты build) с ошибкой.
+
+СБОЙ построения.
+
+Затраченное время: 00:00:04.67
