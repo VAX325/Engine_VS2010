@@ -1,2 +1,3 @@
-# Kakayata_fignya_kotoruy_ya_nashel_na_hdd
-Какая-то фигня которую я нашёл на hdd.
+# Masterr of Dungeon
+
+//Need to add a readme.md... lol i'm only one who making this project what the fuck i need to comments??
