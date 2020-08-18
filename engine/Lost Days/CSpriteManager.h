@@ -1,5 +1,6 @@
 #include "CSprite.h"
 #include "NVector.h"
+#include "FileSystem.h"
 #include <map>
 
 typedef Vector4<float, float, float, float> FLOATVECTOR4;
@@ -15,6 +16,9 @@ private:
 	};
 
 	SpritesNCords spritesNcords;
+
+	Files txt;
+	Files textures;
 
 public:
 

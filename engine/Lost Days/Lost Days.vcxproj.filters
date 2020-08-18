@@ -36,6 +36,9 @@
     <ClCompile Include="FileSystem.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -54,6 +57,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="FileSystem.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -28,8 +28,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     g_hWnd = CreateWindowEx(              //Создаем окно
         WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,        //Расширенный стиль окна
         "WindowClass",                    //Названия класса окна
-        "Lost Days",    //Названия окна
-        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,//Стиль окна
+        "Master of Dungeon",    //Названия окна
+        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, //Стиль окна
         0,                      //Позиция окна по оси Х
         0,                      //Позиция окна по оси У
         g_iWindowWidth,                //Ширина окна
@@ -69,6 +69,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         MessageBox(NULL, "Невозможно получить контекст DirectInput.\n За доп. информацией напишите разработчику.", "Error", MB_OK | MB_ICONERROR);//Выводим сообщение
         return 0;
     }
+
+    CSM = CSpriteManager();
+
+    CSM.LoadAllSprites();
 
     while (g_bApplicationState)            //Начинаем бесконечный цикл обработки сообщений
     {
@@ -209,11 +213,13 @@ void DrawFrame()
         g_bApplicationState = false;
     }
 
-    CSprite* MainMenu = new CSprite(g_pDirect3DDevice, "../gamedata/sprites/ui/MainMenu.bmp", g_iWindowWidth, g_iWindowHeight);
+    //CSprite* MainMenu = new CSprite(g_pDirect3DDevice, "../gamedata/sprites/ui/MainMenu.bmp", g_iWindowWidth, g_iWindowHeight);
     
-    MainMenu->Render(0, 0, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255));
+    //MainMenu->Render(0, 0, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-    delete MainMenu;
+    //delete MainMenu;
+
+    CSM.RenderAllSprites();
 
     g_pDirect3DDevice->EndScene();          //Конец сцены
     g_pDirect3DDevice->Present(NULL, NULL, NULL, NULL);//Отображаем весь задний буфер

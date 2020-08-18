@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+*.tlog
+*.ilk
+*.pdb
+*.ipch
+*.db
+engine/.vs/engine/v16/.suo
+*.manifest
+*.lastbuildstate
+*.log
