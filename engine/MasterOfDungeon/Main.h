@@ -20,6 +20,7 @@ CSpriteManager CSM;
 //Создаем переменные
 HINSTANCE g_hInstance = NULL;
 HWND g_hWnd = NULL;
+#include "Perems.h"
 
 int g_iWindowWidth = 800;
 int g_iWindowHeight = 600;

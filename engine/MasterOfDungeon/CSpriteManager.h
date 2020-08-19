@@ -1,6 +1,7 @@
 #include "CSprite.h"
 #include "NVector.h"
 #include "FileSystem.h"
+#include <d3d9.h>
 #include <map>
 
 typedef Vector4<float, float, float, float> FLOATVECTOR4;
@@ -23,10 +24,11 @@ private:
 public:
 
 	void RenderAllSprites();
-	
+
 	void LoadAllSprites();
 
 	CSprite* GetSprite(char* key);
 
-	void AddSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT windW, UINT windH, char* key, float x, float y, float winw, float winh);
+	void AddSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, char* key, float x, float y);
+	void AddSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT windW, UINT windH, char* key, float x, float y);
 };

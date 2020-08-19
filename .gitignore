@@ -36,7 +36,7 @@
 *.pdb
 *.ipch
 *.db
-engine/.vs/engine/v16/.suo
+engine/.vs
 *.manifest
 *.lastbuildstate
 *.log

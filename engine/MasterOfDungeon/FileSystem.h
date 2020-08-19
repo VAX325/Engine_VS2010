@@ -5,7 +5,7 @@
 
 using namespace std;
 
-typedef map<int, CHAR> Files;
+typedef map<int, char*> Files;
 
 class FileSystem
 {
@@ -13,13 +13,13 @@ private:
 
 	Files files;
 
-public:	
+public:
 	FileSystem();
 
 	FileSystem(const FileSystem& other);
 
 	~FileSystem();
-	
+
 	void WriteInFile(char* data, char* file);
 
 	char* ReadFromFile(char* file);

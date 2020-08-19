@@ -25,11 +25,17 @@ void FileSystem::WriteInFile(char* data, char* file)
 
 char* FileSystem::ReadFromFile(char* file)
 {
-	ifstream out = ifstream(file);
+	if (file == NULL)
+	{
+		return NULL;
+	}
 
-	char* buff;
+	ifstream out = ifstream(file, ios_base::in);
 
-	out.read(buff, out.tellg());
+	char buff[512];
+
+	//out.read(buff, out.tellg());
+	out.getline(buff, 50);
 
 	out.close();
 
@@ -45,7 +51,7 @@ Files FileSystem::GetAllFilesInFolder(char* folder, char* extension)
 	strcpy(FilePath, "*.");
 
 	char* Folder = (char*)malloc(500);
-	
+
 	strcpy(Folder, folder);
 
 	strcat(Folder, FilePath);
@@ -53,24 +59,22 @@ Files FileSystem::GetAllFilesInFolder(char* folder, char* extension)
 	//strcat(FilePath, extension);
 
 	char* FilePathPlusExt = (char*)malloc(500);
-	
+
 	strcpy(FilePathPlusExt, Folder);
 	strcat(FilePathPlusExt, extension);
 
 	hf = FindFirstFile(FilePathPlusExt, &FindFileData);
 
 	if (hf != INVALID_HANDLE_VALUE) {
-
 		int i = 0;
 
 		do {
-			
 			//files.insert( make_pair(i, (CHAR)FindFileData.cFileName) );
-			files[i] = (CHAR)FindFileData.cFileName;
+			files[i] = (char*)malloc(512);
+			strcpy(files[i], (char*)FindFileData.cFileName);
 			i++;
-
 		} while (FindNextFile(hf, &FindFileData) != 0);
-		
+
 		FindClose(hf);
 	}
 
