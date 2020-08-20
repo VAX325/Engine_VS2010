@@ -1,6 +1,5 @@
 #include "CSprite.h"
-
-extern bool g_bApplicationState;
+#include "Perems.h" 
 
 CSprite::CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UINT WindowHeight) {
 	HRESULT hr;
@@ -13,8 +12,7 @@ CSprite::CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UI
 
 	if (FAILED(hr))
 	{
-		MessageBox(NULL, "Не удалось создать спрайт", "Error", MB_OK | MB_ICONERROR);
-		g_bApplicationState = false;
+		GetLogObj().LogError("Can't create sprite", true);
 	}
 
 	hr = D3DXCreateTextureFromFileEx(pD3DDevice, Path, tImageInfo.Width, tImageInfo.Height,
@@ -23,8 +21,7 @@ CSprite::CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UI
 
 	if (FAILED(hr))
 	{
-		MessageBox(NULL, "Не удалось создать текстуру из файла", "Error", MB_OK | MB_ICONERROR);
-		g_bApplicationState = false;
+		GetLogObj().LogError("Can't create texture from file", true);
 	}
 }
 

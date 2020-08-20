@@ -19,6 +19,9 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{4ecc0b23-73bf-4388-8813-3d81c62f0b8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LogSystem">
+      <UniqueIdentifier>{0a5ffa0c-9230-4bea-9461-17bf2f30021e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -38,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CLogManager.cpp">
+      <Filter>LogSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="Perems.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="CLogManager.h">
+      <Filter>LogSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

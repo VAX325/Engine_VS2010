@@ -80,3 +80,37 @@ Files FileSystem::GetAllFilesInFolder(char* folder, char* extension)
 
 	return files;
 }
+
+int FileSystem::GetCountOfFilesInFolder(char* folder, char* extension)
+{
+	WIN32_FIND_DATA FindFileData;
+	HANDLE hf;
+
+	char* FilePath = (char*)malloc(500);
+	strcpy(FilePath, "*.");
+
+	char* Folder = (char*)malloc(500);
+
+	strcpy(Folder, folder);
+
+	strcat(Folder, FilePath);
+
+	char* FilePathPlusExt = (char*)malloc(500);
+
+	strcpy(FilePathPlusExt, Folder);
+	strcat(FilePathPlusExt, extension);
+
+	hf = FindFirstFile(FilePathPlusExt, &FindFileData);
+
+	int i = 0;
+
+	if (hf != INVALID_HANDLE_VALUE) {
+		do {
+			i++;
+		} while (FindNextFile(hf, &FindFileData) != 0);
+
+		FindClose(hf);
+	}
+
+	return i;
+}

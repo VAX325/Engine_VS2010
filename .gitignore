@@ -40,3 +40,4 @@ engine/.vs
 *.manifest
 *.lastbuildstate
 *.log
+*.idb

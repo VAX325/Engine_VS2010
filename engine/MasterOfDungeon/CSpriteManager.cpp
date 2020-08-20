@@ -69,9 +69,8 @@ void CSpriteManager::LoadAllSprites()
 
 	if (txtsize != texturessize)
 	{
-		//Need to log system
-		printf("TXT count don't match textures count!\n");
-		exit(-1);
+		//Need to log system - complete
+		GetLogObj().LogError("TXT count don't match textures count", true);
 	}
 
 	auto txtit = txt.begin();

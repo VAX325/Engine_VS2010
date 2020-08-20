@@ -1,4 +1,7 @@
 #include "Main.h"
+#include "CLogManager.h"
+
+CLogManager LogManager = CLogManager();
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow)
 {
@@ -21,10 +24,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (!RegisterClassEx(&wc))
 	{
-		Shutdown();
-		MessageBox(NULL, "Не возможно зарегестрировать класс (WindowClass).\n За доп. информацией напишите разработчику.", "Error", MB_OK | MB_ICONERROR);
-		return 0;
+		LogManager.LogError("Can't register window class", true);
 	}
+
+	LogManager.LogMsg("Register window class");
 
 	g_hWnd = CreateWindowEx(
 		WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
@@ -42,17 +45,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (g_hWnd == NULL)
 	{
-		Shutdown();
-		MessageBox(NULL, "Невозможно создать окно.\n За доп. информацией напишите разработчику.", "Error", MB_OK | MB_ICONERROR);
-		return 0;
+		LogManager.LogError("Can't create window", true);
 	}
+	
+	LogManager.LogMsg("Window created");
 
 	if (!InitDirect3D(D3DFMT_R5G6B5, D3DFMT_D16))
 	{
-		Shutdown();
-		MessageBox(NULL, "Невозможно получить контекст DirectX.\n За доп. информацией напишите разработчику.", "Error", MB_OK | MB_ICONERROR);
-		return 0;
+		LogManager.LogError("Can't get DirectX context", true);
 	}
+
+	LogManager.LogMsg("Getted DirectX context");
 
 	ShowWindow(g_hWnd, SW_SHOW);
 	UpdateWindow(g_hWnd);
@@ -66,10 +69,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (!InputObj.Initialize(g_hInstance, g_hWnd))
 	{
-		Shutdown();
-		MessageBox(NULL, "Невозможно получить контекст DirectInput.\n За доп. информацией напишите разработчику.", "Error", MB_OK | MB_ICONERROR);
-		return 0;
+		LogManager.LogError("Can't get DirectInput context", true);
 	}
+
+	LogManager.LogMsg("Getted DirectInput context");
 
 	CSM = CSpriteManager();
 
@@ -230,7 +233,6 @@ void Shutdown()
 
 void DrawTextD3D(LPDIRECT3DDEVICE9 pDirect3DDevice, HFONT hFont, char* Text, int x, int y, int x1, int y1, D3DCOLOR MyColor)
 {
-	
 	Rec.left = x;
 	Rec.top = y;
 	Rec.right = x1;
@@ -259,4 +261,9 @@ int GetWindowH()
 int GetWindowW()
 {
 	return g_iWindowWidth;
+}
+
+CLogManager GetLogObj()
+{
+	return LogManager;
 }

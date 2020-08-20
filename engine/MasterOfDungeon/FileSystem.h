@@ -1,3 +1,4 @@
+#pragma once
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -25,4 +26,6 @@ public:
 	char* ReadFromFile(char* file);
 
 	Files GetAllFilesInFolder(char* folder, char* extension);
+
+	int GetCountOfFilesInFolder(char* folder, char* extension);
 };
