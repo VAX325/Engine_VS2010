@@ -66,6 +66,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseUIElement.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="CLogManager.cpp" />
     <ClCompile Include="CSprite.cpp" />
     <ClCompile Include="CSpriteManager.cpp" />
@@ -75,6 +77,8 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseUIElement.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="CLogManager.h" />
     <ClInclude Include="CSprite.h" />
     <ClInclude Include="CSpriteManager.h" />

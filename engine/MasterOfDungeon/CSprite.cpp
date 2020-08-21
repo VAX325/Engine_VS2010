@@ -47,3 +47,13 @@ void CSprite::Render(float X, float Y, float Width, float Height, D3DCOLOR Color
 
 	pSprite->End();
 }
+
+int CSprite::GetPosW() 
+{
+	return tImageInfo.Width;
+}
+
+int CSprite::GetPosH()
+{
+	return tImageInfo.Height;
+}

@@ -22,12 +22,15 @@
     <Filter Include="LogSystem">
       <UniqueIdentifier>{0a5ffa0c-9230-4bea-9461-17bf2f30021e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{89615c6d-b9b5-4475-ace9-328dbde9b4c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{9d4a7afd-ff9f-49da-8cdc-e6944da40bc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="CSprite.cpp">
@@ -45,12 +48,18 @@
     <ClCompile Include="CLogManager.cpp">
       <Filter>LogSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseUIElement.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="CSprite.h">
@@ -73,6 +82,15 @@
     </ClInclude>
     <ClInclude Include="CLogManager.h">
       <Filter>LogSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseUIElement.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

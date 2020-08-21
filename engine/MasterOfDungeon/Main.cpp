@@ -194,6 +194,14 @@ void DrawFrame()
 		{
 			g_bApplicationState = false;
 		}
+		if (InputObj.IsLMouseButtonPressed())
+		{
+			
+		}
+		if (InputObj.IsRMouseButtonPressed())
+		{
+			
+		}
 	}
 	else
 	{
@@ -266,4 +274,9 @@ int GetWindowW()
 CLogManager GetLogObj()
 {
 	return LogManager;
+}
+
+CSpriteManager GetSpriteManger()
+{
+	return CSM;
 }

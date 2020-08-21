@@ -3,26 +3,86 @@
 
 typedef map<int, Vector2<char*, char*>  > txtNtextures;
 
-void CSpriteManager::AddSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, char* key, float x, float y)
+void CSpriteManager::AddSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, char* key, float x, float y, bool NeedToRender)
 {
-	spritesNcords.sprites.insert(make_pair(key, new CSprite(pD3DDevice, Path, GetWindowW(), GetWindowH())));
+	CSprite* Sprite = new CSprite(pD3DDevice, Path, GetWindowW(), GetWindowH());
+
+	spritesNcords.sprites.insert(make_pair(key, Sprite));
 
 	FLOATVECTOR4 cords = { x, y , 100, 100 };
 
 	spritesNcords.cords.insert(make_pair(spritesNcords.sprites[key], cords));
+
+	spritesNcords.NeedToRender.insert(make_pair(Sprite, NeedToRender));
 
 	//delete Sprite;
 }
 
-void CSpriteManager::AddSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT TextureW, UINT TextureH, char* key, float x, float y)
+void CSpriteManager::AddSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT TextureW, UINT TextureH, char* key, float x, float y, bool NeedToRender)
 {
-	spritesNcords.sprites.insert(make_pair(key, new CSprite(pD3DDevice, Path, TextureW, TextureH)));
+	CSprite* Sprite = new CSprite(pD3DDevice, Path, TextureW, TextureH);
+
+	spritesNcords.sprites.insert(make_pair(key, Sprite));
 
 	FLOATVECTOR4 cords = { x, y , 100, 100 };
 
 	spritesNcords.cords.insert(make_pair(spritesNcords.sprites[key], cords));
 
+	spritesNcords.NeedToRender.insert(make_pair(Sprite, NeedToRender));
+
 	//delete Sprite;
+}
+
+void CSpriteManager::SetSpriteVisible(bool visability,char* SpriteName)
+{
+	CSprite* spriteobj = GetSprite(SpriteName);
+
+	auto it = spritesNcords.sprites.begin();
+
+	bool TaskComplete = false;
+
+	while (it != spritesNcords.sprites.end() && !TaskComplete)
+	{
+		std::map<CSprite*, bool > ::iterator it1;
+
+		it1 = spritesNcords.NeedToRender.find(it->second);
+
+		if (it->second == spriteobj)
+		{
+			spritesNcords.NeedToRender[(CSprite*)it1->second] = visability;
+
+			TaskComplete = true;
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
+void CSpriteManager::SetSpriteVisible(bool visability, CSprite* Sprite) 
+{
+	auto it = spritesNcords.sprites.begin();
+
+	bool TaskComplete = false;
+
+	while (it != spritesNcords.sprites.end() && !TaskComplete)
+	{
+		std::map<CSprite*, bool > ::iterator it1;
+
+		it1 = spritesNcords.NeedToRender.find(it->second);
+
+		if (it->second == Sprite)
+		{
+			spritesNcords.NeedToRender[(CSprite*)it1->second] = visability;
+
+			TaskComplete = true;
+		}
+		else
+		{
+			++it;
+		}
+	}
 }
 
 CSprite* CSpriteManager::GetSprite(char* key)
@@ -41,17 +101,24 @@ void CSpriteManager::RenderAllSprites()
 {
 	for (auto it = spritesNcords.sprites.begin(); it != spritesNcords.sprites.end(); ++it)
 	{
-		std::map<CSprite*, FLOATVECTOR4 > ::iterator it2;
+		std::map<CSprite*, bool > ::iterator it1;
 
-		it2 = spritesNcords.cords.find(it->second);
-		FLOATVECTOR4 v = it2->second;
+		it1 = spritesNcords.NeedToRender.find(it->second);
 
-		float x = v.first;
-		float y = v.second;
-		float w = v.third;
-		float h = v.four;
+		if(it1->second)
+		{
+			std::map<CSprite*, FLOATVECTOR4 > ::iterator it2;
 
-		it->second->Render(x, y, w, h, D3DCOLOR_ARGB(255, 255, 255, 255));
+			it2 = spritesNcords.cords.find(it->second);
+			FLOATVECTOR4 v = it2->second;
+
+			float x = v.first;
+			float y = v.second;
+			float w = v.third;
+			float h = v.four;
+
+			it->second->Render(x, y, w, h, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
 	}
 }
 
@@ -119,7 +186,7 @@ void CSpriteManager::LoadAllSprites()
 
 		buff = strtok(bufTXT, ";");
 
-		char* CordsNname[3];
+		char* CordsNname[4];
 
 		int i = 0;
 
@@ -130,13 +197,28 @@ void CSpriteManager::LoadAllSprites()
 			i++;
 		}
 
-		AddSprite(
-			GetD3D9Device(),
-			FullTexturePath.c_str(),
-			CordsNname[2],
-			atof(CordsNname[0]),
-			atof(CordsNname[1])
-		);
+		if( strcmp(CordsNname[3], "true") == 0 )
+		{
+			AddSprite(
+				GetD3D9Device(),
+				FullTexturePath.c_str(),
+				CordsNname[2],
+				atof(CordsNname[0]),
+				atof(CordsNname[1]),
+				true
+			);
+		}
+		else
+		{
+			AddSprite(
+				GetD3D9Device(),
+				FullTexturePath.c_str(),
+				CordsNname[2],
+				atof(CordsNname[0]),
+				atof(CordsNname[1]),
+				false
+			);
+		}
 		txtNtextrsIt++;
 	}
 }
