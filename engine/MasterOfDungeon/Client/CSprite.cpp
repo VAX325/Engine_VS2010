@@ -1,5 +1,5 @@
 #include "CSprite.h"
-#include "Perems.h" 
+#include "ClientPerems.h" 
 
 CSprite::CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UINT WindowHeight) {
 	HRESULT hr;

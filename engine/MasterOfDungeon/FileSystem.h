@@ -25,6 +25,8 @@ public:
 
 	char* ReadFromFile(char* file);
 
+	char* ReadFromFile(char* file, ios_base::open_mode OpenMode);
+
 	Files GetAllFilesInFolder(char* folder, char* extension);
 
 	int GetCountOfFilesInFolder(char* folder, char* extension);

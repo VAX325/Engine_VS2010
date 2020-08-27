@@ -9,7 +9,7 @@ CLogManager::CLogManager()
 
 	char buff[100];
 
-	char* countc = itoa(count, buff, 10);
+	char* countc = _itoa(count, buff, 10);
 
 	logName = logName + countc;
 
@@ -32,7 +32,7 @@ CLogManager::CLogManager(const CLogManager &)
 
 	char buff[100];
 
-	char* countc = itoa(count, buff, 10);
+	char* countc = _itoa(count, buff, 10);
 
 	logName = logName + countc;
 

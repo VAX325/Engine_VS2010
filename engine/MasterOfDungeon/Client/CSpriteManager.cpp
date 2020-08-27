@@ -1,5 +1,4 @@
 #include "CSpriteManager.h"
-#include "Perems.h"
 
 typedef map<int, Vector2<char*, char*>  > txtNtextures;
 
@@ -124,11 +123,9 @@ void CSpriteManager::RenderAllSprites()
 
 void CSpriteManager::LoadAllSprites()
 {
-	FileSystem fs = FileSystem();
+	txt = GetFileSystemObj().GetAllFilesInFolder("../gamedata/sprites/", "txt");
 
-	txt = fs.GetAllFilesInFolder("../gamedata/sprites/", "txt");
-
-	textures = fs.GetAllFilesInFolder("../gamedata/sprites/", "bmp");
+	textures = GetFileSystemObj().GetAllFilesInFolder("../gamedata/sprites/", "bmp");
 
 	int txtsize = txt.size();
 
@@ -180,7 +177,7 @@ void CSpriteManager::LoadAllSprites()
 
 		std::string FullTexturePath = "../gamedata/sprites/" + (std::string)(CHAR*)txtNtextrsIt->second.second;
 
-		char* bufTXT = fs.ReadFromFile((char*)FullTXTPath.c_str());
+		char* bufTXT = GetFileSystemObj().ReadFromFile((char*)FullTXTPath.c_str());
 
 		char* buff = (char*)malloc(512);
 
