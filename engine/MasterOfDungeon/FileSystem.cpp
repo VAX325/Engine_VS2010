@@ -32,7 +32,7 @@ char* FileSystem::ReadFromFile(char* file)
 
 	ifstream out = ifstream(file, ios_base::in);
 
-	char buff[512];
+	char* buff = (char*)malloc(512);
 
 	//out.read(buff, out.tellg());
 	out.getline(buff, 50);

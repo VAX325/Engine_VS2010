@@ -1,8 +1,8 @@
 #pragma once
-#include "../FileSystem.h"
-#include "../CLogManager.h"
 #include "CSpriteManager.h"
+#include "../CLogManager.h"
 #include "CSoundManager.h"
+#include "../FileSystem.h"
 
 #include <Windows.h>
 
@@ -11,9 +11,9 @@ IDirect3DDevice9* GetD3D9Device();
 int GetWindowH();
 int GetWindowW();
 
-HWND GetMainWnd();
-
-CLogManager GetLogObj();
 CSpriteManager GetSpriteManger();
+CLogManager GetLogObj();
 CSoundManager GetSoundObj();
 FileSystem GetFileSystemObj();
+
+HWND GetMainWnd();

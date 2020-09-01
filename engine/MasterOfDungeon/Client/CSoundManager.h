@@ -1,20 +1,35 @@
 #pragma once
 
-#include <dsound.h>
-//#include <dmusici.h>
+#include <map>
+#include <Windows.h>
 
-#pragma comment(lib, "dsound.lib")
+#include <audiere.h>
+#pragma comment(lib,"audiere.lib")
+
+using namespace audiere;
+
+#include "../NVector.h"
 
 class CSoundManager
 {
 private:
 
+	std::map<int, char*> sounds;
+	Vector2	<char*, char*> BuffersBusy;
+
+	AudioDevicePtr device;
+	OutputStreamPtr firstBuff;
+	OutputStreamPtr seccondBuff;
+
 public:
 
 	CSoundManager();
 	~CSoundManager();
+	
+	void Update();
+	void PlayCustomBuffSound(char* sound, float volume, bool repeat, float pan, float pitchShift);
+	void StopCustomBuffSound(char* sound);
 
-	void LoadSound(void* SoundData);
-	void PlayBuffSound();
-	void StopBuffSound();
+	void PlayBuffSound(int sound, float volume, bool repeat, float pan, float pitchShift);
+	void StopBuffSound(int sound);
 };

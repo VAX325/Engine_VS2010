@@ -47,6 +47,11 @@ CLogManager::CLogManager(const CLogManager &)
 	fout << "Logging strated!\n";
 };
 
+CLogManager& CLogManager::operator=(const CLogManager&)
+{
+	return *this;
+}
+
 CLogManager::~CLogManager()
 {
 	fout.close();

@@ -1,4 +1,5 @@
 #include "CSpriteManager.h"
+#include "ClientPerems.h"
 
 typedef map<int, Vector2<char*, char*>  > txtNtextures;
 
@@ -177,9 +178,11 @@ void CSpriteManager::LoadAllSprites()
 
 		std::string FullTexturePath = "../gamedata/sprites/" + (std::string)(CHAR*)txtNtextrsIt->second.second;
 
-		char* bufTXT = GetFileSystemObj().ReadFromFile((char*)FullTXTPath.c_str());
+		char* bufTXT = (char*)malloc(512);
 
 		char* buff = (char*)malloc(512);
+
+		strcpy(bufTXT, GetFileSystemObj().ReadFromFile((char*)FullTXTPath.c_str()));
 
 		buff = strtok(bufTXT, ";");
 

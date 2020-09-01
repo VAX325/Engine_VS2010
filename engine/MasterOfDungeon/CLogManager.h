@@ -12,6 +12,9 @@ public:
 	
 	CLogManager();
 	CLogManager(const CLogManager &);
+
+	CLogManager& operator=(const CLogManager&);
+
 	virtual ~CLogManager();
 
 	void LogMsg(char* Msg);

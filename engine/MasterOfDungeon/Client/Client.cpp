@@ -22,9 +22,9 @@ IDirect3DDevice9* g_pDirect3DDevice = NULL;
 
 DxInput InputObj;
 
-CLogManager LogManager = CLogManager();
+CLogManager LogManager;
 
-FileSystem fs = FileSystem();
+FileSystem fs;
 
 CSpriteManager CSM;
 
@@ -92,8 +92,6 @@ int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
 
-	SoundManager = CSoundManager();
-
 	InputObj = DxInput();
 
 	if (!InputObj.Initialize(g_hInstance, g_hWnd))
@@ -101,17 +99,19 @@ int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
 		LogManager.LogError("Can't get DirectInput context", true);
 	}
 
+	fs = FileSystem();
+
+	LogManager = CLogManager();
+
 	LogManager.LogMsg("Getted DirectInput context");
 
 	CSM = CSpriteManager();
 
 	CSM.LoadAllSprites();
 
-	void* soundFile = fs.ReadFromFile("../gamedata/music/MainMenu.ogg", ios::binary | ios::in);
+	SoundManager = CSoundManager();
 
-	SoundManager.LoadSound(soundFile);
-
-	SoundManager.PlayBuffSound();
+	SoundManager.PlayBuffSound(0, 1.0f, true, 1.0, 1.0);
 
 	while (g_bApplicationState)
 	{
@@ -246,6 +246,7 @@ void DrawFrame()
 	g_pDirect3DDevice->BeginScene();
 
 	CSM.RenderAllSprites();
+	SoundManager.Update();
 
 	g_pDirect3DDevice->EndScene();
 	g_pDirect3DDevice->Present(NULL, NULL, NULL, NULL);
