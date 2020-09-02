@@ -14,7 +14,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-# *.dll
+*.exp
 engine/SDK/*.dll
 engine/Debug/*.dll
 engine/Release/*.dll
