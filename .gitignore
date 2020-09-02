@@ -14,7 +14,10 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+# *.dll
+engine/SDK/*.dll
+engine/Debug/*.dll
+engine/Release/*.dll
 
 # Fortran module files
 *.mod
