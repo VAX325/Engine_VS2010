@@ -32,6 +32,9 @@
     <Filter Include="Client\SoundSystem">
       <UniqueIdentifier>{28c1c04a-53e9-48d7-afb0-a61a7c13c440}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shared\ScriptSystem">
+      <UniqueIdentifier>{8fd67ae4-2ba0-434e-b745-7df828012b76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileSystem.cpp">
@@ -67,6 +70,9 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Client\CSoundManager.cpp">
       <Filter>Client\SoundSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CScriptSystem.cpp">
+      <Filter>Shared\ScriptSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +117,12 @@
     </ClInclude>
     <ClInclude Include="Client\CSoundManager.h">
       <Filter>Client\SoundSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CScriptSystem.h">
+      <Filter>Shared\ScriptSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="luabnd_include.h">
+      <Filter>Shared\ScriptSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

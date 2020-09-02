@@ -1,5 +1,4 @@
 #include "Client.h"
-#include "../CLogManager.h"
 
 //Создаем переменные
 HINSTANCE g_hInstance = NULL;
@@ -29,6 +28,8 @@ FileSystem fs;
 CSpriteManager CSM;
 
 CSoundManager SoundManager;
+
+CScriptSystem ScriptSystem;
 
 int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow)
 {
@@ -108,6 +109,10 @@ int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
 	CSM = CSpriteManager();
 
 	CSM.LoadAllSprites();
+
+	ScriptSystem.init();
+
+	ScriptSystem.ExecuteFile("../gamedata/script_cl/Main.sc");
 
 	SoundManager = CSoundManager();
 
@@ -325,4 +330,9 @@ CSoundManager GetSoundObj()
 FileSystem GetFileSystemObj() 
 {
 	return fs;
+}
+
+CScriptSystem GetScriptSystemObj()
+{
+	return ScriptSystem;
 }

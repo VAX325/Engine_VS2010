@@ -37,6 +37,7 @@
 *.ipch
 *.db
 engine/.vs
+engine/SDK/boost
 *.manifest
 *.lastbuildstate
 *.log

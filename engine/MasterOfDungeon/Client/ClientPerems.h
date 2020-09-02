@@ -3,6 +3,7 @@
 #include "../CLogManager.h"
 #include "CSoundManager.h"
 #include "../FileSystem.h"
+#include "../CScriptSystem.h"
 
 #include <Windows.h>
 
@@ -15,5 +16,6 @@ CSpriteManager GetSpriteManger();
 CLogManager GetLogObj();
 CSoundManager GetSoundObj();
 FileSystem GetFileSystemObj();
+CScriptSystem GetScriptSystemObj();
 
 HWND GetMainWnd();

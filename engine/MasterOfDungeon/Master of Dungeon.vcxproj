@@ -40,7 +40,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)SDK/audiere/include/;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)SDK/audiere/include/;$(DXSDK_DIR)Include/;$(SolutionDir)SDK/luajit/src/;$(SolutionDir)SDK/luabind/;$(SolutionDir)SDK/boost/;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)SDK/audiere/lib/;$(DXSDK_DIR)Lib/x86/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -78,6 +78,7 @@
     <ClCompile Include="Client\Input.cpp" />
     <ClCompile Include="Client\CSoundManager.cpp" />
     <ClCompile Include="CLogManager.cpp" />
+    <ClCompile Include="CScriptSystem.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Server\Server.cpp" />
@@ -93,7 +94,9 @@
     <ClInclude Include="Client\Input.h" />
     <ClInclude Include="Client\CSoundManager.h" />
     <ClInclude Include="CLogManager.h" />
+    <ClInclude Include="CScriptSystem.h" />
     <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="luabnd_include.h" />
     <ClInclude Include="NVector.h" />
     <ClInclude Include="Server\Server.h" />
     <ClInclude Include="Server\ServerPerems.h" />
