@@ -45,3 +45,10 @@ engine/SDK/boost
 *.lastbuildstate
 *.log
 *.idb
+*.iobj
+
+*.ipdb
+
+*.idb
+
+*.ipch

@@ -1,0 +1,2 @@
+D:\VAX\SourceCode\Master_of_Dungeon\engine\binaries\x64-Debug\lua-5.2.4.pdb
+D:\VAX\SourceCode\Master_of_Dungeon\engine\SDK\lua-5.2.4\x64\Debug\lua-5.2.4.pdb

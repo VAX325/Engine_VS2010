@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Shared">
+      <UniqueIdentifier>{e5c573c1-4f8e-4db7-ac8c-45d131e1f059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\FileSystem">
+      <UniqueIdentifier>{e0f9bce7-c4b4-4b9a-84a0-8191be99db73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Lua">
+      <UniqueIdentifier>{e2510b23-5d9c-4817-966c-c6096a72f0e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\LogManager">
+      <UniqueIdentifier>{a9c190ed-ceb7-4562-996c-b65c1586c18a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Utils">
+      <UniqueIdentifier>{27558b40-7d43-4228-89f5-7fee1c59fb8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client">
+      <UniqueIdentifier>{9110e474-d72a-4be2-9497-237d7b352629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\Input">
+      <UniqueIdentifier>{4df399e8-1f48-4cb8-b8ab-76fc7090694c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\UI">
+      <UniqueIdentifier>{87438877-42ad-4056-82f3-f6eec20fb5c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\Sound">
+      <UniqueIdentifier>{7a8872e8-dfba-4005-8b37-83c61c35bf03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\Sprite">
+      <UniqueIdentifier>{9af450d8-bd17-4b79-8c70-ca3d53e7a14a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server">
+      <UniqueIdentifier>{f7f9bf72-2577-46d3-9d47-9632840cbbdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\NET">
+      <UniqueIdentifier>{593e502a-d7a2-41fd-83cb-5193db264f28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\NET">
+      <UniqueIdentifier>{03cbf749-46d3-4f58-ab6c-c922d998c72b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Level2D">
+      <UniqueIdentifier>{aef4e430-a960-4745-8adb-5b5f175cefea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Entitys">
+      <UniqueIdentifier>{497d8338-a30a-46dd-8a3f-de37f508eb2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\Entitys\Base">
+      <UniqueIdentifier>{6473e9d6-4251-4181-986a-1ad5c617a0de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\LevelBase">
+      <UniqueIdentifier>{bc0a0e4c-0d89-422a-a38d-a54c6f84cd1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Physics">
+      <UniqueIdentifier>{526d9287-a14c-479d-82a2-69b5553a55bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\Entitys">
+      <UniqueIdentifier>{5484267d-8572-44c2-bce0-c02b1df4e683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Physics\CBasePhysicsEntity">
+      <UniqueIdentifier>{91064668-48cb-4c72-82da-f90ddb362613}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Physics\Constants">
+      <UniqueIdentifier>{878341da-fb18-4936-99cf-f1fe63d67380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Entitys">
+      <UniqueIdentifier>{debb58d1-425b-4366-bfea-2628a9d312ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Entitys\CPlayerSV">
+      <UniqueIdentifier>{8164cd87-eb54-4b8b-adc2-beb347c3f8be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\Entitys\CPlayerCL">
+      <UniqueIdentifier>{c7a62089-6e9d-4059-a93b-64c84c9f062d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Entitys\CTrigger">
+      <UniqueIdentifier>{8d3da881-060c-4832-bd79-f03d231a611c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\UI\Base">
+      <UniqueIdentifier>{26aa9155-a4d8-4474-8973-28e25c270323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\UI\Button">
+      <UniqueIdentifier>{a9fffaf0-53f9-4d4c-9ab5-f1a434ee6355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\UI\Manager">
+      <UniqueIdentifier>{c57befa3-bb77-473a-b6e6-eb1dad35894b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\UI\UIPanel">
+      <UniqueIdentifier>{5deb35b0-1864-4e2f-8803-7778161d1c8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\UI\Text">
+      <UniqueIdentifier>{b2411017-0002-4d8c-b050-0eca62fb5e98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\XMLParser">
+      <UniqueIdentifier>{8d089617-7dff-43c4-9e72-2cbfe29b8caf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SharedLua.h">
+      <Filter>Shared\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua_include.h">
+      <Filter>Shared\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem.h">
+      <Filter>Shared\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CScriptSystem.h">
+      <Filter>Shared\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="CLogManager.h">
+      <Filter>Shared\LogManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Shared\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="NVector.h">
+      <Filter>Shared\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="Client\Input.h">
+      <Filter>Client\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CSprite.h">
+      <Filter>Client\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CSpriteManager.h">
+      <Filter>Client\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CSoundManager.h">
+      <Filter>Client\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Client.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\ClientPerems.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\Server.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\ServerPerems.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Base_include.h" />
+    <ClInclude Include="Client\ClientNET.h">
+      <Filter>Client\NET</Filter>
+    </ClInclude>
+    <ClInclude Include="NET.h">
+      <Filter>Shared\NET</Filter>
+    </ClInclude>
+    <ClInclude Include="CBaseEntity.h">
+      <Filter>Shared\Entitys\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="CLevelBase.h">
+      <Filter>Shared\LevelBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\CLevel2DServer.h">
+      <Filter>Server\Level2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\CBasePhysicsEntity.h">
+      <Filter>Server\Physics\CBasePhysicsEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\PhysicsConstants.h">
+      <Filter>Server\Physics\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\CPlayerSV.h">
+      <Filter>Server\Entitys\CPlayerSV</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CPlayerCL.h">
+      <Filter>Client\Entitys\CPlayerCL</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\CTrigger.h">
+      <Filter>Server\Entitys\CTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\BaseUIElement.h">
+      <Filter>Client\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CButton.h">
+      <Filter>Client\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CUIManager.h">
+      <Filter>Client\UI\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CUIPanel.h">
+      <Filter>Client\UI\UIPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CUIText.h">
+      <Filter>Client\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="xmlparser.h">
+      <Filter>Shared\XMLParser</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SharedLua.cpp">
+      <Filter>Shared\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem.cpp">
+      <Filter>Shared\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CScriptSystem.cpp">
+      <Filter>Shared\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="CLogManager.cpp">
+      <Filter>Shared\LogManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Shared\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Client\Input.cpp">
+      <Filter>Client\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CSpriteManager.cpp">
+      <Filter>Client\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CSprite.cpp">
+      <Filter>Client\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CSoundManager.cpp">
+      <Filter>Client\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Client.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\Server.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\ClientNET.cpp">
+      <Filter>Client\NET</Filter>
+    </ClCompile>
+    <ClCompile Include="NET.cpp">
+      <Filter>Shared\NET</Filter>
+    </ClCompile>
+    <ClCompile Include="CBaseEntity.cpp">
+      <Filter>Shared\Entitys\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="CLevelBase.cpp">
+      <Filter>Shared\LevelBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\CLevel2DServer.cpp">
+      <Filter>Server\Level2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\CBasePhysicsEntity.cpp">
+      <Filter>Server\Physics\CBasePhysicsEntity</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\CPlayerSV.cpp">
+      <Filter>Server\Entitys\CPlayerSV</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CPlayerCL.cpp">
+      <Filter>Client\Entitys\CPlayerCL</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\CTrigger.cpp">
+      <Filter>Server\Entitys\CTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\PhysicsConstants.cpp">
+      <Filter>Server\Physics\Constants</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\BaseUIElement.cpp">
+      <Filter>Client\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CButton.cpp">
+      <Filter>Client\UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CUIManager.cpp">
+      <Filter>Client\UI\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CUIPanel.cpp">
+      <Filter>Client\UI\UIPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CUIText.cpp">
+      <Filter>Client\UI\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="xmlparser.cpp">
+      <Filter>Shared\XMLParser</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

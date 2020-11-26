@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B88B2E04-A495-43B2-90E8-A46E3BAF1946}</ProjectGuid>
+    <RootNamespace>MasterOfDungeon</RootNamespace>
+    <ProjectName>Master of Dungeon</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(DXSDK_DIR)Include\;$(SolutionDir)SDK\audiere\include\;$(SolutionDir)SDK\lua\include\;$(SolutionDir)SDK\LuaBridge\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)SDK\lua\;$(SolutionDir)SDK\audiere\lib\;$(DXSDK_DIR)Lib\x86\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(DXSDK_DIR)Include\;$(SolutionDir)SDK\audiere\include\;$(SolutionDir)SDK\lua\include\;$(SolutionDir)SDK\LuaBridge\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)SDK\lua\;$(SolutionDir)SDK\audiere\lib\;$(DXSDK_DIR)Lib\x86\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Client\BaseUIElement.cpp" />
+    <ClCompile Include="Client\Button.cpp" />
+    <ClCompile Include="Client\Client.cpp" />
+    <ClCompile Include="Client\CSprite.cpp" />
+    <ClCompile Include="Client\CSpriteManager.cpp" />
+    <ClCompile Include="Client\Input.cpp" />
+    <ClCompile Include="Client\CSoundManager.cpp" />
+    <ClCompile Include="CLogManager.cpp" />
+    <ClCompile Include="CScriptSystem.cpp" />
+    <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Server\Server.cpp" />
+    <ClCompile Include="SharedLua.cpp" />
+    <ClCompile Include="Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client\BaseUIElement.h" />
+    <ClInclude Include="Client\Button.h" />
+    <ClInclude Include="Client\Client.h" />
+    <ClInclude Include="Client\ClientPerems.h" />
+    <ClInclude Include="Client\CSprite.h" />
+    <ClInclude Include="Client\CSpriteManager.h" />
+    <ClInclude Include="Client\Input.h" />
+    <ClInclude Include="Client\CSoundManager.h" />
+    <ClInclude Include="CLogManager.h" />
+    <ClInclude Include="CScriptSystem.h" />
+    <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="lua_include.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="NVector.h" />
+    <ClInclude Include="Server\Server.h" />
+    <ClInclude Include="Server\ServerPerems.h" />
+    <ClInclude Include="SharedLua.h" />
+    <ClInclude Include="Utils.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

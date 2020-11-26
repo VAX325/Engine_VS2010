@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<controls>
+	<forward  key="W" />
+	<left	  key="A" />
+	<backward key="S" />
+	<right 	  key="D" />
+</controls>
