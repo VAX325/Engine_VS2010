@@ -1,25 +1,12 @@
 #include <Base_include.h>
 #include "../NET.h"
 
-#if PLATFORM == PLATFORM_WINDOWS
-
-#include <winsock2.h>
-
-#elif PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <fcntl.h>
-
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
+#include <thread>
 #include "Server.h"
 
 #pragma warning( disable : 26495 6031 )
-
-#define STANDART_PORT 27063
 
 #pragma comment(lib,"ws2_32.lib")
 
@@ -29,64 +16,62 @@ CLogManager LogManagerServer;
 
 CScriptSystem* ScriptSystemServer;
 
-int ServerWindows()
+lua_State* LSv;
+
+Server server;
+std::thread ServerThread;
+
+bool Work = true;
+
+void ServerWindows()
 {
-	AllocConsole();
-	freopen("CONOUT$", "w+", stdout);
-	freopen("CONIN$", "w+", stdin);
+    LogManagerServer = CLogManager();
+    LogManagerServer.Init(true);
 
-    Socket socket;
-    if (!socket.Open(STANDART_PORT))
+    SteamGameSocketsInit();
+
+    Server server = Server();
+    //server.Run(STANDART_PORT);
+    ServerThread = std::thread(&Server::Run, &server, STANDART_PORT);
+
+    char* command = new char;
+
+    while(Work)
     {
-        printf("failed to create socket!\n");
-        GetLogObj()->LogError((char*)"failed to create socket!", true);
-        return false;
+        cin >> command;
+
+        if (strncmp(command, "/stop", 5) == 0)
+        {
+            Work = false;
+        }
+        else if (strncmp(command, "/list", 5) == 0)
+        {
+            printf("WIP \n");
+        }
+        else
+        {
+            printf("There is no command '%s' !\n", command);
+        }
     }
 
-    // send a packet
+    ServerStop();
 
-    /*const char data[] = "hello world!";
-    socket.Send(Address(127, 0, 0, 1, STANDART_PORT), data, sizeof(data));*/
-
-    // receive packets
-
-    while (true)
-    {
-        Address sender;
-        unsigned char buffer[256];
-        int bytes_read = socket.Receive(sender, buffer, sizeof(buffer));
-        if (!bytes_read)
-            break;
-        // process packet
-    }
-
-	return 0;
+    SteamGameSocketsDeInit();
 }
 
-char* ServerInClient()
+void ServerInClient()
 {
-    Socket socket;
-    if (!socket.Open(STANDART_PORT))
-    {
-        return (char*)"failed to create socket!";
-    }
+    server = Server();
+    server.Run(STANDART_PORT);
 
-    // send a packet
+    ServerStop();
+}
 
-    const char data[] = "hello world!";
-    socket.Send(Address(127, 0, 0, 1, STANDART_PORT), data, sizeof(data));
-
-    // receive packets
-
-    while (true)
-    {
-        Address sender;
-        unsigned char buffer[256];
-        int bytes_read = socket.Receive(sender, buffer, sizeof(buffer));
-        if (!bytes_read)
-            break;
-        // process packet
-    }
+void ServerStop()
+{
+    server.Stop();
+    if (ServerThread.joinable())
+        ServerThread.join();
 }
 
 CLogManager* GetLogObj()
@@ -102,4 +87,9 @@ FileSystem* GetFileSystemObj()
 CScriptSystem* GetScriptSystemObj()
 {
 	return ScriptSystemServer;
+}
+
+void CallLuaFuncSv(char* LuaFunc)
+{
+    ScriptSystemServer->CallLuaFunc(LSv, LuaFunc);
 }

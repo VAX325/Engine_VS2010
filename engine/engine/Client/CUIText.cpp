@@ -45,7 +45,7 @@ void CUIText::SetFont(LPDIRECT3DDEVICE9 pDirect3DDevice, char* FontName)
 
 void CUIText::Render(LPDIRECT3DDEVICE9 pDirect3DDevice)
 {
-	if(GetCurrentVisability())
+	if(_visability)
 	{
 		DrawTextD3D(pDirect3DDevice, pFont, (char*)Text.c_str(), x, y, w, h, _color);
 	}

@@ -16,3 +16,5 @@
 #define MakeString( M, L ) M(L)
 #define $Line MakeString( Stringize, __LINE__ )
 #define Reminder __FILE__ "(" $Line ") : Reminder: "
+
+#define STANDART_PORT 27063

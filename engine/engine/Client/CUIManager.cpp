@@ -8,7 +8,7 @@
 
 CUIManager::CUIManager()
 {
-
+	
 }
 
 CUIManager::~CUIManager()
@@ -16,10 +16,10 @@ CUIManager::~CUIManager()
 
 }
 
-
-
 void CUIManager::LoadPanels()
 {
+	_CurrentPanel = UI_NO_PANEL;
+
 	Files configs = GetFileSystemObjCl()->GetAllFilesInFolder((char*)"../gamedata/configs/ui/", (char*)"xml");
 
 	XMLParser xml_parser;
@@ -209,25 +209,144 @@ void CUIManager::LoadPanels()
 						}
 					}
 				}
-				CSprite* sprite = GetSpriteManger()->GetSprite(Name);
-				
-				if(hNeed == false)
-				{
-					GetSpriteManger()->SetH(Name, h);
-				}
-				if (wNeed == false)
-				{
-					GetSpriteManger()->SetW(Name, w);
-				}
+
+				char* texturePath = (char*)malloc(128);
+				strcpy(texturePath, "../gamedata/sprites/UI/");
+				strcat(texturePath, Name);
+				strcat(texturePath, ".png");
+
+				CSprite* sprite = new CSprite(GetD3D9Device(), texturePath, GetWindowW(), GetWindowH(), Name);
 
 				if (sprite == NULL)
 				{
 					GetLogObjCl()->LogError((char*)"Can't find sprite! Please check your .xml configuration file!", true);
 				}
 
-				panels[j]->AddElement(sprite, Name);
+				if (hNeed)
+				{
+					h = sprite->GetH();
+				}
+				if (wNeed)
+				{
+					w = sprite->GetW();
+				}
+
+				CUISprite* UISprite = new CUISprite(x, y, w, h, sprite, false);
+
+				panels[j]->AddElement(UISprite, Name);
 			}
 
+			if (FindWord(it->first, (char*)"CButton"))
+			{
+				int i = 0;
+
+				float x = 0, y = 0;
+				float w = 0;
+				float h = 0;
+				char* Name = (char*)malloc(64);
+				char* SpriteName = (char*)malloc(64);
+				char* OnClickName = (char*)malloc(64);
+				char* Text = (char*)malloc(64);
+
+				ZeroMemory(Name, sizeof(Name));
+				ZeroMemory(SpriteName, sizeof(SpriteName));
+				ZeroMemory(OnClickName, sizeof(OnClickName));
+				ZeroMemory(Text, sizeof(Text));
+
+				while (it->second.first.chr[i] != NULL)
+				{
+					if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
+					{
+						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
+						{
+							if (FindWord(it->second.first.chr[i], (char*)"x"))
+							{
+								x = std::stof(it->second.second.chr[i]);
+								i++;
+							}
+						}
+
+						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
+						{
+							if (FindWord(it->second.first.chr[i], (char*)"y"))
+							{
+								y = std::stof(it->second.second.chr[i]);
+								i++;
+							}
+						}
+
+						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
+						{
+							if (FindWord(it->second.first.chr[i], (char*)"w"))
+							{
+								w = std::stof(it->second.second.chr[i]);
+								i++;
+							}
+						}
+
+						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
+						{
+							if (FindWord(it->second.first.chr[i], (char*)"h"))
+							{
+								h = std::stof(it->second.second.chr[i]);
+								i++;
+							}
+						}
+
+						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
+						{
+							if (FindWord(it->second.first.chr[i], (char*)"name"))
+							{
+								strcpy(Name, it->second.second.chr[i]);
+								i++;
+							}
+						}
+
+						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
+						{
+							if (FindWord(it->second.first.chr[i], (char*)"sprite"))
+							{
+								strcpy(SpriteName, it->second.second.chr[i]);
+								i++;
+							}
+						}
+
+						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
+						{
+							if (FindWord(it->second.first.chr[i], (char*)"text"))
+							{
+								strcpy(Text, it->second.second.chr[i]);
+								i++;
+							}
+						}
+
+						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
+						{
+							if (FindWord(it->second.first.chr[i], (char*)"OnClick"))
+							{
+								strcpy(OnClickName, it->second.second.chr[i]);
+								i++;
+							}
+						}
+					}
+				}
+				char* texturePath = (char*)malloc(128);
+				strcpy(texturePath, "../gamedata/sprites/UI/");
+				strcat(texturePath, SpriteName);
+				strcat(texturePath, ".png");
+				CSprite* sprite = new CSprite(GetD3D9Device(), texturePath, GetWindowW(), GetWindowH(), SpriteName );
+
+				if (sprite == NULL)
+				{
+					GetLogObjCl()->LogMsg((char*)"Can't find sprite on button. Is good?");
+				}
+				LuaFuncPtr* ptr = GetLuaFuncPtrCl(OnClickName);//(LuaFuncPtr*)malloc(sizeof(LuaFuncPtr));
+				//memcpy(ptr, GetLuaFuncPtrCl(OnClickName), sizeof(LuaFuncPtr));
+
+				CButton* button = new CButton(x, y, w, h, sprite, Text, &ptr);
+
+				panels[j]->AddElement(button, Name);
+			}
 
 			it++;
 		}
@@ -244,9 +363,24 @@ void CUIManager::RenderPanels()
 	}
 }
 
+int CUIManager::GetCurrentPanel()
+{
+	return _CurrentPanel;
+}
+
+CUIPanel* CUIManager::GetPanel(int panelID)
+{
+	return panels[panelID];
+}
+
 void CUIManager::ShowPanel(int panelID)
 {
+	if (_CurrentPanel != UI_NO_PANEL)
+	{
+		panels[_CurrentPanel]->HidePanel();
+	}
 	panels[panelID]->ShowPanel();
+	_CurrentPanel = panelID;
 }
 
 int CUIManager::GetCountOfPanels()

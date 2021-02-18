@@ -23,6 +23,8 @@
 
 #include "Raw.h"
 
+#include "Compiler.h"
+
 HINSTANCE g_hInstance = NULL;
 HWND g_hWnd = NULL;
 
@@ -56,6 +58,8 @@ char* CurrentFile = (char*)"";
 bool CanDrawScene = true;
 
 WORD xPos, yPos;
+
+Compiler* CompilerObj = new Compiler();
 
 long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 bool InitDirect3D(D3DFORMAT ColorFormat, D3DFORMAT DepthFormat);
@@ -92,7 +96,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif // _3D
 
 		std::string str = std::string(lpCmdLine);
-		
+
 		vector<std::string> tokens;
 
 		for (auto i = strtok(&str[0], " "); i != NULL; i = strtok(NULL, " "))
@@ -173,7 +177,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		SetForegroundWindow(g_hWnd);
 
 #ifdef _3D
-}
+	}
 #endif // _3D
 
 	HMENU hMainMenu = CreateMenu();
@@ -188,6 +192,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	AppendMenu(hPopMenuFile, MF_STRING, 1004, "Load");
 	AppendMenu(hPopMenuFile, MF_STRING, 1007, "Unload");
 	AppendMenu(hPopMenuFile, MF_SEPARATOR, 1005, "");
+	AppendMenu(hPopMenuFile, MF_STRING, 1008, "Compile!");
 	AppendMenu(hPopMenuFile, MF_STRING, 1006, "Exit");
 
 	SetMenu(g_hWnd, hMainMenu);
@@ -244,7 +249,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	SpriteManager.LoadAllSprites();
 
-	if( RegisterHotKey(g_hWnd, ID_HOTKEY_CTRL_Z, MOD_CONTROL, 0x5A) == 0)
+	if (RegisterHotKey(g_hWnd, ID_HOTKEY_CTRL_Z, MOD_CONTROL, 0x5A) == 0)
 	{
 		LogManager.LogError((char*)"Failed to create hot key", true);
 	}
@@ -265,7 +270,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{
 			Shutdown();
 		}
-}
+	}
 
 	return 0;
 }
@@ -330,7 +335,7 @@ void OpenRawLevel(char* RawLevelName)
 	auto iss = std::istringstream((std::string)fs.ReadFromFile(RawLevelName));
 	auto str = std::string{};
 
-	while (iss >> str) 
+	while (iss >> str)
 	{
 		int id = 0;
 
@@ -379,7 +384,7 @@ char* SaveLevelRaw()
 
 	auto it = SceneSprites.begin();
 
-	while(it != SceneSprites.end())
+	while (it != SceneSprites.end())
 	{
 		int id = it->first;
 		char* idB = (char*)malloc(32);
@@ -388,7 +393,7 @@ char* SaveLevelRaw()
 		float x = it->second.second.first;
 		char xB[10];
 		_itoa(x, xB, 10);
-		
+
 		float y = it->second.second.second;
 		char yB[10];
 		_itoa(y, yB, 10);
@@ -398,7 +403,7 @@ char* SaveLevelRaw()
 		strcat(Buffer, " ");
 		strcat(Buffer, idB);
 		strcat(Buffer, " ");
-		
+
 		strcat(Buffer, xB);
 		strcat(Buffer, " ");
 
@@ -438,7 +443,7 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			MessageBox(g_hWnd, "Level editor v0.1A\nDeveloper: VAX", "Level Editor Help", MB_OK);
 			break;
 		case 1001:
-			if(CurrentFile == "")
+			if (CurrentFile == "")
 			{
 				CurrentFile = SaveFileAs(g_hWnd, SaveLevelRaw());
 				strcat(WindowsName, CurrentFile);
@@ -485,8 +490,46 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				break;
 			}
 			break;
+		case 1008:
+			if(CurrentFile == "")
+			{
+				CurrentFile = SaveFileAs(g_hWnd, SaveLevelRaw());
+				strcat(WindowsName, CurrentFile);
+				SetWindowText(g_hWnd, WindowsName);
+			}
+
+			std::string str = std::string(CurrentFile);
+
+			vector<std::string> tokens;
+
+			BaseData bd;
+
+			for (auto i = strtok(&str[0], "\\"); i != NULL; i = strtok(NULL, "\\"))
+			{
+				if (FindWord(i, (char*)".rawlvl"))
+				{
+					tokens.push_back(i);
+					
+					std::string str2 = std::string(i);
+
+					auto j = strtok(&str2[0], ".");
+
+					bd.LevelName = (char*)malloc(512);
+
+					strcpy(bd.LevelName, j);
+				}
+			}
+
+			Physic physic;
+			physic.gravity = 10;
+
+			bd.PhysicData = physic;
+
+			CompilerObj->WriteBaseData(&bd);
+
+			break;
 		}
-		
+
 		if (lParam == (LPARAM)hBtnFlor && hWnd == hWndMenu)    // если нажали на кнопку
 		{
 			SpriteManager.SetSpriteVisible(true, (char*)"Flor");
@@ -496,7 +539,7 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_LBUTTONDOWN:
 	{
-		printf("Sprite num:%d | x: %i | y: %i | \n", countOn1Scene+1, (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
+		printf("Sprite num:%d | x: %i | y: %i | \n", countOn1Scene + 1, (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
 		if (GetFocus() == g_hWnd && CurrentCursorSprite != "")
 		{
 			Vector2<CSprite*, Vector2<float, float>> sprite = { SpriteManager.GetSprite(CurrentCursorSprite), {CurrentCursorSpritePosX, CurrentCursorSpritePosY} };
@@ -507,9 +550,9 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_HOTKEY:
 	{
-		if(wParam == 3452113719)
+		if (wParam == 3452113719)
 		{
-			if(countOn1Scene > 0)
+			if (countOn1Scene > 0)
 			{
 				SceneSprites.erase(countOn1Scene - 1);
 				printf("Deleted sprite on scene1 - id: %d \n", countOn1Scene - 1);
@@ -616,14 +659,14 @@ bool InitDirect3D(D3DFORMAT ColorFormat, D3DFORMAT DepthFormat)
 //	}
 //
 //	VOID* pVertices;
-//	
+//
 //	if (FAILED(g_pVB->Lock(0, sizeof(vertices), (void**)&pVertices, 0)))
 //	{
 //		LogManager.LogError((char*)"Can't lock vertex buffer!", true);
 //	}
-//	
+//
 //	memcpy(pVertices, vertices, sizeof(vertices));
-//	
+//
 //	g_pVB->Unlock();
 //
 //	Device_Interface->SetStreamSource(0, g_pVB, 0, sizeof(CUSTOMVERTEX));
@@ -681,14 +724,14 @@ void DrawLevelEditorMesh()
 	int y = 0;
 	int i = 0;
 
-	while(y < g_iWindowHeight/1.3)
+	while (y < g_iWindowHeight / 1.3)
 	{
 		DrawLineGorizontal(g_pDirect3DDevice, 60, y + 60, 720, 5, D3DCOLOR_XRGB(127, 127, 127));
 
 		y = y + 30;
 	}
 
-	while(i < g_iWindowWidth/1.8)
+	while (i < g_iWindowWidth / 1.8)
 	{
 		DrawLineVertical(g_pDirect3DDevice, i + 60, 60, 545, 5, D3DCOLOR_XRGB(127, 127, 127));
 
@@ -701,7 +744,7 @@ void DrawLevelEditorMesh()
 //{
 //	float widthW = g_iWindowWidth / 225;
 //	float heightW = g_iWindowHeight / 225;
-//	
+//
 //	if (!LineInit)
 //	{
 //		spriteLine = new CSprite(g_pDirect3DDevice, (LPCSTR)"../gamedata/sprites/LevelEditor/Line.png", g_iWindowWidth, g_iWindowHeight);
@@ -724,7 +767,7 @@ void DrawLevelEditorMesh()
 //
 //	float LenghtOfSpriteW = heightW * 41.83;
 //	float LenghtOfSpriteH = heightW * 26;
-//	
+//
 //	if (!LineInit)
 //	{
 //		printf("LenghtOfSpriteW is %f \n", LenghtOfSpriteW);
@@ -770,11 +813,11 @@ void DrawFrame()
 
 	g_pDirect3DDevice->BeginScene();
 
-	if (xPos >= 60 && xPos <= 760+60
+	if (xPos >= 60 && xPos <= 760 + 60
 		&&
-		yPos >= 60 && yPos <= 550+60)
+		yPos >= 60 && yPos <= 550 + 60)
 	{
-		if(CurrentCursorSprite != "")
+		if (CurrentCursorSprite != "")
 		{
 			float x = xPos / 10;
 			float y = yPos / 10;

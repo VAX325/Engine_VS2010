@@ -17,13 +17,12 @@ void CUIPanel::AddElement(CButton* button, char* text)
 	UIButtons[text] = button;
 }
 
-
 void CUIPanel::AddElement(CUIText* text1, char* text)
 {
 	UITexts[text] = text1;
 }
 
-void CUIPanel::AddElement(CSprite* sprite, char* spriteName)
+void CUIPanel::AddElement(CUISprite* sprite, char* spriteName)
 {
 	UISprites[spriteName] = sprite;
 }
@@ -40,6 +39,11 @@ std::map<char*, CUIText*> CUIPanel::GetAllUITexts()
 
 void CUIPanel::Render(LPDIRECT3DDEVICE9 pDirect3DDevice)
 {
+	for (auto it = UISprites.begin(); it != UISprites.end(); it++)
+	{
+		it->second->Render(pDirect3DDevice);
+	}
+
 	for(auto it = UIButtons.begin(); it != UIButtons.end(); it++)
 	{
 		it->second->Render(pDirect3DDevice);
@@ -65,11 +69,37 @@ void CUIPanel::ShowPanel()
 
 	for (auto spriteit = UISprites.begin(); spriteit != UISprites.end(); spriteit++)
 	{
-		GetSpriteManger()->SetSpriteVisible(true, spriteit->second);
+		spriteit->second->SetVisible(true);
 	}
 
 	for (auto textit = UITexts.begin(); textit != UITexts.end(); textit++)
 	{
 		textit->second->SetVisible(true);
+	}
+}
+
+void CUIPanel::HidePanel()
+{
+	for (auto buttonsit = UIButtons.begin(); buttonsit != UIButtons.end(); buttonsit++)
+	{
+		buttonsit->second->SetVisible(false);
+	}
+
+	for (auto spriteit = UISprites.begin(); spriteit != UISprites.end(); spriteit++)
+	{
+		spriteit->second->SetVisible(false);
+	}
+
+	for (auto textit = UITexts.begin(); textit != UITexts.end(); textit++)
+	{
+		textit->second->SetVisible(false);
+	}
+}
+
+void CUIPanel::CheckForUIEvents(int MouseX, int MouseY)
+{
+	for (auto buttonsit = UIButtons.begin(); buttonsit != UIButtons.end(); buttonsit++)
+	{
+		buttonsit->second->CheckForClick(MouseX, MouseY);
 	}
 }

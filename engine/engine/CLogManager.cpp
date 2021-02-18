@@ -1,12 +1,22 @@
 #include "CLogManager.h"
 #include <Base_include.h>
+
+#define DEBUG_INVOKE __asm int 3
+
 #include <ctime>
 
-void CLogManager::Init()
+#include "Main.h"
+
+void CLogManager::Init(bool IsServer)
 {
 	int count = fs->GetCountOfFilesInFolder((char*)"../logs/", (char*)"log");
 
-	string logName = "../logs/log";
+	string logName;
+
+	if (IsServer)
+		logName = "../logs_sv/log";
+	else
+		logName = "../logs/log";
 
 	char buff[100];
 
@@ -23,36 +33,59 @@ void CLogManager::Init()
 		fout.open(logName.c_str(), ios_base::out);
 
 		fout << "Logging strated!\n";
+
+		fout.flush();
 	}
 }
 
-void CLogManager::LogMsg(char* Msg)
+void CLogManager::LogMsg(const char* Msg, ...)
 {
 	time_t now = time(0);
 
 	tm* local = localtime(&now);
 
-	fout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " Msg: " << Msg << "\n";
+	char* MsgBuff = (char*)malloc(128 * sizeof(*MsgBuff));
+	MsgBuff[0] = '\0';
+
+	va_list arg;
+	va_start(arg, Msg);
+	vsprintf((char*)MsgBuff, Msg, arg);
+	va_end(arg);
+
+	fout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " Msg: " << MsgBuff << "\n";
+
+	fout.flush();
 
 #ifdef _DEBUG
-	printf("%s\n" ,Msg);
+	printf("%s\n" ,MsgBuff);
 #endif // _DEBUG
 
+	free(MsgBuff);
 }
 
-void CLogManager::LogError(char* Msg, bool needToShutdown)
+void CLogManager::LogError(const char* Msg, bool needToShutdown, ...)
 {
+	DEBUG_INVOKE
+
 	time_t now = time(0);
 
 	tm* local = localtime(&now);
+
+	char* MsgBuff = (char*)malloc(128 * sizeof(*MsgBuff));
+	MsgBuff[0] = '\0';
+
+	va_list arg;
+	va_start(arg, Msg);
+	vsprintf((char*)MsgBuff, Msg, arg);
+	va_end(arg);
 
 	if (needToShutdown)
 	{
-		fout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " ERROR: " << Msg << "\n";
+		fout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " ERROR: " << MsgBuff << "\n";
 		fout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " SHUTING DOWN! " << "\n";
 
 #ifdef _DEBUG
-		printf("%s\n", Msg);
+		printf("%s\n", MsgBuff);
 #endif // _DEBUG
 
 		fout.close();
@@ -60,12 +93,15 @@ void CLogManager::LogError(char* Msg, bool needToShutdown)
 	}
 	else
 	{
-		fout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " ERROR: " << Msg << "\n";
+		fout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " ERROR: " << MsgBuff << "\n";
 
+		fout.flush();
 #ifdef _DEBUG
-		printf("%s\n", Msg);
+		printf("%s\n", MsgBuff);
 #endif // _DEBUG
 	}
+
+	free(MsgBuff);
 }
 
 void CLogManager::LogMsgLua(lua_State* L)
@@ -88,6 +124,7 @@ void CLogManager::LogMsgLua(lua_State* L)
 
 			fout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " Msg LUA: " << Msg << "\n";
 
+			fout.flush();
 #ifdef _DEBUG
 			printf("%s\n", Msg);
 #endif // _DEBUG
@@ -97,6 +134,8 @@ void CLogManager::LogMsgLua(lua_State* L)
 
 void CLogManager::LogErrorLua(lua_State* L)
 {
+	DEBUG_INVOKE
+
 	int count = lua_gettop(L); // получаем количество переданных параметров
 	if (count < 1)
 	{
@@ -137,9 +176,26 @@ void CLogManager::LogErrorLua(lua_State* L)
 	else
 	{
 		fout << local->tm_hour << ":" << local->tm_min << ":" << local->tm_sec << " ERROR LUA: " << Msg << "\n";
+		
+		fout.flush();
 
 #ifdef _DEBUG
 		printf("%s\n", Msg);
 #endif // _DEBUG
+	}
+}
+
+#include "Client/Client.h"
+#include "Server/Server.h"
+
+CLogManager* GetLogManager()
+{
+	if(IsClient())
+	{
+		return GetLogObjCl();
+	}
+	else
+	{
+		return GetLogObj();
 	}
 }

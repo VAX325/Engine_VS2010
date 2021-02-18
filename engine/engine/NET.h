@@ -1,43 +1,83 @@
-class Address
+#pragma once
+
+#pragma comment(lib, "GameNetworkingSockets.lib")
+
+#include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
+#include <GameNetworkingSockets/steam/isteamnetworkingutils.h>
+
+#include <iostream>
+#include <string>
+#include <map>
+
+//This need to call the static func
+void SteamGameSocketsInit();
+//This need to call the static func
+void SteamGameSocketsDeInit();
+
+class Server
 {
 public:
+	Server();
+	~Server();
 
-    Address();
-    Address(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned short port);
-    Address(unsigned int address, unsigned short port);
-    unsigned int GetAddress() const;
-    unsigned char GetA() const;
-    unsigned char GetB() const;
-    unsigned char GetC() const;
-    unsigned char GetD() const;
-    unsigned short GetPort() const;
-    bool operator == (const Address& other) const;
-    bool operator != (const Address& other) const;
+	void Run(uint16 nPort);
+
+	void Stop();
+
+	void SendStringToClient(HSteamNetConnection conn, const char* str);
+
+	void SendStringToAllClients(const char* str, HSteamNetConnection except = k_HSteamNetConnection_Invalid);
+
+	void SendDataToClient(HSteamNetConnection conn, void* data);
+
+	void SendDataToAllClients(void* data, HSteamNetConnection except = k_HSteamNetConnection_Invalid);
+
+	void SetClientNick(HSteamNetConnection hConn, const char* nick);
 
 private:
 
-    unsigned char aA;
-    unsigned char bA;
-    unsigned char cA;
-    unsigned char dA;
+	HSteamListenSocket m_hListenSock;
+	HSteamNetPollGroup m_hPollGroup;
+	ISteamNetworkingSockets* m_pInterface;
 
-    unsigned int addressA;
-    unsigned short portA;
+	struct Client_t
+	{
+		std::string m_sNick;
+	};
+
+	std::map< HSteamNetConnection, Client_t > m_mapClients;
+
+	void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t* pInfo);
+
+	static Server* s_pCallbackInstance;
+	static void SteamNetConnectionStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
+
+	void PollConnectionStateChanges();
 };
 
-class Socket
+class Client
 {
 public:
+	Client();
+	~Client();
 
-    Socket();
-    ~Socket();
-    bool Open(unsigned short port);
-    void Close();
-    bool IsOpen() const;
-    bool Send(const Address& destination, const void* data, int size);
-    int Receive(Address& sender, void* data, int size);
+	void Run(const SteamNetworkingIPAddr& serverAddr);
+
+	void Stop();
 
 private:
-    bool isOpen = false;
-    int handle;
+	HSteamNetConnection m_hConnection;
+	ISteamNetworkingSockets* m_pInterfaceCl;
+
+	void PollIncomingMessages();
+
+	void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t* pInfo);
+
+	static void SteamNetConnectionStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
+	
+	void PollConnectionStateChanges();
+	
+	static Client* cl_pCallbackInstance;
+
+	bool g_bQuit;
 };

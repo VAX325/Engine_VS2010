@@ -1,6 +1,7 @@
 #include "CSprite.h"
 #include "ClientPerems.h"
 #include <Base_include.h>
+#include <d3d9types.h>
 
 CSprite::CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UINT WindowHeight, char* Name) {
 	HRESULT hr;
@@ -122,14 +123,50 @@ void CSprite::RenderNonProcent(float X, float Y, float Width, float Height, D3DC
 	pSprite->End();
 }
 
-int CSprite::GetW() 
+void CSprite::RenderRect(float X, float Y, float Width, float Height, D3DCOLOR Color)
+{
+	pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+
+	RECT* rct = new RECT();
+
+	rct->left = X;
+	rct->top = Y;
+	rct->right = X + Width;
+	rct->bottom = Y + Height;
+
+	D3DXVECTOR3* pos = new D3DXVECTOR3(X, Y, 0);
+
+	pSprite->Draw(pTexture, rct, NULL, pos, Color);
+
+	pSprite->End();
+}
+
+void CSprite::RenderRect(float X, float Y, float Width, float Height, D3DCOLOR Color, int rotate)
+{
+	pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+
+	RECT* rct = new RECT();
+
+	rct->left = X;
+	rct->top = Y;
+	rct->right = X + Width;
+	rct->bottom = Y + Height;
+
+	D3DXVECTOR3* pos = new D3DXVECTOR3(X, Y, 0);
+
+	pSprite->Draw(pTexture, rct, NULL, pos, Color);
+
+	pSprite->End();
+}
+
+float CSprite::GetW() 
 {
 	return tImageInfo.Width;
 }
 
-int CSprite::GetH()
+float CSprite::GetH()
 {
-	return tImageInfo.Height;
+	return (float)tImageInfo.Height;
 }
 
 char* CSprite::GetName()

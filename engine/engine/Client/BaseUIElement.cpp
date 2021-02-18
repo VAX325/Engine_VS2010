@@ -1,5 +1,4 @@
 #include <Base_include.h>
-
 #include "BaseUIElement.h"
 #include "ClientPerems.h"
 
@@ -19,11 +18,12 @@ BaseUIElement::BaseUIElement(float x, float y, CSprite* texture, bool visability
 	{
 		Texture = NULL;
 
-		w = 0;
-		h = 0;
+		this->w = 0;
+		this->h = 0;
 	}
 
 	_visability = visability;
+	GetSpriteManger()->SetSpriteVisible(false, Texture);
 }
 
 BaseUIElement::BaseUIElement(float x, float y, float w, float h, CSprite* texture, bool visability)
@@ -37,6 +37,7 @@ BaseUIElement::BaseUIElement(float x, float y, float w, float h, CSprite* textur
 	this->h = h;
 
 	_visability = visability;
+	GetSpriteManger()->SetSpriteVisible(false, Texture);
 }
 
 BaseUIElement::~BaseUIElement()
@@ -55,7 +56,6 @@ BaseUIElement::~BaseUIElement()
 void BaseUIElement::SetVisible(bool visability)
 {
 	_visability = visability;
-	GetSpriteManger()->SetSpriteVisible(visability, Texture);
 }
 
 bool BaseUIElement::GetCurrentVisability()
@@ -65,28 +65,31 @@ bool BaseUIElement::GetCurrentVisability()
 
 void BaseUIElement::Render(LPDIRECT3DDEVICE9 pDirect3DDevice)
 {
-	//if(Texture != NULL)
-	//{
-		//GetSpriteManger()->SetSpriteVisible(_visability, Texture);
-	//}
+	if(_visability)
+	{
+		if (Texture != NULL)
+		{
+			Texture->RenderRect(x, y, w, h, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
+	}
 }
 
-int BaseUIElement::GetW()
+float BaseUIElement::GetW()
 {
 	return w;
 }
 
-int BaseUIElement::GetH()
+float BaseUIElement::GetH()
 {
 	return h;
 }
 
-int BaseUIElement::GetX()
+float BaseUIElement::GetX()
 {
 	return x;
 }
 
-int BaseUIElement::GetY()
+float BaseUIElement::GetY()
 {
 	return y;
 }

@@ -20,14 +20,23 @@ public:
 
 	~CSprite(void); // удаляем наш sprite
 
-	int GetW();
-	int GetH();
+	float GetW();
+	float GetH();
 
-	void Render(float X, float Y, float Width, float Height, D3DCOLOR Color); // параметры float указывать в процентах 0 - 100
-	void Render(float X, float Y, float Width, float Height, D3DCOLOR Color, int rotate); // параметры float указывать в процентах 0 - 100
+	// параметры float указывать в процентах 0 - 100
+	void Render(float X, float Y, float Width, float Height, D3DCOLOR Color);
+	// параметры float указывать в процентах 0 - 100
+	void Render(float X, float Y, float Width, float Height, D3DCOLOR Color, int rotate);
 
+	// параметры W и H это множитель на который умножается W и H спрайта
 	void RenderNonProcent(float X, float Y, float Width, float Height, D3DCOLOR Color);
+	// параметры W и H это множитель на который умножается W и H спрайта
 	void RenderNonProcent(float X, float Y, float Width, float Height, D3DCOLOR Color, int rotate);
 
+	// Параметры W и H указывать в пикселях
+	void RenderRect(float X, float Y, float Width, float Height, D3DCOLOR Color);
+	// Параметры W и H указывать в пикселях
+	void RenderRect(float X, float Y, float Width, float Height, D3DCOLOR Color, int rotate);
+	
 	char* GetName();
 };

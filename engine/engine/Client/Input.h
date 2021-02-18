@@ -1,16 +1,16 @@
 #pragma once
 
 #include "windows.h"
-
+#include "CMouse.h"
 #include <dinput.h>
 
 #define DIRECTINPUT_VERSION 0x0800
 
-class DxInput
+class CInput
 {
 public:
-	DxInput();
-	~DxInput();
+	CInput();
+	~CInput();
 
 	bool Initialize(HINSTANCE hinstance, HWND hwnd);
 	void ShutdownInput();
@@ -18,19 +18,18 @@ public:
 
 	bool IsKeyPressed(int DIK, int DIK_NUMBER);
 
-	bool IsRMouseButtonPressed();
-	bool IsLMouseButtonPressed();
+	CMouse* GetMouse();
 
-	void MouseMove(int* deltaX, int* deltaY);
-
-private:
-	bool ReadKeyboard();
-	bool ReadMouse();
+	IDirectInput8* GetDI();
 
 private:
 	IDirectInput8* m_directInput;
 	IDirectInputDevice8* m_keyboard;
-	IDirectInputDevice8* m_mouse;
 	unsigned char m_keyboardState[256];
-	DIMOUSESTATE m_mouseState;
+
+	bool ReadKeyboard();
+
+	CMouse* m_pMouse;
 };
+
+CInput* GetInputObj();

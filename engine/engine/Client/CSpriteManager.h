@@ -45,8 +45,8 @@ public:
 	void MoveSprite(char* SpriteName, int x, int y);
 	void MoveSprite(CSprite* Sprite, int x, int y);
 
-	void SetW(char* SpriteName, int w);
-	void SetH(char* SpriteName, int h);
+	void SetW(char* SpriteName, float w);
+	void SetH(char* SpriteName, float h);
 };
 
 #endif

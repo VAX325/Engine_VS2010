@@ -2,7 +2,7 @@
 #include "../CBaseEntity.h"
 #include "NVector.h"
 
-class CBasePhysicsEntity : private CBaseEntity
+class CBasePhysicsEntity : public CBaseEntity
 {
 public:
 	CBasePhysicsEntity(double mass, Vector4<float, float, float, float> CollisionPoints);

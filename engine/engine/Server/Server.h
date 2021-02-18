@@ -6,5 +6,7 @@
 
 #include "ServerPerems.h"
 
-int ServerWindows();
-char* ServerInClient();
+void ServerWindows();
+void ServerInClient();
+
+void ServerStop();

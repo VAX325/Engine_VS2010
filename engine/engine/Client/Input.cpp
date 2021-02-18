@@ -1,19 +1,19 @@
 #include "Input.h"
-
+#include <iostream>
 #include <Base_include.h>
+#include "ClientPerems.h"
 
-DxInput::DxInput()
+CInput::CInput()
 {
 	m_directInput = 0;
 	m_keyboard = 0;
-	m_mouse = 0;
 }
 
-DxInput::~DxInput()
+CInput::~CInput()
 {
 }
 
-bool DxInput::Initialize(HINSTANCE hinstance, HWND hwnd)
+bool CInput::Initialize(HINSTANCE hinstance, HWND hwnd)
 {
 	HRESULT result;
 
@@ -47,36 +47,13 @@ bool DxInput::Initialize(HINSTANCE hinstance, HWND hwnd)
 		return false;
 	}
 
-	result = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, NULL);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	result = m_mouse->SetDataFormat(&c_dfDIMouse);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	result = m_mouse->Acquire();
-	if (FAILED(result))
-	{
-		return false;
-	}
+	m_pMouse = new CMouse(GetMainWnd(), false);
 
 	return true;
 }
 
-void DxInput::ShutdownInput()
+void CInput::ShutdownInput()
 {
-	if (m_mouse)
-	{
-		m_mouse->Unacquire();
-		m_mouse->Release();
-		m_mouse = 0;
-	}
-
 	if (m_keyboard)
 	{
 		m_keyboard->Unacquire();
@@ -91,7 +68,7 @@ void DxInput::ShutdownInput()
 	}
 }
 
-bool DxInput::ReadKeyboard()
+bool CInput::ReadKeyboard()
 {
 	HRESULT result;
 
@@ -111,27 +88,7 @@ bool DxInput::ReadKeyboard()
 	return true;
 }
 
-bool DxInput::ReadMouse()
-{
-	HRESULT result;
-
-	result = m_mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&m_mouseState);
-	if (FAILED(result))
-	{
-		if ((result == DIERR_INPUTLOST) || (result == DIERR_NOTACQUIRED))
-		{
-			m_mouse->Acquire();
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-bool DxInput::Frame()
+bool CInput::Frame()
 {
 	bool result;
 
@@ -141,16 +98,12 @@ bool DxInput::Frame()
 		return false;
 	}
 
-	result = ReadMouse();
-	if (!result)
-	{
-		return false;
-	}
+	m_pMouse->Update();
 
 	return true;
 }
 
-bool DxInput::IsKeyPressed(int DIK, int DIK_NUMBER)
+bool CInput::IsKeyPressed(int DIK, int DIK_NUMBER)
 {
 	if (m_keyboardState[DIK] & DIK_NUMBER)
 	{
@@ -160,26 +113,12 @@ bool DxInput::IsKeyPressed(int DIK, int DIK_NUMBER)
 	return false;
 }
 
-void DxInput::MouseMove(int* deltaX, int* deltaY)
+CMouse* CInput::GetMouse()
 {
-	*deltaX = m_mouseState.lX;
-	*deltaY = m_mouseState.lY;
+	return m_pMouse;
 }
 
-bool DxInput::IsRMouseButtonPressed()
+IDirectInput8* CInput::GetDI()
 {
-	if (m_mouseState.rgbButtons[1] & 0x80)
-	{
-		return true;
-	}
-	return false;
-}
-
-bool DxInput::IsLMouseButtonPressed()
-{
-	if (m_mouseState.rgbButtons[0] & 0x80)
-	{
-		return true;
-	}
-	return false;
+	return m_directInput;
 }

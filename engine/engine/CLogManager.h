@@ -11,11 +11,11 @@ class CLogManager
 {
 public:
 
-	void Init();
+	void Init(bool IsServer = false);
 
-	void LogMsg(char* Msg);
+	void LogMsg(const char* Msg, ...);
 
-	void LogError(char* Msg, bool needToShutdown);
+	void LogError(const char* Msg, bool needToShutdown, ...);
 
 	void LogMsgLua(lua_State* L);
 
@@ -28,3 +28,5 @@ private:
 
 	ofstream fout;
 };
+
+CLogManager* GetLogManager();

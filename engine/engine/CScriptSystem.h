@@ -8,6 +8,29 @@
 //#define RegisterLuaObjN(NameSpace, LuaName, Func) luabridge::getGlobalNamespace(L).beginNamespace(NameSpace).addFunction(LuaName, Func).endNamespace();
 //#define RegisterLuaObjW(LuaName, Func) luabridge::getGlobalNamespace(L).addFunction(LuaName, Func);
 
+class LuaFuncPtr
+{
+public:
+
+	void operator()()
+	{
+		ref();
+	}
+
+	void SetPtr(luabridge::LuaRef _ref)
+	{
+		ref = _ref;
+	}
+
+	luabridge::LuaRef GetPointer()
+	{
+		return ref;
+	}
+
+private:
+	luabridge::LuaRef ref;
+};
+
 class CScriptSystem
 {
 public:
@@ -18,6 +41,7 @@ public:
 	void LuaStart(lua_State* L);
 	
 	void LuaUpdate(lua_State* L);
+	void LuaUpdateCl(lua_State* L);
 	/*void RegisterLuaObj(char* LuaName, int (* const fp)(lua_State*));*/
 
 	template<class ReturnType, class... Params>
@@ -54,6 +78,8 @@ public:
 		lua_setglobal(L, LuaName);
 	}
 
+	void CallLuaFunc(lua_State* L, char* LuaName);
+	LuaFuncPtr* GetLuaFuncPtr(lua_State* L, char* LuaName);
 private:
 
 	std::map<char*, char*> Scripts;

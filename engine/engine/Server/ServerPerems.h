@@ -7,3 +7,4 @@
 CLogManager* GetLogObj();
 FileSystem* GetFileSystemObj();
 CScriptSystem* GetScriptSystemObj();
+void CallLuaFuncSv(char* LuaFunc);

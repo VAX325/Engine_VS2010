@@ -6,7 +6,17 @@ function Main ()
 	
 end
 
-function Update ()
-	str = strPlusStr("FPS IS : ", GetFPS())
-	CLogClient:Msg()
+function new_game ()
+	CLogClient:Msg("Loading level Untitled1")
+	LevelChange("Untitled1")
+end
+
+function connect ()
+
+end
+
+function UpdateCl ()
+
+	CheckForEvents()
+	
 end

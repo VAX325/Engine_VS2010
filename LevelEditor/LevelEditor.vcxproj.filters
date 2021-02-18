@@ -63,6 +63,9 @@
     <ClInclude Include="Raw.h">
       <Filter>Compiler</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\engine\LevelStructure.h">
+      <Filter>Compiler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LevelEditor.rc" />

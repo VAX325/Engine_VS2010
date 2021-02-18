@@ -157,6 +157,7 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\engine\engine\LevelStructure.h" />
     <ClInclude Include="CLogManager.h" />
     <ClInclude Include="Compiler.h" />
     <ClInclude Include="CSprite.h" />

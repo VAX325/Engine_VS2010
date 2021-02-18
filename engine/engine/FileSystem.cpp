@@ -49,25 +49,6 @@ char* FileSystem::ReadFromFile(char* file)
 	return buff;
 }
 
-char* FileSystem::ReadFromFile(char* file, ios_base::open_mode OpenMode)
-{
-	if (file == NULL)
-	{
-		return NULL;
-	}
-
-	ifstream out = ifstream(file, OpenMode);
-
-	char buff[512];
-
-	//out.read(buff, out.tellg());
-	out.getline(buff, 50);
-
-	out.close();
-
-	return buff;
-}
-
 Files FileSystem::GetAllFilesInFolder(char* folder, char* extension)
 {
 	WIN32_FIND_DATA FindFileData;

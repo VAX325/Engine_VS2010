@@ -1,0 +1,1 @@
+start Win32-Debug/engine.exe -nosound -server

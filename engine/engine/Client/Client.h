@@ -15,7 +15,7 @@
 #include <vector>
 #include <fstream>
 
-int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow);
+int ClientMain(int argc, char* argv[]);
 long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 bool InitDirect3D(D3DFORMAT ColorFormat, D3DFORMAT DepthFormat);
 void DrawFrame();

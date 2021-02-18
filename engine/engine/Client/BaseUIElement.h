@@ -9,11 +9,11 @@ public:
 	BaseUIElement(float x = 0, float y = 0, float w = 0, float h = 0, CSprite* texture = nullptr, bool visability = false);
 	~BaseUIElement();
 
-	int GetX();
-	int GetY();
+	float GetX();
+	float GetY();
 
-	int GetW();
-	int GetH();
+	float GetW();
+	float GetH();
 
 	void SetVisible(bool visability);
 	bool GetCurrentVisability();

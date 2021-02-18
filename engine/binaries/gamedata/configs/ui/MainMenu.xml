@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <panel>
-	<CText value="Text" font="Arial" x="10" y="10" w="50" h="50" color="0xff646464"/>
-	<!-- <CSprite name="MainMenu" x="0" y="0" w="-1" h="-1"/> -->
+	<CSprite name="MainMenu" x="0" y="0" w="-1" h="-1"/>
+	<CButton name="Button" x="10" y="10" w="25" h="10" text="Button_text" sprite="button" OnClick="new_game">
+	<!-- <CText value="Text" font="Arial" x="10" y="10" w="50" h="50" color="0xff646464"/> -->
 </panel>

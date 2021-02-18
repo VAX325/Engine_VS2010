@@ -20,6 +20,8 @@ CSoundManager* GetSoundObj();
 FileSystem* GetFileSystemObjCl();
 CScriptSystem* GetScriptSystemObjCl();
 lua_State* GetLuaStateCl();
+void CallLuaFuncCl(char* LuaFunc);
+LuaFuncPtr* GetLuaFuncPtrCl(char* LuaName);
 HWND GetMainWnd();
 
 #include "../SharedLua.h"

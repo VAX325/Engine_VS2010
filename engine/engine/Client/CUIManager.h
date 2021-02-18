@@ -2,6 +2,8 @@
 #include "CUIPanel.h"
 #include <map>
 
+#define UI_NO_PANEL -1
+
 class CUIManager
 {
 public:
@@ -18,7 +20,12 @@ public:
 
 	void RenderPanels();
 
+	int GetCurrentPanel();
+
+	CUIPanel* GetPanel(int panelID);
+
 private:
+	int _CurrentPanel;
 
 	std::map<int, CUIPanel*> panels;
 };

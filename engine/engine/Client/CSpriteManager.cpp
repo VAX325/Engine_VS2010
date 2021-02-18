@@ -347,8 +347,8 @@ void CSpriteManager::LoadAllSprites()
 				GetD3D9Device(),
 				FullTexturePath.c_str(),
 				CordsNname[2],
-				atof(CordsNname[0]),
-				atof(CordsNname[1]),
+				(float)atof(CordsNname[0]),
+				(float)atof(CordsNname[1]),
 				true,
 				(CHAR*)txtNtextrsIt->second.second
 			);
@@ -359,8 +359,8 @@ void CSpriteManager::LoadAllSprites()
 				GetD3D9Device(),
 				FullTexturePath.c_str(),
 				CordsNname[2],
-				atof(CordsNname[0]),
-				atof(CordsNname[1]),
+				(float)atof(CordsNname[0]),
+				(float)atof(CordsNname[1]),
 				false,
 				(CHAR*)txtNtextrsIt->second.second
 			);
@@ -384,13 +384,13 @@ void CSpriteManager::MoveSprite(CSprite* Sprite, int x, int y)
 	spritesNcords.cords[Sprite] = { (float)x, (float)y , old.third, old.four };
 }
 
-void CSpriteManager::SetW(char* SpriteName, int w)
+void CSpriteManager::SetW(char* SpriteName, float w)
 {
 	FLOATVECTOR4 old = spritesNcords.cords[GetSprite(SpriteName)];
 	spritesNcords.cords[GetSprite(SpriteName)] = { old.first, old.second , (float)w, old.four };
 }
 
-void CSpriteManager::SetH(char* SpriteName, int h)
+void CSpriteManager::SetH(char* SpriteName, float h)
 {
 	FLOATVECTOR4 old = spritesNcords.cords[GetSprite(SpriteName)];
 	spritesNcords.cords[GetSprite(SpriteName)] = { old.first, old.second , old.third, (float)h };

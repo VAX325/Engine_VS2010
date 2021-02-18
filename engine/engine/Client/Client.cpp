@@ -1,6 +1,8 @@
 #include <Base_include.h>
 #include "Client.h"
 #include "CUIManager.h"
+#include "CGameCL.h"
+#include "../Server/Server.h"
 #include "../xmlparser.h"
 #include "../Utils.h"
 
@@ -22,7 +24,7 @@ IDirect3DDevice9* g_pDirect3DDevice = NULL;
 
 #include "Input.h"
 
-DxInput InputObj;
+CInput InputObj;
 
 CLogManager LogManager;
 
@@ -40,6 +42,37 @@ XMLParser* xml_parser;
 
 lua_State* L;
 
+CGameCL* Game;
+
+struct Mouse
+{
+	int xPos;
+	int yPos;
+};
+
+Mouse MouseCl;
+
+void inline UpdateFuncUP(int button)
+{
+	UIManager.GetPanel(UIManager.GetCurrentPanel())->CheckForUIEvents(MouseCl.xPos, MouseCl.yPos);
+}
+
+class MouseReciverClass : public iMouseReceiver
+{
+public:
+	void MouseButtonUp(int button) override
+	{
+		UpdateFuncUP(button);
+	};
+
+	void MouseButtonDown(int button) override
+	{
+		
+	};
+};
+
+MouseReciverClass* MouseReciver = new MouseReciverClass();
+
 bool Sound = false;
 
 float fps = 0.0f;
@@ -51,24 +84,55 @@ float LuaGetFPS()
 	return fps;
 }
 
-int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow)
+void LuaCheckForEvents()
 {
-#ifdef _DEBUG
-	AllocConsole();
-	freopen("CONOUT$", "w+", stdout);
-	freopen("CONIN$", "w+", stdin);
-#endif // _DEBUG
+	
+}
+
+bool IsClAndSv = false;
+
+void LuaLevelChange(lua_State* LS)
+{
+	IsClAndSv = true;
+
+	SteamGameSocketsInit();
+
+	CreateThread(0, 0, (LPTHREAD_START_ROUTINE)ServerInClient, NULL, 0, NULL);
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+	if (lua_isstring(L, 1))
+	{
+		char* LevelName = (char*)lua_tostring(L, 1);
+		Game->LevelLoad(LevelName);
+	}
+	else
+	{
+		LogManager.LogError("You atempting to load unknown level!", false);
+	}
+}
+
+int ClientMain(int argc, char* argv[])
+{
+#ifndef _DEBUG
+	FreeConsole();
+	::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+#else
+	if (::IsWindowVisible(::GetConsoleWindow()) == FALSE)
+		::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+#endif
 
 	fs = FileSystem();
 
 	LogManager.Init();
 
-	InputObj = DxInput();
-
-	if (FindWord((char*)lpCmdLine, (char*)"-nosound"))
+	for (int i = 0; i != argc; i++)
 	{
-		Sound = true;
-		LogManager.LogMsg((char*)"No sound!");
+		if (FindWord((char*)argv[i], (char*)"-nosound"))
+		{
+			Sound = true;
+			LogManager.LogMsg("No sound!");
+		}
 	}
 
 	g_hWnd = NULL;
@@ -90,10 +154,10 @@ int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
 
 	if (!RegisterClassEx(&wc))
 	{
-		LogManager.LogError((char*)"Can't register window class", true);
+		LogManager.LogError("Can't register window class", true);
 	}
 
-	LogManager.LogMsg((char*)"Register window class");
+	LogManager.LogMsg("Register window class");
 
 	g_hWnd = CreateWindowEx(
 		WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
@@ -110,49 +174,44 @@ int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
 
 	if (g_hWnd == NULL)
 	{
-		LogManager.LogError((char*)"Can't create window", true);
+		LogManager.LogError("Can't create window", true);
 	}
 
-	LogManager.LogMsg((char*)"Window created");
+	LogManager.LogMsg("Window created");
 
 	if (!InitDirect3D(D3DFMT_R5G6B5, D3DFMT_D16))
 	{
-		LogManager.LogError((char*)"Can't get DirectX context", true);
+		LogManager.LogError("Can't get DirectX context", true);
 	}
 
-	LogManager.LogMsg((char*)"Getted DirectX context");
+	LogManager.LogMsg("Getted DirectX context");
 
-	ShowWindow(g_hWnd, SW_SHOW);
-	UpdateWindow(g_hWnd);
-	SetFocus(g_hWnd);
-	SetForegroundWindow(g_hWnd);
+	try
+	{
+		ShowWindow(g_hWnd, SW_SHOW);
+		UpdateWindow(g_hWnd);
+		SetFocus(g_hWnd);
+		SetForegroundWindow(g_hWnd);
+	}
+	catch (const std::exception& e)
+	{
+		LogManager.LogError(e.what(), true);
+	}
 
-	MSG msg;
-	ZeroMemory(&msg, sizeof(msg));
+	InputObj = CInput();
 
 	if (!InputObj.Initialize(g_hInstance, g_hWnd))
 	{
-		LogManager.LogError((char*)"Can't get DirectInput context", true);
+		LogManager.LogError("Can't get DirectInput context", true);
 	}
 
-	LogManager.LogMsg((char*)"Getted DirectInput context");
+	InputObj.GetMouse()->SetReceiver(MouseReciver);
+
+	LogManager.LogMsg("Getted DirectInput context");
 
 	CSM = CSpriteManager();
 
 	CSM.LoadAllSprites();
-
-	UIManager = CUIManager();
-
-	UIManager.LoadPanels();
-
-	for(int i = 0; i != UIManager.GetCountOfPanels(); i++)
-	{
-		if(strcmp(UIManager.GetPanelName(i), "MainMenu.xml") == 0)
-		{
-			UIManager.ShowPanel(i);
-			break;
-		}
-	}
 
 	if (!Sound)
 	{
@@ -168,28 +227,30 @@ int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
 
 	InitLuaShared(L, &LogManager);
 
-	DWORD start = GetTickCount();
-
-	DrawFrame();
-
-	DWORD end = GetTickCount();
-
-	total += end - start;
-
-	frames++;
-
-	if (total >= 1000) {
-		fps = frames * 1000 / total;
-
-#ifdef _DEBUG
-		cout << "FPS: " << fps << "\n";
-#endif
-		frames = 0;
-		total = 0;
-	}
+	luabridge::getGlobalNamespace(L)
+		.addFunction("CheckForEvents", LuaCheckForEvents)
+		.addFunction("LevelChange", LuaLevelChange);
 
 	ScriptSystem.LuaStart(L);
+
+	UIManager = CUIManager();
+
+	UIManager.LoadPanels();
+
+	for (int i = 0; i != UIManager.GetCountOfPanels(); i++)
+	{
+		if (strcmp(UIManager.GetPanelName(i), "MainMenu.xml") == 0)
+		{
+			UIManager.ShowPanel(i);
+			break;
+		}
+	}
 	
+	Game = new CGameCL();
+
+	MSG msg;
+	ZeroMemory(&msg, sizeof(msg));
+
 	while (g_bApplicationState)
 	{
 		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
@@ -220,8 +281,8 @@ int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
 			}
 		}
 
-		ScriptSystem.LuaUpdate(L);
-
+		ScriptSystem.LuaUpdateCl(L);
+		
 		if(!g_bApplicationState)
 		{
 			Shutdown();
@@ -234,6 +295,9 @@ int ClientMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
 
 long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
+	MouseCl.xPos = LOWORD(lParam);
+	MouseCl.yPos = HIWORD(lParam);
+
 	switch (iMsg)
 	{
 	case WM_DESTROY:
@@ -331,14 +395,6 @@ void DrawFrame()
 		{
 			g_bApplicationState = false;
 		}
-		if (InputObj.IsLMouseButtonPressed())
-		{
-			
-		}
-		if (InputObj.IsRMouseButtonPressed())
-		{
-			
-		}
 	}
 	else
 	{
@@ -366,6 +422,13 @@ void DrawFrame()
 
 void Shutdown()
 {
+	Game->UnloadLevel();
+
+	if (IsClAndSv)
+		ServerStop();
+
+	SteamGameSocketsDeInit();
+
 	if (g_pDirect3DDevice != NULL)
 	{
 		g_pDirect3DDevice->Release();
@@ -407,6 +470,11 @@ int GetWindowW()
 	return g_iWindowWidth;
 }
 
+CInput* GetInputObj()
+{
+	return &InputObj;
+}
+
 CLogManager* GetLogObjCl()
 {
 	return &LogManager;
@@ -422,7 +490,7 @@ CSoundManager* GetSoundObj()
 	return &SoundManager;
 }
 
-FileSystem* GetFileSystemObjCl() 
+FileSystem* GetFileSystemObjCl()
 {
 	return &fs;
 }
@@ -435,4 +503,16 @@ CScriptSystem* GetScriptSystemObjCl()
 lua_State* GetLuaStateCl()
 {
 	return L;
+}
+
+void CallLuaFuncCl(char* LuaFunc)
+{
+	ScriptSystem.CallLuaFunc(L, LuaFunc);
+}
+
+LuaFuncPtr* GetLuaFuncPtrCl(char* LuaName)
+{
+	LuaFuncPtr* _ptr = ScriptSystem.GetLuaFuncPtr(L, LuaName);
+
+	return _ptr;
 }

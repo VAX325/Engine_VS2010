@@ -34,23 +34,14 @@
     <Filter Include="Server">
       <UniqueIdentifier>{f7f9bf72-2577-46d3-9d47-9632840cbbdc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Client\NET">
-      <UniqueIdentifier>{593e502a-d7a2-41fd-83cb-5193db264f28}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shared\NET">
       <UniqueIdentifier>{03cbf749-46d3-4f58-ab6c-c922d998c72b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Server\Level2D">
-      <UniqueIdentifier>{aef4e430-a960-4745-8adb-5b5f175cefea}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shared\Entitys">
       <UniqueIdentifier>{497d8338-a30a-46dd-8a3f-de37f508eb2f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shared\Entitys\Base">
       <UniqueIdentifier>{6473e9d6-4251-4181-986a-1ad5c617a0de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shared\LevelBase">
-      <UniqueIdentifier>{bc0a0e4c-0d89-422a-a38d-a54c6f84cd1b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Server\Physics">
       <UniqueIdentifier>{526d9287-a14c-479d-82a2-69b5553a55bb}</UniqueIdentifier>
@@ -60,9 +51,6 @@
     </Filter>
     <Filter Include="Server\Physics\CBasePhysicsEntity">
       <UniqueIdentifier>{91064668-48cb-4c72-82da-f90ddb362613}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Server\Physics\Constants">
-      <UniqueIdentifier>{878341da-fb18-4936-99cf-f1fe63d67380}</UniqueIdentifier>
     </Filter>
     <Filter Include="Server\Entitys">
       <UniqueIdentifier>{debb58d1-425b-4366-bfea-2628a9d312ad}</UniqueIdentifier>
@@ -93,6 +81,27 @@
     </Filter>
     <Filter Include="Shared\XMLParser">
       <UniqueIdentifier>{8d089617-7dff-43c4-9e72-2cbfe29b8caf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\UI\Sprite">
+      <UniqueIdentifier>{bc202649-370e-469d-b3de-65d75e4614e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\CL Game">
+      <UniqueIdentifier>{5170b647-4b24-4715-9430-1e5bab1751f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Physics\World">
+      <UniqueIdentifier>{1d204bb0-3015-4375-aeeb-22fc16840a82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared\GameBase">
+      <UniqueIdentifier>{ba03db3c-0def-42a5-bcdb-71d1d401ae11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Level">
+      <UniqueIdentifier>{aef4e430-a960-4745-8adb-5b5f175cefea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\SV Game">
+      <UniqueIdentifier>{fa60445d-2c0a-4d24-9c6e-71ab6eafa56a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\Level">
+      <UniqueIdentifier>{a06dc22a-78bb-45ef-9bdf-f0a3f6de5352}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -143,35 +152,17 @@
       <Filter>Server</Filter>
     </ClInclude>
     <ClInclude Include="Base_include.h" />
-    <ClInclude Include="Client\ClientNET.h">
-      <Filter>Client\NET</Filter>
-    </ClInclude>
     <ClInclude Include="NET.h">
       <Filter>Shared\NET</Filter>
     </ClInclude>
     <ClInclude Include="CBaseEntity.h">
       <Filter>Shared\Entitys\Base</Filter>
     </ClInclude>
-    <ClInclude Include="CLevelBase.h">
-      <Filter>Shared\LevelBase</Filter>
-    </ClInclude>
-    <ClInclude Include="Server\CLevel2DServer.h">
-      <Filter>Server\Level2D</Filter>
-    </ClInclude>
     <ClInclude Include="Server\CBasePhysicsEntity.h">
       <Filter>Server\Physics\CBasePhysicsEntity</Filter>
     </ClInclude>
-    <ClInclude Include="Server\PhysicsConstants.h">
-      <Filter>Server\Physics\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="Server\CPlayerSV.h">
-      <Filter>Server\Entitys\CPlayerSV</Filter>
-    </ClInclude>
     <ClInclude Include="Client\CPlayerCL.h">
       <Filter>Client\Entitys\CPlayerCL</Filter>
-    </ClInclude>
-    <ClInclude Include="Server\CTrigger.h">
-      <Filter>Server\Entitys\CTrigger</Filter>
     </ClInclude>
     <ClInclude Include="Client\BaseUIElement.h">
       <Filter>Client\UI\Base</Filter>
@@ -190,6 +181,39 @@
     </ClInclude>
     <ClInclude Include="xmlparser.h">
       <Filter>Shared\XMLParser</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CUISprite.h">
+      <Filter>Client\UI\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CMouse.h">
+      <Filter>Client\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\CPhysicWorld.h">
+      <Filter>Server\Physics\World</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelStructure.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="CGameBase.h">
+      <Filter>Shared\GameBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\LevelLoadSv.h">
+      <Filter>Server\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\CLevelServer.h">
+      <Filter>Server\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CLevelClient.h">
+      <Filter>Client\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\LevelLoadCl.h">
+      <Filter>Client\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\CGameSV.h">
+      <Filter>Server\SV Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CGameCL.h">
+      <Filter>Client\CL Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -227,35 +251,17 @@
     <ClCompile Include="Server\Server.cpp">
       <Filter>Server</Filter>
     </ClCompile>
-    <ClCompile Include="Client\ClientNET.cpp">
-      <Filter>Client\NET</Filter>
-    </ClCompile>
     <ClCompile Include="NET.cpp">
       <Filter>Shared\NET</Filter>
     </ClCompile>
     <ClCompile Include="CBaseEntity.cpp">
       <Filter>Shared\Entitys\Base</Filter>
     </ClCompile>
-    <ClCompile Include="CLevelBase.cpp">
-      <Filter>Shared\LevelBase</Filter>
-    </ClCompile>
-    <ClCompile Include="Server\CLevel2DServer.cpp">
-      <Filter>Server\Level2D</Filter>
-    </ClCompile>
     <ClCompile Include="Server\CBasePhysicsEntity.cpp">
       <Filter>Server\Physics\CBasePhysicsEntity</Filter>
     </ClCompile>
-    <ClCompile Include="Server\CPlayerSV.cpp">
-      <Filter>Server\Entitys\CPlayerSV</Filter>
-    </ClCompile>
     <ClCompile Include="Client\CPlayerCL.cpp">
       <Filter>Client\Entitys\CPlayerCL</Filter>
-    </ClCompile>
-    <ClCompile Include="Server\CTrigger.cpp">
-      <Filter>Server\Entitys\CTrigger</Filter>
-    </ClCompile>
-    <ClCompile Include="Server\PhysicsConstants.cpp">
-      <Filter>Server\Physics\Constants</Filter>
     </ClCompile>
     <ClCompile Include="Client\BaseUIElement.cpp">
       <Filter>Client\UI\Base</Filter>
@@ -274,6 +280,36 @@
     </ClCompile>
     <ClCompile Include="xmlparser.cpp">
       <Filter>Shared\XMLParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CUISprite.cpp">
+      <Filter>Client\UI\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CMouse.cpp">
+      <Filter>Client\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\CPhysicWorld.cpp">
+      <Filter>Server\Physics\World</Filter>
+    </ClCompile>
+    <ClCompile Include="CGameBase.cpp">
+      <Filter>Shared\GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\CLevelServer.cpp">
+      <Filter>Server\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CLevelClient.cpp">
+      <Filter>Client\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\CGameSV.cpp">
+      <Filter>Server\SV Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CGameCL.cpp">
+      <Filter>Client\CL Game</Filter>
+    </ClCompile>
+    <ClCompile Include="NET_Client.cpp">
+      <Filter>Shared\NET</Filter>
+    </ClCompile>
+    <ClCompile Include="NET_Server.cpp">
+      <Filter>Shared\NET</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

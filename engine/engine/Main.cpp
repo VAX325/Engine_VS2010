@@ -8,29 +8,35 @@
 
 bool Client;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow)
+//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow)
+int main(int argc, char* argv[])
 {
-	int nArgs;
-	CommandLineToArgvW(GetCommandLineW(), &nArgs);
+	//int nArgs;
+	//CommandLineToArgvW(GetCommandLineW(), &nArgs);
 
-	if( nArgs > 1 )
+	if( argc > 1 )
 	{
-		if (FindWord((char*)lpCmdLine, (char*)"-client"))
+		for (int i = 0; i != argc; i++)
 		{
-			Client = true;
-			return ClientMain(hInstance, hPrevInstance, lpCmdLine, iCmdShow);
-		}
-		else if(FindWord((char*)lpCmdLine, (char*)"-server"))
-		{
-			Client = false;
-			return ServerWindows();
+			if (FindWord((char*)argv[i], (char*)"-client"))
+			{
+				Client = true;
+				return ClientMain(argc, argv);
+			}
+			if (FindWord((char*)argv[i], (char*)"-server"))
+			{
+				Client = false;
+				ServerWindows();
+			}
 		}
 	}
+	else
+	{
+		Client = true;
+		return ClientMain(argc, argv);
+	}
 
-	Client = true;
-	return ClientMain(hInstance, hPrevInstance, lpCmdLine, iCmdShow);
-
-	return 13;
+	return 0;
 }
 
 bool IsClient() 
