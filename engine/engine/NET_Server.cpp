@@ -13,7 +13,7 @@ bool ImAcrutch = false;
 
 Server::Server()
 {
-	s_pCallbackInstance = this;
+	sv_pCallbackInstance = this;
 }
 
 Server::~Server()
@@ -23,7 +23,7 @@ Server::~Server()
 
 void Server::Run(uint16 nPort)
 {
-	m_pInterface = SteamNetworkingSockets();
+	m_pInterfaceSv = SteamNetworkingSockets();
 
 	// Start listening
 	SteamNetworkingIPAddr serverLocalAddr;
@@ -31,10 +31,10 @@ void Server::Run(uint16 nPort)
 	serverLocalAddr.m_port = nPort;
 	SteamNetworkingConfigValue_t opt;
 	opt.SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void*)SteamNetConnectionStatusChangedCallback);
-	m_hListenSock = m_pInterface->CreateListenSocketIP(serverLocalAddr, 1, &opt);
+	m_hListenSock = m_pInterfaceSv->CreateListenSocketIP(serverLocalAddr, 1, &opt);
 	if (m_hListenSock == k_HSteamListenSocket_Invalid)
 		GetLogManager()->LogError("Failed to listen on port %d", true, nPort);
-	m_hPollGroup = m_pInterface->CreatePollGroup();
+	m_hPollGroup = m_pInterfaceSv->CreatePollGroup();
 	if (m_hPollGroup == k_HSteamNetPollGroup_Invalid)
 		GetLogManager()->LogError("Failed to listen on port %d", true, nPort);
 	GetLogManager()->LogMsg("Server listening on port %d\n", nPort);
@@ -51,14 +51,14 @@ void Server::Run(uint16 nPort)
 	{
 		SendStringToClient(it.first, "Server is shutting down.  Goodbye.");
 
-		m_pInterface->CloseConnection(it.first, 0, "Server Shutdown", true);
+		m_pInterfaceSv->CloseConnection(it.first, 0, "Server Shutdown", true);
 	}
 	m_mapClients.clear();
 
-	m_pInterface->CloseListenSocket(m_hListenSock);
+	m_pInterfaceSv->CloseListenSocket(m_hListenSock);
 	m_hListenSock = k_HSteamListenSocket_Invalid;
 
-	m_pInterface->DestroyPollGroup(m_hPollGroup);
+	m_pInterfaceSv->DestroyPollGroup(m_hPollGroup);
 	m_hPollGroup = k_HSteamNetPollGroup_Invalid;
 }
 
@@ -69,7 +69,7 @@ void Server::Stop()
 
 void Server::SendStringToClient(HSteamNetConnection conn, const char* str)
 {
-	m_pInterface->SendMessageToConnection(conn, str, (uint32)strlen(str), k_nSteamNetworkingSend_Reliable, nullptr);
+	m_pInterfaceSv->SendMessageToConnection(conn, str, (uint32)strlen(str), k_nSteamNetworkingSend_Reliable, nullptr);
 }
 
 void Server::SendStringToAllClients(const char* str, HSteamNetConnection except)
@@ -84,7 +84,7 @@ void Server::SendStringToAllClients(const char* str, HSteamNetConnection except)
 void Server::SendDataToClient(HSteamNetConnection conn, void* data)
 {
 	//m_pInterface->SendMessageToConnection(conn, str, (uint32)strlen(str), k_nSteamNetworkingSend_Reliable, nullptr);
-	m_pInterface->SendMessageToConnection(conn, data, (uint32)sizeof(data), k_nSteamNetworkingSend_Reliable, nullptr);
+	m_pInterfaceSv->SendMessageToConnection(conn, data, (uint32)sizeof(data), k_nSteamNetworkingSend_Reliable, nullptr);
 }
 
 void Server::SendDataToAllClients(void* data, HSteamNetConnection except)
@@ -100,7 +100,7 @@ void Server::SetClientNick(HSteamNetConnection hConn, const char* nick)
 {
 	m_mapClients[hConn].m_sNick = nick;
 
-	m_pInterface->SetConnectionName(hConn, nick);
+	m_pInterfaceSv->SetConnectionName(hConn, nick);
 }
 
 void Server::OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t* pInfo)
@@ -149,7 +149,7 @@ void Server::OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCa
 			assert(pInfo->m_eOldState == k_ESteamNetworkingConnectionState_Connecting);
 		}
 
-		m_pInterface->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
+		m_pInterfaceSv->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
 		break;
 	}
 
@@ -159,16 +159,16 @@ void Server::OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCa
 
 		GetLogManager()->LogMsg("Connection request from %s", pInfo->m_info.m_szConnectionDescription);
 
-		if (m_pInterface->AcceptConnection(pInfo->m_hConn) != k_EResultOK)
+		if (m_pInterfaceSv->AcceptConnection(pInfo->m_hConn) != k_EResultOK)
 		{
-			m_pInterface->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
+			m_pInterfaceSv->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
 			GetLogManager()->LogMsg("Can't accept connection.  (It was already closed?)");
 			break;
 		}
 
-		if (!m_pInterface->SetConnectionPollGroup(pInfo->m_hConn, m_hPollGroup))
+		if (!m_pInterfaceSv->SetConnectionPollGroup(pInfo->m_hConn, m_hPollGroup))
 		{
-			m_pInterface->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
+			m_pInterfaceSv->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
 			GetLogManager()->LogMsg("Failed to set poll group?");
 			break;
 		}
@@ -202,13 +202,13 @@ void Server::OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCa
 
 void Server::SteamNetConnectionStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo)
 {
-	s_pCallbackInstance->OnSteamNetConnectionStatusChanged(pInfo);
+	sv_pCallbackInstance->OnSteamNetConnectionStatusChanged(pInfo);
 }
 
 void Server::PollConnectionStateChanges()
 {
-	s_pCallbackInstance = this;
-	m_pInterface->RunCallbacks();
+	sv_pCallbackInstance = this;
+	m_pInterfaceSv->RunCallbacks();
 }
 
-Server* Server::s_pCallbackInstance = nullptr;
+Server* Server::sv_pCallbackInstance = nullptr;

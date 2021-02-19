@@ -38,7 +38,7 @@ private:
 
 	HSteamListenSocket m_hListenSock;
 	HSteamNetPollGroup m_hPollGroup;
-	ISteamNetworkingSockets* m_pInterface;
+	ISteamNetworkingSockets* m_pInterfaceSv;
 
 	struct Client_t
 	{
@@ -49,7 +49,7 @@ private:
 
 	void OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t* pInfo);
 
-	static Server* s_pCallbackInstance;
+	static Server* sv_pCallbackInstance;
 	static void SteamNetConnectionStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
 
 	void PollConnectionStateChanges();
@@ -64,6 +64,10 @@ public:
 	void Run(const SteamNetworkingIPAddr& serverAddr);
 
 	void Stop();
+
+	void SendString(const char* str);
+
+	void SendData(void* data);
 
 private:
 	HSteamNetConnection m_hConnection;

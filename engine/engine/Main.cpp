@@ -27,14 +27,12 @@ int main(int argc, char* argv[])
 			{
 				Client = false;
 				ServerWindows();
+				return 0;
 			}
 		}
 	}
-	else
-	{
-		Client = true;
-		return ClientMain(argc, argv);
-	}
+	Client = true;
+	return ClientMain(argc, argv);
 
 	return 0;
 }

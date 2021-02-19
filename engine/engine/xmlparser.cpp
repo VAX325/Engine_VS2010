@@ -1,5 +1,5 @@
 #include "xmlparser.h"
-#include <pugixml.hpp>
+#include <pugixml/pugixml.hpp>
 #include <Base_include.h>
 #include <Windows.h>
 

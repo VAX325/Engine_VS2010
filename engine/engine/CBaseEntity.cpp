@@ -5,6 +5,8 @@
 
 CBaseEntity::CBaseEntity()
 {
+	ImPhysEnt = false;
+
 	xPos = 0;
 	yPos = 0;
 #ifdef _3D
@@ -14,6 +16,8 @@ CBaseEntity::CBaseEntity()
 
 CBaseEntity::CBaseEntity(double x, double y)
 {
+	ImPhysEnt = false;
+
 	xPos = x;
 	yPos = y;
 }
@@ -26,6 +30,8 @@ CBaseEntity::~CBaseEntity()
 #ifdef _3D
 CBaseEntity::CBaseEntity(double x, double y, double z)
 {
+	ImPhysEnt = false;
+
 	xPos = x;
 	yPos = y;
 	zPos = z;
@@ -45,4 +51,9 @@ bool CBaseEntity::operator != (CBaseEntity another)
 void CBaseEntity::Update()
 {
 
+}
+
+bool CBaseEntity::ImPhys()
+{
+	return ImPhysEnt;
 }

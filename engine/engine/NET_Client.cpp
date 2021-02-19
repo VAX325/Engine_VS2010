@@ -55,6 +55,16 @@ void Client::Stop()
 	g_bQuit = true;
 }
 
+void Client::SendString(const char* str)
+{
+	m_pInterfaceCl->SendMessageToConnection(m_hConnection, str, (uint32)strlen(str), k_nSteamNetworkingSend_Reliable, nullptr);
+}
+
+void Client::SendData(void* data)
+{
+	m_pInterfaceCl->SendMessageToConnection(m_hConnection, data, (uint32)sizeof(data), k_nSteamNetworkingSend_Reliable, nullptr);
+}
+
 void Client::PollIncomingMessages()
 {
 	while (!g_bQuit)
@@ -72,6 +82,8 @@ void Client::PollIncomingMessages()
 
 		// We don't need this anymore.
 		pIncomingMsg->Release();
+
+		//m_pInterfaceCl->SendMessageToConnection(m_hConnection, cmd.c_str(), (uint32)cmd.length(), k_nSteamNetworkingSend_Reliable, nullptr);
 	}
 }
 
@@ -91,15 +103,15 @@ void Client::OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCa
 
 		if (pInfo->m_eOldState == k_ESteamNetworkingConnectionState_Connecting)
 		{
-			GetLogManager()->LogMsg("We sought the remote host, yet our efforts were met with defeat.  (%s)", pInfo->m_info.m_szEndDebug);
+			GetLogManager()->LogMsg("Can't find remote host.  (%s)", pInfo->m_info.m_szEndDebug);
 		}
 		else if (pInfo->m_info.m_eState == k_ESteamNetworkingConnectionState_ProblemDetectedLocally)
 		{
-			GetLogManager()->LogMsg("Alas, troubles beset us; we have lost contact with the host.  (%s)", pInfo->m_info.m_szEndDebug);
+			GetLogManager()->LogMsg("Lost contact with the host.  (%s)", pInfo->m_info.m_szEndDebug);
 		}
 		else
 		{
-			GetLogManager()->LogMsg("The host hath bidden us farewell.  (%s)", pInfo->m_info.m_szEndDebug);
+			GetLogManager()->LogMsg("Disconected.  (%s)", pInfo->m_info.m_szEndDebug);
 		}
 
 		m_pInterfaceCl->CloseConnection(pInfo->m_hConn, 0, nullptr, false);

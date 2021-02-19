@@ -40,9 +40,8 @@ public:
 		EntitysAll = 0;
 		for (auto it = entitys.begin(); it != entitys.end(); it++)
 		{
-			CBasePhysicsEntity* entity = dynamic_cast<CBasePhysicsEntity*>(it->second);
-			if (entity)
-				PhysEntitys[EntitysAll] = entity;
+			if (it->second->ImPhys())
+				PhysEntitys[EntitysAll] = dynamic_cast<CBasePhysicsEntity*>(it->second);
 			else
 				Entitys[EntitysAll] = it->second;
 			EntitysAll++;

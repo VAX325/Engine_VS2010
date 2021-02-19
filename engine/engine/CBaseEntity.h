@@ -14,7 +14,11 @@ public:
 
 	virtual void Update();
 
+	bool ImPhys();
+
 protected:
+	bool ImPhysEnt;
+
 	double xPos;
 	double yPos;
 #ifdef _3D

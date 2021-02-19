@@ -2,9 +2,8 @@
 
 #include "windows.h"
 #include "CMouse.h"
-#include <dinput.h>
-
 #define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
 
 class CInput
 {

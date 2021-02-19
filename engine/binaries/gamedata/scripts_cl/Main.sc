@@ -7,7 +7,7 @@ function Main ()
 end
 
 function new_game ()
-	CLogClient:Msg("Loading level Untitled1")
+	-- CLogClient:Msg("Loading level Untitled1")
 	LevelChange("Untitled1")
 end
 

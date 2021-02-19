@@ -15,9 +15,6 @@
 *.so
 *.dylib
 *.exp
-engine/SDK/*.dll
-engine/Debug/*.dll
-engine/Release/*.dll
 
 # Fortran module files
 *.mod
@@ -27,7 +24,7 @@ engine/Release/*.dll
 *.lai
 *.la
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
@@ -39,25 +36,21 @@ engine/Release/*.dll
 *.pdb
 *.ipch
 *.db
-engine/.vs
 *.manifest
 *.lastbuildstate
 *.log
 *.idb
 *.iobj
-
 *.ipdb
 
-*.idb
+engine\engine\Win32\*.*
+engine\engine\x64\*.*
 
-*.ipch
-
-engine/engine/Win32/*.*
-engine/engine/x64/*.*
-
-LevelEditor/Debug/*.*
-LevelEditor/Release/*.*
-
-engine/SDL/lua-5.2.4/Win32/*.*
-engine/SDL/lua-5.2.4/x64/*.*
+engine\binaries\OBJ\*.*
 *.sarif
+
+lua-5.2.4.lib
+lua-5.2.4.pdb
+
+pugixml.lib
+pugixml.pdb

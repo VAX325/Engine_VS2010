@@ -3,25 +3,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerWorkingDirectory>$(SolutionDir)binaries\$(Platform)-$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-nosound -server</LocalDebuggerCommandArguments>
-    <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)SDK\bin\;$(SolutionDir)SDK\audiere\bin\
-$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+    <LocalDebuggerCommandArguments>-nosound</LocalDebuggerCommandArguments>
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)SDK\$(Configuration)\$(Platform)\bin\</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerWorkingDirectory>$(SolutionDir)binaries\$(Platform)-$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-nosound -server</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-nosound</LocalDebuggerCommandArguments>
     <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)SDK\bin\;$(SolutionDir)SDK\audiere\bin\
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerWorkingDirectory>$(SolutionDir)binaries\$(Platform)-$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-nosound -server</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-nosound</LocalDebuggerCommandArguments>
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)SDK\$(Configuration)\$(Platform)\bin\</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerWorkingDirectory>$(SolutionDir)binaries\$(Platform)-$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-nosound -server</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-nosound</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

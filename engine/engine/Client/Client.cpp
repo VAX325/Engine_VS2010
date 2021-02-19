@@ -89,26 +89,42 @@ void LuaCheckForEvents()
 	
 }
 
-bool IsClAndSv = false;
+bool ClLaunched = false;
+bool SvLaunched = false;
 
 void LuaLevelChange(lua_State* LS)
 {
-	IsClAndSv = true;
-
-	SteamGameSocketsInit();
-
-	CreateThread(0, 0, (LPTHREAD_START_ROUTINE)ServerInClient, NULL, 0, NULL);
-
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-	if (lua_isstring(L, 1))
+	if (!ClLaunched && !SvLaunched)
 	{
-		char* LevelName = (char*)lua_tostring(L, 1);
-		Game->LevelLoad(LevelName);
+		ClLaunched = true;
+		SvLaunched = true;
+
+		SteamGameSocketsInit();
+
+		CreateThread(0, 0, (LPTHREAD_START_ROUTINE)ServerInClient, NULL, 0, NULL);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+		if (lua_isstring(L, 1))
+		{
+			char* LevelName = (char*)lua_tostring(L, 1);
+			Game->LevelLoad(LevelName);
+		}
+		else
+		{
+			LogManager.LogError("You atempting to load unknown level!", false);
+		}
 	}
 	else
 	{
-		LogManager.LogError("You atempting to load unknown level!", false);
+		if(ClLaunched)
+			Game->UnloadLevel();
+
+		if (SvLaunched)
+			ServerStop();
+
+		ClLaunched = false;
+		SvLaunched = false;
 	}
 }
 
@@ -424,7 +440,7 @@ void Shutdown()
 {
 	Game->UnloadLevel();
 
-	if (IsClAndSv)
+	if (SvLaunched)
 		ServerStop();
 
 	SteamGameSocketsDeInit();

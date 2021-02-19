@@ -15,6 +15,8 @@
 
 SteamNetworkingMicroseconds g_logTimeZero = 0;
 
+bool InitHasBeenCalled = false;
+
 static void DebugOutput(ESteamNetworkingSocketsDebugOutputType eType, const char* pszMsg)
 {
 	SteamNetworkingMicroseconds time = SteamNetworkingUtils()->GetLocalTimestamp() - g_logTimeZero;
@@ -48,10 +50,18 @@ static void ShutdownSteamDatagramConnectionSockets()
 
 void SteamGameSocketsInit()
 {
-	InitSteamDatagramConnectionSockets();
+	if (!InitHasBeenCalled)
+	{
+		InitHasBeenCalled = true;
+		InitSteamDatagramConnectionSockets();
+	}
 }
 
 void SteamGameSocketsDeInit()
 {
-	ShutdownSteamDatagramConnectionSockets();
+	if (InitHasBeenCalled)
+	{
+		InitHasBeenCalled = false;
+		ShutdownSteamDatagramConnectionSockets();
+	}
 }

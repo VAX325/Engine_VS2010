@@ -3,10 +3,10 @@
 #include <map>
 #include <Windows.h>
 
-#include <audiere.h>
-#pragma comment(lib,"audiere.lib")
+//#include <audiere.h>
+//#pragma comment(lib,"audiere.lib")
 
-using namespace audiere;
+//using namespace audiere;
 
 #include "../NVector.h"
 
@@ -17,9 +17,9 @@ private:
 	std::map<int, char*> sounds;
 	Vector2	<char*, char*> BuffersBusy;
 
-	AudioDevicePtr device;
-	OutputStreamPtr firstBuff;
-	OutputStreamPtr seccondBuff;
+	//AudioDevicePtr device;
+	//OutputStreamPtr firstBuff;
+	//OutputStreamPtr seccondBuff;
 
 public:
 
