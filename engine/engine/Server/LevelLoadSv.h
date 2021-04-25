@@ -10,11 +10,10 @@ class LevelFileServer
 public:
 	LevelFileServer()
 	{
-		_BD.LevelName = (char*)"NON_LOADED";
-
 		Physic ph;
 		ph.gravity = 0;
-		_BD.PhysicData = ph;
+
+		_BD = { ph, "NON_LOADED" };
 
 		EntitysAll = 0;
 	};

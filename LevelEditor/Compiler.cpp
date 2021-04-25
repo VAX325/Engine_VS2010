@@ -1,3 +1,6 @@
+#define _LEVEL_EDITOR
+#include "../engine/engine/CBaseEntity.h"
+#include "../engine/engine/LevelStructure.h"
 #include "Compiler.h"
 #include <fstream>
 
@@ -6,7 +9,7 @@ using namespace std;
 
 void Compiler::WriteBaseData(BaseData* BD)
 {
-	char* FileName = (char*)malloc(512);
+	char* FileName = new char[512];
 
 	//strcpy(FileName, "\\");
 	strcpy(FileName, BD->LevelName);
@@ -16,21 +19,60 @@ void Compiler::WriteBaseData(BaseData* BD)
 	strcat(FileName, "\\");
 	strcat(FileName, "lbd.levelbd");
 
-	ofstream out(FileName, ios::binary | ios::out);
+	FILE* outfile;
 
-	out.write((char*)&BD, sizeof(BD));
+	outfile = fopen(FileName, "w");
+	
+	fwrite(&(*BD), sizeof(struct BaseData), 1, outfile);
 
-	out.close();
+	fclose(outfile);
 
 	_BaseDATA = *&BD;
 }
 
-void Compiler::WriteEntitys()
+void Compiler::WriteGeometry(GeometryData* GD)
 {
+	char* FileName = new char[512];
 
+	//strcpy(FileName, "\\");
+	strcpy(FileName, _BaseDATA->LevelName);
+
+	//Unused return var
+	void(_mkdir(FileName));
+
+	strcat(FileName, "\\");
+	strcat(FileName, "lgeom.levelgeom");
+
+	FILE* outfile;
+
+	outfile = fopen(FileName, "w");
+
+	fwrite(&(*GD), sizeof(struct GeometryData), 1, outfile);
+
+	fclose(outfile);
+
+	_GetometryDATA = *&GD;
 }
 
-void Compiler::BakeTextures()
+void Compiler::WriteEntitys(EntityData* ED)
 {
+	char* FileName = new char[512];
 
+	//strcpy(FileName, "\\");
+	strcpy(FileName, _BaseDATA->LevelName);
+
+	_mkdir(FileName);
+
+	strcat(FileName, "\\");
+	strcat(FileName, "lent.levelent");
+
+	FILE* outfile;
+
+	outfile = fopen(FileName, "w");
+
+	fwrite(&(*ED), sizeof(struct EntityData), 1, outfile);
+
+	fclose(outfile);
+
+	_EntityDATA = *&ED;
 }

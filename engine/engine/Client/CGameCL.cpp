@@ -1,15 +1,17 @@
-#include "Base_include.h"
+#include <Base_include.h>
 #include "CGameCL.h"
 
 CGameCL::CGameCL()
 {
-	Level = new CLevelClient();
 	LevelLoaded = false;
+	Level = new CLevelClient();
 }
 
 CGameCL::CGameCL(char* LevelName)
 {
+	LevelLoaded = false;
 	Level = new CLevelClient(LevelName);
+	Sleep(1000);
 	LevelLoaded = true;
 }
 
@@ -22,7 +24,9 @@ CGameCL::~CGameCL()
 void CGameCL::LevelLoad(char* LevelName)
 {
 	Level->Close();
+	LevelLoaded = false;
 	Level = new CLevelClient(LevelName);
+	Sleep(1000);
 	LevelLoaded = true;
 }
 

@@ -1,12 +1,12 @@
+#include <Base_include.h>
+
 #include "CSoundManager.h"
 #include "ClientPerems.h"
-
-#include <Base_include.h>
 
 CSoundManager::CSoundManager()
 {
 	//device = OpenDevice();
-	Files fls = GetFileSystemObjCl()->GetAllFilesInFolder((char*)"../gamedata/sounds/", (char*)"wav");
+	Files fls = GetFileSystemEx()->GetAllFilesInFolder((char*)"../gamedata/sounds/", (char*)"wav");
 
 	auto it = fls.begin();
 

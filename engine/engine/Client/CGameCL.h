@@ -2,7 +2,7 @@
 #include "CGameBase.h"
 #include "CLevelClient.h"
 
-class CGameCL : protected CGameBase
+class CGameCL : public CGameBase
 {
 public:
 	CGameCL();

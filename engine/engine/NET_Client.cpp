@@ -1,7 +1,7 @@
 #include <Base_include.h>
+
 #include "NET.h"
 
-#include "CLogManager.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -9,6 +9,7 @@
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include <GameNetworkingSockets/steam/isteamnetworkingutils.h>
 
+#include <cassert>
 
 Client::Client()
 {
@@ -26,13 +27,13 @@ void Client::Run(const SteamNetworkingIPAddr& serverAddr)
 	m_pInterfaceCl = SteamNetworkingSockets();
 	if (m_pInterfaceCl == nullptr)
 	{
-		GetLogManager()->LogError("Failed to create SteamNetworkingSockets", true);
+		GetLogManagerEx()->LogError("Failed to create SteamNetworkingSockets", true);
 	}
 
 	char szAddr[SteamNetworkingIPAddr::k_cchMaxString];
 	serverAddr.ToString(szAddr, sizeof(szAddr), true);
 
-	GetLogManager()->LogMsg("Connecting to server at %s", szAddr);
+	GetLogManagerEx()->LogMsg("Connecting to server at %s", szAddr);
 
 	SteamNetworkingConfigValue_t opt;
 	opt.SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void*)SteamNetConnectionStatusChangedCallback);
@@ -40,7 +41,7 @@ void Client::Run(const SteamNetworkingIPAddr& serverAddr)
 	m_hConnection = m_pInterfaceCl->ConnectByIPAddress(serverAddr, 1, &opt);
 
 	if (m_hConnection == k_HSteamNetConnection_Invalid)
-		GetLogManager()->LogError("Failed to create connection", true);
+		GetLogManagerEx()->LogError("Failed to create connection", true);
 
 	while (!g_bQuit)
 	{
@@ -74,7 +75,7 @@ void Client::PollIncomingMessages()
 		if (numMsgs == 0)
 			break;
 		if (numMsgs < 0)
-			GetLogManager()->LogError("Error checking for messages", true);
+			GetLogManagerEx()->LogError("Error checking for messages", true);
 
 		// Just echo anything we get from the server
 		fwrite(pIncomingMsg->m_pData, 1, pIncomingMsg->m_cbSize, stdout);
@@ -103,15 +104,15 @@ void Client::OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCa
 
 		if (pInfo->m_eOldState == k_ESteamNetworkingConnectionState_Connecting)
 		{
-			GetLogManager()->LogMsg("Can't find remote host.  (%s)", pInfo->m_info.m_szEndDebug);
+			GetLogManagerEx()->LogMsg("Can't find remote host.  (%s)", pInfo->m_info.m_szEndDebug);
 		}
 		else if (pInfo->m_info.m_eState == k_ESteamNetworkingConnectionState_ProblemDetectedLocally)
 		{
-			GetLogManager()->LogMsg("Lost contact with the host.  (%s)", pInfo->m_info.m_szEndDebug);
+			GetLogManagerEx()->LogMsg("Lost contact with the host.  (%s)", pInfo->m_info.m_szEndDebug);
 		}
 		else
 		{
-			GetLogManager()->LogMsg("Disconected.  (%s)", pInfo->m_info.m_szEndDebug);
+			GetLogManagerEx()->LogMsg("Disconected.  (%s)", pInfo->m_info.m_szEndDebug);
 		}
 
 		m_pInterfaceCl->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
@@ -123,7 +124,7 @@ void Client::OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCa
 		break;
 
 	case k_ESteamNetworkingConnectionState_Connected:
-		GetLogManager()->LogMsg("Connected to server OK");
+		GetLogManagerEx()->LogMsg("Connected to server OK");
 		break;
 
 	default:

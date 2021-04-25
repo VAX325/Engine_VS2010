@@ -1,8 +1,7 @@
 #pragma once
 #include "CSpriteManager.h"
-#include "../CLogManager.h"
 #include "CSoundManager.h"
-#include "../FileSystem.h"
+#include "../QCore/FileSystem/FileSystem.h"
 #include "../CScriptSystem.h"
 
 #include <Windows.h>
@@ -15,9 +14,7 @@ int GetWindowH();
 int GetWindowW();
 
 CSpriteManager* GetSpriteManger();
-CLogManager* GetLogObjCl();
 CSoundManager* GetSoundObj();
-FileSystem* GetFileSystemObjCl();
 CScriptSystem* GetScriptSystemObjCl();
 lua_State* GetLuaStateCl();
 void CallLuaFuncCl(char* LuaFunc);

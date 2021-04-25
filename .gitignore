@@ -88,11 +88,9 @@ ipch/
 engine\engine\Win32\*.*
 engine\engine\x64\*.*
 
-engine\binaries\OBJ\*.*
-*.sarif
-
 lua-5.2.4.lib
 lua-5.2.4.pdb
 
 pugixml.lib
 pugixml.pdb
+engine/binaries/*

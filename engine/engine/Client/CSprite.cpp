@@ -1,9 +1,16 @@
+#include <Base_include.h>
+
 #include "CSprite.h"
 #include "ClientPerems.h"
-#include <Base_include.h>
 #include <d3d9types.h>
 
-CSprite::CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UINT WindowHeight, char* Name) {
+CSprite::CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UINT WindowHeight, char* Name) 
+{	
+	Constructor(pD3DDevice, Path, WindowWidth, WindowHeight, Name);
+}
+
+void CSprite::Constructor(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UINT WindowHeight, char* Name)
+{
 	HRESULT hr;
 
 	WW = WindowWidth;
@@ -16,7 +23,7 @@ CSprite::CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UI
 
 	if (FAILED(hr))
 	{
-		GetLogObjCl()->LogError((char*)"Can't create sprite", true);
+		GetLogManagerEx()->LogError("Can't create sprite", true);
 	}
 
 	hr = D3DXCreateTextureFromFileEx(pD3DDevice, Path, tImageInfo.Width, tImageInfo.Height,
@@ -25,8 +32,17 @@ CSprite::CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UI
 
 	if (FAILED(hr))
 	{
-		GetLogObjCl()->LogError((char*)"Can't create texture from file", true);
+		GetLogManagerEx()->LogError("Can't create texture from file", false);
 	}
+	else
+	{
+		return;
+	}
+
+	Constructor(pD3DDevice, "../gamedata/sprites/UI/missing.png", WindowWidth, WindowHeight, Name);
+
+	//If sprite == null then
+	//CSprite(pD3DDevice, "../gamedata/sprites/UI/missing.png", WindowWidth, WindowHeight, Name);
 }
 
 CSprite::~CSprite(void) {
@@ -68,7 +84,7 @@ void CSprite::Render(float X, float Y, float Width, float Height, D3DCOLOR Color
 
 	D3DXMatrixScaling(&matWH, w, h, 0.0f);
 
-	D3DXMatrixRotationZ(&matRot, (rotate * (3.1415 / 180.0)));
+	D3DXMatrixRotationZ(&matRot, ((float)rotate * (float)(3.1415 / 180.0)));
 
 	D3DXMatrixMultiply(&matTransform, &matRot, &matXY);
 	D3DXMatrixMultiply(&matAll, &matWH, &matTransform);
@@ -108,7 +124,7 @@ void CSprite::RenderNonProcent(float X, float Y, float Width, float Height, D3DC
 
 	D3DXMatrixScaling(&matWH, Width, Height, 0.0f);
 
-	D3DXMatrixRotationZ(&matRot, (rotate * (3.1415 / 180.0)));
+	D3DXMatrixRotationZ(&matRot, ((float)rotate * (float)(3.1415 / 180.0)));
 
 	D3DXMatrixMultiply(&matTransform, &matRot, &matXY);
 
@@ -129,10 +145,10 @@ void CSprite::RenderRect(float X, float Y, float Width, float Height, D3DCOLOR C
 
 	RECT* rct = new RECT();
 
-	rct->left = X;
-	rct->top = Y;
-	rct->right = X + Width;
-	rct->bottom = Y + Height;
+	rct->left = (LONG)X;
+	rct->top = (LONG)Y;
+	rct->right = (LONG)(X + Width);
+	rct->bottom = (LONG)(Y + Height);
 
 	D3DXVECTOR3* pos = new D3DXVECTOR3(X, Y, 0);
 
@@ -147,10 +163,10 @@ void CSprite::RenderRect(float X, float Y, float Width, float Height, D3DCOLOR C
 
 	RECT* rct = new RECT();
 
-	rct->left = X;
-	rct->top = Y;
-	rct->right = X + Width;
-	rct->bottom = Y + Height;
+	rct->left = (LONG)X;
+	rct->top = (LONG)Y;
+	rct->right = (LONG)(X + Width);
+	rct->bottom = (LONG)(Y + Height);
 
 	D3DXVECTOR3* pos = new D3DXVECTOR3(X, Y, 0);
 
@@ -161,7 +177,7 @@ void CSprite::RenderRect(float X, float Y, float Width, float Height, D3DCOLOR C
 
 float CSprite::GetW() 
 {
-	return tImageInfo.Width;
+	return (float)tImageInfo.Width;
 }
 
 float CSprite::GetH()

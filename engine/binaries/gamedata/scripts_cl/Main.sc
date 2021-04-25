@@ -2,7 +2,7 @@
 
 function Main ()
 	
-	CLogClient:Msg("Lua started!")
+	CLog:Msg("Lua started!")
 	
 end
 

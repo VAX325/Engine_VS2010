@@ -14,6 +14,8 @@ private:
 
 	char* NameOfSprite;
 
+	inline void Constructor(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UINT WindowHeight, char* Name);
+
 public:
 
 	CSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, UINT WindowWidth, UINT WindowHeight, char* Name); // d3d device, путь к файлу, реальные размеры окна

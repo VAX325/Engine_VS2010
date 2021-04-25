@@ -1,4 +1,5 @@
 #include <Base_include.h>
+
 #include "Client.h"
 #include "CUIManager.h"
 #include "CGameCL.h"
@@ -25,10 +26,6 @@ IDirect3DDevice9* g_pDirect3DDevice = NULL;
 #include "Input.h"
 
 CInput InputObj;
-
-CLogManager LogManager;
-
-FileSystem fs;
 
 CSpriteManager CSM;
 
@@ -107,12 +104,23 @@ void LuaLevelChange(lua_State* LS)
 
 		if (lua_isstring(L, 1))
 		{
+			UIManager.HidePanel("MainMenu.xml");
+			UIManager.ShowPanel("LoadingScreen.xml");
+
 			char* LevelName = (char*)lua_tostring(L, 1);
-			Game->LevelLoad(LevelName);
+			Game = new CGameCL(LevelName);
+
+			while(Game->IsLevelLoading())
+			{
+				//Here need tips	
+			}
+
+			UIManager.HidePanel("LoadingScreen.xml");
+			UIManager.ShowPanel("Game.xml");
 		}
 		else
 		{
-			LogManager.LogError("You atempting to load unknown level!", false);
+			GetLogManagerEx()->LogError("You atempting to load unknown level!", false);
 		}
 	}
 	else
@@ -138,16 +146,14 @@ int ClientMain(int argc, char* argv[])
 		::ShowWindow(::GetConsoleWindow(), SW_SHOW);
 #endif
 
-	fs = FileSystem();
-
-	LogManager.Init();
+	InitLogManager(false);
 
 	for (int i = 0; i != argc; i++)
 	{
 		if (FindWord((char*)argv[i], (char*)"-nosound"))
 		{
 			Sound = true;
-			LogManager.LogMsg("No sound!");
+			GetLogManagerEx()->LogMsg("No sound!");
 		}
 	}
 
@@ -170,10 +176,10 @@ int ClientMain(int argc, char* argv[])
 
 	if (!RegisterClassEx(&wc))
 	{
-		LogManager.LogError("Can't register window class", true);
+		GetLogManagerEx()->LogError("Can't register window class", true);
 	}
 
-	LogManager.LogMsg("Register window class");
+	GetLogManagerEx()->LogMsg("Register window class");
 
 	g_hWnd = CreateWindowEx(
 		WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
@@ -190,17 +196,17 @@ int ClientMain(int argc, char* argv[])
 
 	if (g_hWnd == NULL)
 	{
-		LogManager.LogError("Can't create window", true);
+		GetLogManagerEx()->LogError("Can't create window", true);
 	}
 
-	LogManager.LogMsg("Window created");
+	GetLogManagerEx()->LogMsg("Window created");
 
 	if (!InitDirect3D(D3DFMT_R5G6B5, D3DFMT_D16))
 	{
-		LogManager.LogError("Can't get DirectX context", true);
+		GetLogManagerEx()->LogError("Can't get DirectX context", true);
 	}
 
-	LogManager.LogMsg("Getted DirectX context");
+	GetLogManagerEx()->LogMsg("Getted DirectX context");
 
 	try
 	{
@@ -211,19 +217,19 @@ int ClientMain(int argc, char* argv[])
 	}
 	catch (const std::exception& e)
 	{
-		LogManager.LogError(e.what(), true);
+		GetLogManagerEx()->LogError(e.what(), true);
 	}
 
 	InputObj = CInput();
 
 	if (!InputObj.Initialize(g_hInstance, g_hWnd))
 	{
-		LogManager.LogError("Can't get DirectInput context", true);
+		GetLogManagerEx()->LogError("Can't get DirectInput context", true);
 	}
 
 	InputObj.GetMouse()->SetReceiver(MouseReciver);
 
-	LogManager.LogMsg("Getted DirectInput context");
+	GetLogManagerEx()->LogMsg("Getted DirectInput context");
 
 	CSM = CSpriteManager();
 
@@ -241,7 +247,7 @@ int ClientMain(int argc, char* argv[])
 
 	ScriptSystem = CScriptSystem();
 
-	InitLuaShared(L, &LogManager);
+	InitLuaShared(L, GetLogManagerEx());
 
 	luabridge::getGlobalNamespace(L)
 		.addFunction("CheckForEvents", LuaCheckForEvents)
@@ -253,16 +259,7 @@ int ClientMain(int argc, char* argv[])
 
 	UIManager.LoadPanels();
 
-	for (int i = 0; i != UIManager.GetCountOfPanels(); i++)
-	{
-		if (strcmp(UIManager.GetPanelName(i), "MainMenu.xml") == 0)
-		{
-			UIManager.ShowPanel(i);
-			break;
-		}
-	}
-	
-	Game = new CGameCL();
+	UIManager.ShowPanel("MainMenu.xml");
 
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
@@ -287,7 +284,7 @@ int ClientMain(int argc, char* argv[])
 			frames++;
 
 			if (total >= 1000) {
-				fps = frames * 1000 / total;
+				fps = frames * 1000 / (float)total;
 
 #ifdef _DEBUG
 				//cout << "FPS: " << fps << "\n";
@@ -305,7 +302,6 @@ int ClientMain(int argc, char* argv[])
 		}
 	}
 
-	Shutdown();
 	return 0;
 }
 
@@ -323,7 +319,7 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	}
 	}
 
-	return DefWindowProc(hWnd, iMsg, wParam, lParam);  //Если нету для нас нужных сообщений, пусть это обрабатывает виндовс
+	return DefWindowProc(hWnd, iMsg, wParam, lParam);
 }
 
 bool InitDirect3D(D3DFORMAT ColorFormat, D3DFORMAT DepthFormat)
@@ -491,11 +487,6 @@ CInput* GetInputObj()
 	return &InputObj;
 }
 
-CLogManager* GetLogObjCl()
-{
-	return &LogManager;
-}
-
 CSpriteManager* GetSpriteManger()
 {
 	return &CSM;
@@ -504,11 +495,6 @@ CSpriteManager* GetSpriteManger()
 CSoundManager* GetSoundObj()
 {
 	return &SoundManager;
-}
-
-FileSystem* GetFileSystemObjCl()
-{
-	return &fs;
 }
 
 CScriptSystem* GetScriptSystemObjCl()

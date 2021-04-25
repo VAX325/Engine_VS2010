@@ -24,6 +24,7 @@
     <ProjectGuid>{36af4c6f-2da7-4d87-a687-2a82df0dc81c}</ProjectGuid>
     <RootNamespace>engine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Qengine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(SolutionDir)binaries\OBJ\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)binaries\OBJ\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)binaries\$(Platform)-$(Configuration)\</OutDir>
     <IncludePath>$(DXSDK_DIR)Include\;$(SolutionDir)SDK\Include\;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)SDK\$(Configuration)\$(Platform)\lib;$(DXSDK_DIR)Lib\x86\;$(SolutionDir)binaries\$(Platform)-$(Configuration)\;$(LibraryPath)</LibraryPath>
@@ -82,7 +83,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)Include\;$(SolutionDir)SDK\Include\;$(ProjectDir);$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)binaries\$(Platform)-$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)binaries\OBJ\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)binaries\OBJ\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)SDK\$(Configuration)\$(Platform)\lib;$(DXSDK_DIR)Lib\x86\;$(SolutionDir)binaries\$(Platform)-$(Configuration)\;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
@@ -91,20 +92,20 @@
     <IncludePath>$(DXSDK_DIR)Include\;$(SolutionDir)SDK\Include\;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)SDK\$(Configuration)\$(Platform)\lib;$(DXSDK_DIR)Lib\x64\;$(SolutionDir)binaries\$(Platform)-$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)binaries\$(Platform)-$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)binaries\OBJ\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)binaries\OBJ\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)Include\;$(SolutionDir)SDK\Include\;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)SDK\$(Configuration)\$(Platform)\lib;$(DXSDK_DIR)Lib\x64\;$(SolutionDir)binaries\$(Platform)-$(Configuration)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)binaries\$(Platform)-$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)binaries\OBJ\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)binaries\OBJ\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>QENGINE_COMPILING;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Base_include.h</PrecompiledHeaderFile>
@@ -113,6 +114,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>QCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -121,7 +123,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>QENGINE_COMPILING;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Base_include.h</PrecompiledHeaderFile>
@@ -132,13 +134,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>QCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>QENGINE_COMPILING;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Base_include.h</PrecompiledHeaderFile>
@@ -147,6 +150,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>QCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,7 +159,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>QENGINE_COMPILING;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Base_include.h</PrecompiledHeaderFile>
@@ -166,6 +170,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>QCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -189,9 +194,7 @@
     <ClInclude Include="Client\Input.h" />
     <ClInclude Include="Client\CUIPanel.h" />
     <ClInclude Include="Client\LevelLoadCl.h" />
-    <ClInclude Include="CLogManager.h" />
     <ClInclude Include="CScriptSystem.h" />
-    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="LevelStructure.h" />
     <ClInclude Include="lua_include.h" />
     <ClInclude Include="Main.h" />
@@ -226,9 +229,7 @@
     <ClCompile Include="Client\CUIText.cpp" />
     <ClCompile Include="Client\Input.cpp" />
     <ClCompile Include="Client\CUIPanel.cpp" />
-    <ClCompile Include="CLogManager.cpp" />
     <ClCompile Include="CScriptSystem.cpp" />
-    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="NET.cpp" />
     <ClCompile Include="NET_Client.cpp" />

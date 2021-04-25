@@ -1,5 +1,6 @@
-#include "ClientPerems.h"
 #include <Base_include.h>
+
+#include "ClientPerems.h"
 
 typedef map<int, Vector2<char*, char*>> txtNtextures;
 
@@ -260,9 +261,9 @@ void CSpriteManager::RenderAllSprites()
 
 void CSpriteManager::LoadAllSprites()
 {
-	txt = GetFileSystemObjCl()->GetAllFilesInFolder((char*)"../gamedata/sprites/", (char*)"txt");
+	txt = GetFileSystemEx()->GetAllFilesInFolder((char*)"../gamedata/sprites/", (char*)"txt");
 
-	textures = GetFileSystemObjCl()->GetAllFilesInFolder((char*)"../gamedata/sprites/", (char*)"png");
+	textures = GetFileSystemEx()->GetAllFilesInFolder((char*)"../gamedata/sprites/", (char*)"png");
 
 	int txtsize = txt.size();
 
@@ -271,7 +272,7 @@ void CSpriteManager::LoadAllSprites()
 	if (txtsize != texturessize)
 	{
 		//Need to log system - complete
-		GetLogObjCl()->LogError((char*)"TXT count don't match textures count", true);
+		GetLogManagerEx()->LogError((char*)"TXT count don't match textures count", true);
 	}
 
 	auto txtit = txt.begin();
@@ -312,7 +313,7 @@ void CSpriteManager::LoadAllSprites()
 
 		if (strcmp(txt, texture) != 0)
 		{
-			GetLogObjCl()->LogError((char*)"Check your sprite files!", true);
+			GetLogManagerEx()->LogError((char*)"Check your sprite files!", true);
 		}
 
 		delete buff1;
@@ -326,7 +327,7 @@ void CSpriteManager::LoadAllSprites()
 
 		char* buff = (char*)malloc(512);
 
-		strcpy(bufTXT, GetFileSystemObjCl()->ReadFromFile((char*)FullTXTPath.c_str()));
+		strcpy(bufTXT, GetFileSystemEx()->ReadFromFile((char*)FullTXTPath.c_str()));
 
 		buff = strtok(bufTXT, ";");
 

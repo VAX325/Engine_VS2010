@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{7806bb2b-7ee3-4335-88e7-1c8fba1c8efe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{c052971a-ad73-41fc-9160-f1fa0d81e27e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\DX9">
+      <UniqueIdentifier>{daa0dc9b-4055-42b6-8d06-9793a57a079e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\DX12">
+      <UniqueIdentifier>{3dbbc254-6f71-40bc-8cfd-ed9c7177aea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL">
+      <UniqueIdentifier>{c9a91ceb-c7fb-47b4-8280-df7e7de1c3e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vulcan">
+      <UniqueIdentifier>{cf90b553-5fbf-4aed-b3e6-63a3d3a83afb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\DX11">
+      <UniqueIdentifier>{95520eb4-0cb6-4ef0-aea3-c02a5137dc0d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectX.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DX9\directx9.cpp">
+      <Filter>DirectX\DX9</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DX12\directx12.cpp">
+      <Filter>DirectX\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DX11\directx11.cpp">
+      <Filter>DirectX\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DX11\IRenderable11.cpp">
+      <Filter>DirectX\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DX9\IRenderable9.cpp">
+      <Filter>DirectX\DX9</Filter>
+    </ClCompile>
+    <ClCompile Include="Interfaces\IRenderable.cpp">
+      <Filter>Interfaces</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Base_include.h" />
+    <ClInclude Include="Interfaces\QRender.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\IRenderable.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DirectX.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DX9\directx9.h">
+      <Filter>DirectX\DX9</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DX12\directx12.h">
+      <Filter>DirectX\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UsefullMacro.h" />
+    <ClInclude Include="DirectX\DX11\directx11.h">
+      <Filter>DirectX\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DX11\IRenderable11.h">
+      <Filter>DirectX\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DX9\IRenderable9.h">
+      <Filter>DirectX\DX9</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Info.txt" />
+  </ItemGroup>
+</Project>

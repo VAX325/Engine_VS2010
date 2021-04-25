@@ -1,6 +1,7 @@
+#include <Base_include.h>
+
 #include "xmlparser.h"
 #include <pugixml/pugixml.hpp>
-#include <Base_include.h>
 #include <Windows.h>
 
 XMLParser::XMLParser()

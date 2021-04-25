@@ -385,3 +385,15 @@ void CSpriteManager::MoveSprite(CSprite* Sprite, int x, int y)
 	FLOATVECTOR4 old = spritesNcords.cords[Sprite];
 	spritesNcords.cords[Sprite] = { (float)x, (float)y , old.third, old.four };
 }
+
+CSprite* CSpriteManager::GetSpriteByPos(float x, float y)
+{
+	for(auto it = spritesNcords.cords.begin(); it != spritesNcords.cords.end(); it++)
+	{
+		if(spritesNcords.cords[it->first].first == x && spritesNcords.cords[it->first].second == y)
+		{
+			return it->first;
+		}
+	}
+	return nullptr;
+}

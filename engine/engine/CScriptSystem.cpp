@@ -1,3 +1,5 @@
+#include <Base_include.h>
+
 #include "CScriptSystem.h"
 
 #include "Client/ClientPerems.h"
@@ -7,8 +9,6 @@
 
 #include <typeinfo>
 #include <string>
-
-#include "Base_include.h"
 
 using namespace luabridge;
 
@@ -30,12 +30,12 @@ void CScriptSystem::LuaStart(lua_State* L)
 
 	if (IsClient())
 	{
-		fs = GetFileSystemObjCl();
+		fs = GetFileSystemEx();
 		fls = fs->GetAllFilesInFolder((char*)"../gamedata/scripts_cl/", (char*)"sc");
 	}
 	else
 	{
-		fs = GetFileSystemObj();
+		fs = GetFileSystemEx();
 		fls = fs->GetAllFilesInFolder((char*)"../gamedata/scripts_sv/", (char*)"sc");
 	}
 
@@ -73,14 +73,7 @@ void CScriptSystem::LuaStart(lua_State* L)
 		mainLua();
 	}
 	catch (const LuaException& e) {
-		if (IsClient())
-		{
-			GetLogObjCl()->LogError((char*)e.what(), true);
-		}
-		else
-		{
-			GetLogObj()->LogError((char*)e.what(), true);
-		}
+		GetLogManagerEx()->LogError((char*)e.what(), true);
 	}
 }
 
@@ -92,14 +85,7 @@ void CScriptSystem::CallLuaFunc(lua_State* L, char* LuaName)
 		LuaFunc();
 	}
 	catch (const LuaException& e) {
-		if (IsClient())
-		{
-			GetLogObjCl()->LogError((char*)e.what(), true);
-		}
-		else
-		{
-			GetLogObj()->LogError((char*)e.what(), true);
-		}
+		GetLogManagerEx()->LogError((char*)e.what(), true);
 	}
 }
 
@@ -131,14 +117,7 @@ void CScriptSystem::LuaUpdateCl(lua_State* L)
 		UpdateCl();
 	}
 	catch (const LuaException& e) {
-		if (IsClient())
-		{
-			GetLogObjCl()->LogError((char*)e.what(), true);
-		}
-		else
-		{
-			GetLogObj()->LogError((char*)e.what(), true);
-		}
+		GetLogManagerEx()->LogError((char*)e.what(), true);
 	}
 }
 
@@ -150,13 +129,6 @@ void CScriptSystem::LuaUpdate(lua_State* L)
 		Update();
 	}
 	catch (const LuaException& e) {
-		if (IsClient())
-		{
-			GetLogObjCl()->LogError((char*)e.what(), true);
-		}
-		else
-		{
-			GetLogObj()->LogError((char*)e.what(), true);
-		}
+		GetLogManagerEx()->LogError((char*)e.what(), true);
 	}
 }

@@ -1,5 +1,7 @@
 #pragma once
-
+#ifndef _LEVEL_EDITOR
+#ifndef BASE_INCLUDE_H
+#define BASE_INCLUDE_H
 #define PLATFORM_WINDOWS  1
 #define PLATFORM_MAC      2
 #define PLATFORM_UNIX     3
@@ -12,9 +14,21 @@
 #define PLATFORM PLATFORM_UNIX
 #endif
 
-#define Stringize( L )     #L 
-#define MakeString( M, L ) M(L)
-#define $Line MakeString( Stringize, __LINE__ )
-#define Reminder __FILE__ "(" $Line ") : Reminder: "
+#define TODO __FILE__ "(" $Line ") : TODO: "
+
+//Use like: #if IS_WIN32
+#define IS_WIN32 PLATFORM == PLATFORM_WINDOWS
+
+//Use like: #if IS_MAC
+#define IS_MAC PLATFORM == PLATFORM_MAC
+
+//Use like: #if IS_UNIX
+#define IS_UNIX PLATFORM == PLATFORM_UNIX
 
 #define STANDART_PORT 27063
+
+#include "../UsefullMacro.h"
+#include "../QCore/Log/CLogManager.h"
+
+#endif
+#endif

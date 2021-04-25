@@ -1,5 +1,6 @@
-#include "CBasePhysicsEntity.h"
 #include <Base_include.h>
+
+#include "CBasePhysicsEntity.h"
 #include <cmath>
 
 CBasePhysicsEntity::CBasePhysicsEntity(double mass, Vector4<float, float, float, float> CollisionPoints) : CBaseEntity()

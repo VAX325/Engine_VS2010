@@ -1,13 +1,15 @@
 #include <Base_include.h>
+
 #include "NET.h"
 
-#include "CLogManager.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
 
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include <GameNetworkingSockets/steam/isteamnetworkingutils.h>
+
+#include <cassert>
 
 bool ImAcrutch = false;
 
@@ -33,11 +35,11 @@ void Server::Run(uint16 nPort)
 	opt.SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void*)SteamNetConnectionStatusChangedCallback);
 	m_hListenSock = m_pInterfaceSv->CreateListenSocketIP(serverLocalAddr, 1, &opt);
 	if (m_hListenSock == k_HSteamListenSocket_Invalid)
-		GetLogManager()->LogError("Failed to listen on port %d", true, nPort);
+		GetLogManagerEx()->LogError("Failed to listen on port %d", true, nPort);
 	m_hPollGroup = m_pInterfaceSv->CreatePollGroup();
 	if (m_hPollGroup == k_HSteamNetPollGroup_Invalid)
-		GetLogManager()->LogError("Failed to listen on port %d", true, nPort);
-	GetLogManager()->LogMsg("Server listening on port %d\n", nPort);
+		GetLogManagerEx()->LogError("Failed to listen on port %d", true, nPort);
+	GetLogManagerEx()->LogMsg("Server listening on port %d\n", nPort);
 
 	while (!ImAcrutch)
 	{
@@ -46,7 +48,7 @@ void Server::Run(uint16 nPort)
 	}
 
 	// Close all the connections
-	GetLogManager()->LogMsg("Closing connections...\n");
+	GetLogManagerEx()->LogMsg("Closing connections...\n");
 	for (auto it : m_mapClients)
 	{
 		SendStringToClient(it.first, "Server is shutting down.  Goodbye.");
@@ -133,7 +135,7 @@ void Server::OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCa
 				sprintf(temp, "%s hath departed", itClient->second.m_sNick.c_str());
 			}
 
-			GetLogManager()->LogMsg("Connection %s %s, reason %d: %s\n",
+			GetLogManagerEx()->LogMsg("Connection %s %s, reason %d: %s\n",
 				pInfo->m_info.m_szConnectionDescription,
 				pszDebugLogAction,
 				pInfo->m_info.m_eEndReason,
@@ -157,19 +159,19 @@ void Server::OnSteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCa
 	{
 		assert(m_mapClients.find(pInfo->m_hConn) == m_mapClients.end());
 
-		GetLogManager()->LogMsg("Connection request from %s", pInfo->m_info.m_szConnectionDescription);
+		GetLogManagerEx()->LogMsg("Connection request from %s", pInfo->m_info.m_szConnectionDescription);
 
 		if (m_pInterfaceSv->AcceptConnection(pInfo->m_hConn) != k_EResultOK)
 		{
 			m_pInterfaceSv->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
-			GetLogManager()->LogMsg("Can't accept connection.  (It was already closed?)");
+			GetLogManagerEx()->LogMsg("Can't accept connection.  (It was already closed?)");
 			break;
 		}
 
 		if (!m_pInterfaceSv->SetConnectionPollGroup(pInfo->m_hConn, m_hPollGroup))
 		{
 			m_pInterfaceSv->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
-			GetLogManager()->LogMsg("Failed to set poll group?");
+			GetLogManagerEx()->LogMsg("Failed to set poll group?");
 			break;
 		}
 

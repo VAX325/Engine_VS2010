@@ -1,4 +1,5 @@
-#include "Base_include.h"
+#include <Base_include.h>
+
 #include "CUIManager.h"
 #include "../xmlparser.h"
 #include "../Utils.h"
@@ -20,7 +21,7 @@ void CUIManager::LoadPanels()
 {
 	_CurrentPanel = UI_NO_PANEL;
 
-	Files configs = GetFileSystemObjCl()->GetAllFilesInFolder((char*)"../gamedata/configs/ui/", (char*)"xml");
+	Files configs = GetFileSystemEx()->GetAllFilesInFolder((char*)"../gamedata/configs/ui/", (char*)"xml");
 
 	XMLParser xml_parser;
 
@@ -125,7 +126,7 @@ void CUIManager::LoadPanels()
 						{
 							if (FindWord(it->second.first.chr[i], (char*)"color"))
 							{
-								Color = std::stof(it->second.second.chr[i]);
+								Color = (D3DCOLOR)std::stof(it->second.second.chr[i]);
 								i++;
 							}
 						}
@@ -141,13 +142,16 @@ void CUIManager::LoadPanels()
 			{
 				int i = 0;
 
-				float x = 0, y = 0;
+				float x = 0;
+				float y = 0;
 				float w = 0;
 				float h = 0;
 				char* Name = (char*)malloc(64);
 
 				bool hNeed = false;
 				bool wNeed = false;
+				bool hWindow = false;
+				bool wWindow = false;
 
 				ZeroMemory(Name, sizeof(Name));
 
@@ -182,6 +186,10 @@ void CUIManager::LoadPanels()
 								{
 									wNeed = true;
 								}
+								else if (w == -2)
+								{
+									wWindow = true;
+								}
 								i++;
 							}
 						}
@@ -194,6 +202,10 @@ void CUIManager::LoadPanels()
 								if(h == -1)
 								{
 									hNeed = true;
+								}
+								else if(h == -2)
+								{
+									hWindow = true;
 								}
 								i++;
 							}
@@ -219,7 +231,7 @@ void CUIManager::LoadPanels()
 
 				if (sprite == NULL)
 				{
-					GetLogObjCl()->LogError((char*)"Can't find sprite! Please check your .xml configuration file!", true);
+					GetLogManagerEx()->LogError((char*)"Can't find sprite! Please check your .xml configuration file!", true);
 				}
 
 				if (hNeed)
@@ -231,7 +243,18 @@ void CUIManager::LoadPanels()
 					w = sprite->GetW();
 				}
 
-				CUISprite* UISprite = new CUISprite(x, y, w, h, sprite, false);
+				if (hWindow)
+				{
+					h = (float)GetWindowH();
+				}
+				if (wWindow)
+				{
+					w = (float)GetWindowW();
+				}
+
+				CUISprite* UISprite = new CUISprite(x, y, (float)GetWindowW(), (float)GetWindowH(), sprite, false);
+				UISprite->SetW(w);
+				UISprite->SetH(h);
 
 				panels[j]->AddElement(UISprite, Name);
 			}
@@ -338,7 +361,7 @@ void CUIManager::LoadPanels()
 
 				if (sprite == NULL)
 				{
-					GetLogObjCl()->LogMsg((char*)"Can't find sprite on button. Is good?");
+					GetLogManagerEx()->LogMsg((char*)"Can't find sprite on button. Is good?");
 				}
 				LuaFuncPtr* ptr = GetLuaFuncPtrCl(OnClickName);//(LuaFuncPtr*)malloc(sizeof(LuaFuncPtr));
 				//memcpy(ptr, GetLuaFuncPtrCl(OnClickName), sizeof(LuaFuncPtr));
@@ -381,6 +404,40 @@ void CUIManager::ShowPanel(int panelID)
 	}
 	panels[panelID]->ShowPanel();
 	_CurrentPanel = panelID;
+}
+
+void CUIManager::HidePanel(int panelID)
+{
+	if (_CurrentPanel != UI_NO_PANEL)
+	{
+		panels[_CurrentPanel]->HidePanel();
+	}
+	panels[panelID]->HidePanel();
+	_CurrentPanel = UI_NO_PANEL;
+}
+
+void CUIManager::ShowPanel(const char* panelName)
+{
+	for (int i = 0; i != GetCountOfPanels(); i++)
+	{
+		if (strcmp(GetPanelName(i), panelName) == 0)
+		{
+			ShowPanel(i);
+			break;
+		}
+	}
+}
+
+void CUIManager::HidePanel(const char* panelName)
+{
+	for (int i = 0; i != GetCountOfPanels(); i++)
+	{
+		if (strcmp(GetPanelName(i), panelName) == 0)
+		{
+			HidePanel(i);
+			break;
+		}
+	}
 }
 
 int CUIManager::GetCountOfPanels()

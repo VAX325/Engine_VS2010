@@ -2,8 +2,9 @@
 #include "CGameBase.h"
 #include "CLevelServer.h"
 
-class CGameSV : protected CGameBase
+class CGameSV : public CGameBase
 {
+public:
 	CGameSV();
 	CGameSV(char* LevelName);
 	~CGameSV();

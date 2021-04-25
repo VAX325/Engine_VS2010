@@ -33,6 +33,9 @@
     <ClCompile Include="Raw.cpp">
       <Filter>Compiler</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\engine\CBaseEntity.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CLogManager.h">

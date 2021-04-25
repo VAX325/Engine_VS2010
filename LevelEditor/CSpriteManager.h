@@ -41,4 +41,6 @@ public:
 
 	void MoveSprite(char* SpriteName, int x, int y);
 	void MoveSprite(CSprite* Sprite, int x, int y);
+
+	CSprite* GetSpriteByPos(float x, float y);
 };

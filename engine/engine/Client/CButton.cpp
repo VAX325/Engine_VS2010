@@ -1,6 +1,7 @@
+#include <Base_include.h>
+
 #include "CButton.h"
 #include "ClientPerems.h"
-#include <Base_include.h>
 
 CButton::CButton(float x, float y, float w, float h, CSprite* texture) : BaseUIElement(x, y, w, h, texture)
 {
@@ -66,7 +67,7 @@ bool CButton::CheckForClick(int mouseX, int mouseY)
 		}
 		catch (const std::exception& e)
 		{
-			GetLogObjCl()->LogError((char*)e.what(), false);
+			GetLogManagerEx()->LogError((char*)e.what(), false);
 		}
 	}
 	else

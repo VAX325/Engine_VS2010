@@ -9,21 +9,64 @@ class LevelFileClient
 public:
 	LevelFileClient()
 	{
-		_BD.LevelName = (char*)"NON_LOADED";
-
 		Physic ph;
 		ph.gravity = 0;
-		_BD.PhysicData = ph;
+
+		_BD = { ph, "NON_LOADED" };
 	};
 
 	LevelFileClient(char* LevelDir)
 	{
-		char* Buff = (char*)malloc(512 * sizeof(Buff));
-		strcpy(Buff, "../gamedata/levels/");
-		strcat(Buff, LevelDir);
-		strcat(Buff, "/lbd.levelbd");
+		std::string Base = "../gamedata/levels/";
+		Base += LevelDir;
+		Base += "/";
 
-		//Load file
+		//BaseData
+		{
+			BaseData bd;
+
+			std::string BaseData = Base + "lbd.levelbd";
+
+			FILE* datafile;
+			datafile = fopen(BaseData.c_str(), "r");
+			if (datafile == NULL)
+			{
+				GetLogManagerEx()->LogError("Error opening lbd.levelbd file!\n", true);
+			}
+
+			// read file contents till end of file 
+			while (fread(&bd, sizeof(struct BaseData), 1, datafile))
+			{
+				_BD = bd;
+			}
+
+		fclose(datafile);
+		}
+		//END
+
+		//GeometryData
+		{
+			GeometryData gd;
+
+			std::string GeomData = Base + "lgeom.levelgeom";
+
+			FILE* geomfile;
+			geomfile = fopen(GeomData.c_str(), "r");
+			if (geomfile == NULL)
+			{
+				GetLogManagerEx()->LogError("Error opening lgeom.levelgeom file!\n", true);
+				exit(1);
+			}
+
+			// read file contents till end of file 
+			while (fread(&gd, sizeof(struct GeometryData), 1, geomfile))
+			{
+				_GD = gd;
+			}
+
+			fclose(geomfile);
+		}
+		//END
 
 		std::map<int, CBaseEntity*> entitys;
 
@@ -36,6 +79,8 @@ public:
 				EntitysAll++;
 			}
 		}
+
+		GetLogManagerEx()->LogMsg("%s level loaded!", LevelDir);
 	};
 
 	CBaseEntity* GetEntity(int ID)
@@ -47,6 +92,7 @@ public:
 
 private:
 	BaseData _BD;
+	GeometryData _GD;
 
 	int EntitysAll;
 

@@ -2,6 +2,6 @@
 
 function Main ()
 	
-	CLogServer:Msg("Lua server started!")
+	CLog:Msg("Lua server started!")
 	
 end

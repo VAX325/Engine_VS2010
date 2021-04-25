@@ -13,6 +13,10 @@ public:
 	void LoadPanels();
 
 	void ShowPanel(int panelID);
+	void HidePanel(int panelID);
+
+	void ShowPanel(const char* panelName);
+	void HidePanel(const char* panelName);
 
 	int GetCountOfPanels();
 

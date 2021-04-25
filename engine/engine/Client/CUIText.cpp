@@ -1,14 +1,15 @@
-#include "Base_include.h"
+#include <Base_include.h>
+
 #include "CUIText.h"
 
 inline void DrawTextD3D(LPDIRECT3DDEVICE9 pDirect3DDevice, LPD3DXFONT pFont, char* Text, float x, float y, float x1, float y1, D3DCOLOR MyColor)
 {
 	RECT Rec;
 
-	Rec.left = x;
-	Rec.top = y;
-	Rec.right = x1;
-	Rec.bottom = y1;
+	Rec.left = (LONG)x;
+	Rec.top = (LONG)y;
+	Rec.right = (LONG)x1;
+	Rec.bottom = (LONG)y1;
 
 	pFont->DrawText(0, Text, -1, &Rec, DT_CENTER, MyColor);
 }

@@ -1,4 +1,5 @@
 #include <Base_include.h>
+
 #include "NET.h"
 
 #include "Main.h"
@@ -20,7 +21,7 @@ bool InitHasBeenCalled = false;
 static void DebugOutput(ESteamNetworkingSocketsDebugOutputType eType, const char* pszMsg)
 {
 	SteamNetworkingMicroseconds time = SteamNetworkingUtils()->GetLocalTimestamp() - g_logTimeZero;
-	GetLogObjCl()->LogMsg("%s\n", pszMsg);
+	GetLogManagerEx()->LogMsg("%s\n", pszMsg);
 	fflush(stdout);
 	if (eType == k_ESteamNetworkingSocketsDebugOutputType_Bug)
 	{
@@ -34,7 +35,7 @@ static void InitSteamDatagramConnectionSockets()
 {
 	SteamDatagramErrMsg errMsg;
 	if (!GameNetworkingSockets_Init(nullptr, errMsg))
-		GetLogObjCl()->LogError("GameNetworkingSockets_Init failed.  %s", true, errMsg);
+		GetLogManagerEx()->LogError("GameNetworkingSockets_Init failed.  %s", true, errMsg);
 
 	g_logTimeZero = SteamNetworkingUtils()->GetLocalTimestamp();
 

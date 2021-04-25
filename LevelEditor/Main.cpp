@@ -25,6 +25,11 @@
 
 #include "Compiler.h"
 
+#include "../engine/engine/CBaseEntity.h"
+#include "../engine/engine/Server/CBasePhysicsEntity.h"
+
+#include "../engine/engine/LevelStructure.h"
+
 HINSTANCE g_hInstance = NULL;
 HWND g_hWnd = NULL;
 
@@ -32,6 +37,7 @@ HWND hWndMenu = NULL;
 
 static HWND hBtnFlor;
 static HWND hBtnDelete;
+static HWND hBtnEnt;
 
 CLogManager LogManager;
 
@@ -48,6 +54,7 @@ bool g_bApplicationState = true;
 CSpriteManager SpriteManager;
 
 char* CurrentCursorSprite = (char*)"";
+char* TypeOfObj = (char*)"";
 
 float CurrentCursorSpritePosX = 0;
 
@@ -62,6 +69,7 @@ WORD xPos, yPos;
 Compiler* CompilerObj = new Compiler();
 
 long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
+long WINAPI WndProcMenu(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 bool InitDirect3D(D3DFORMAT ColorFormat, D3DFORMAT DepthFormat);
 void CreateMenuUI();
 void DrawFrame();
@@ -78,7 +86,10 @@ struct CUSTOMVERTEX
 #define ID_HOTKEY_CTRL_Z 0x0CDC31337
 
 int countOn1Scene = 0;
+//This is make for geometry file
 std::map<int, Vector2<CSprite*, Vector2<float, float>>> SceneSprites;
+//This is make for entity file
+std::map<int, Vector2<CBaseEntity, Vector2<float, float>>> SceneEntity;
 
 //std::map<Trigger, Vector2<float, float>> SceneTriggers;
 
@@ -206,7 +217,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	WNDCLASSEX wcMenu;
 	wcMenu.cbSize = sizeof(WNDCLASSEX);
 	wcMenu.style = CS_HREDRAW | CS_VREDRAW;
-	wcMenu.lpfnWndProc = (WNDPROC)WndProc;
+	wcMenu.lpfnWndProc = (WNDPROC)WndProcMenu;
 	wcMenu.cbClsExtra = 0;
 	wcMenu.cbWndExtra = 0;
 	wcMenu.hInstance = g_hInstance;
@@ -246,6 +257,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	UpdateWindow(hWndMenu);
 	SetFocus(hWndMenu);
 	SetForegroundWindow(hWndMenu);
+
+	SetWindowPos(hWndMenu, HWND_TOPMOST, 0, 0, 350, 600, SWP_NOMOVE);
 
 	SpriteManager.LoadAllSprites();
 
@@ -290,6 +303,11 @@ void CreateMenuUI()
 		200, 50, 80, 25, hWndMenu, NULL, NULL, NULL);
 
 	ShowWindow(hBtnDelete, SW_SHOWNORMAL);
+
+	hBtnEnt = CreateWindow((LPCSTR)"button", (LPCSTR)"Entity", WS_VISIBLE | WS_CHILD /*| BS_BITMAP*/,
+		50, 100, 80, 25, hWndMenu, NULL, NULL, NULL);
+
+	ShowWindow(hBtnEnt, SW_SHOWNORMAL);
 }
 
 void RenderScene()
@@ -378,7 +396,7 @@ void OpenRawLevel(char* RawLevelName)
 
 char* SaveLevelRaw()
 {
-	char* Buffer = (char*)malloc(1048576);
+	char* Buffer = new char[1024];
 
 	strcpy(Buffer, "\n");
 
@@ -419,15 +437,87 @@ char* SaveLevelRaw()
 	return Buffer;
 }
 
+char* WindowsName = new char[300];
+
+inline void ChangeWindowsName(const char* Name)
+{
+	strcat(WindowsName, Name);
+	SetWindowText(g_hWnd, WindowsName);
+}
+
+//Fucking stackoverflow
+
+inline void CompileBaseData(std::string str)
+{
+	vector<std::string> tokens;
+
+	BaseData* bd = new BaseData();
+
+	for (auto i = strtok(&str[0], "\\"); i != NULL; i = strtok(NULL, "\\"))
+	{
+		if (FindWord(i, (char*)".rawlvl"))
+		{
+			tokens.push_back(i);
+
+			std::string str2 = std::string(i);
+
+			const char* j = strtok(&str2[0], ".");
+
+			Physic physic;
+			physic.gravity = 10;
+
+			bd->PhysicData = physic;
+			strcpy(bd->LevelName, j);
+		}
+	}
+
+	CompilerObj->WriteBaseData(bd);
+}
+
+inline void CompileGeometryData()
+{
+	GeometryData* gd = new GeometryData();
+	ZeroMemory(&gd, sizeof(gd));
+
+	int SID = 0;
+	for (auto i = SceneSprites.begin(); i != SceneSprites.end(); i++)
+	{
+		strcpy(gd->sprite[SID], i->second.first->GetName());
+		gd->pos[SID][0] = i->second.second.first;
+		gd->pos[SID][1] = i->second.second.second;
+
+		SID++;
+	}
+
+	CompilerObj->WriteGeometry(gd);
+}
+
+inline void CompileEntityData()
+{
+	EntityData* ed = new EntityData();
+	ZeroMemory(&ed, sizeof(ed));
+
+	int SID = 0;
+	for (auto i = SceneEntity.begin(); i != SceneEntity.end(); i++)
+	{
+		ed->entitys[SID] = i->second.first;
+		ed->pos[SID][0] = i->second.second.first;
+		ed->pos[SID][1] = i->second.second.second;
+
+		SID++;
+	}
+
+	CompilerObj->WriteEntitys(ed);
+}
+
 long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	xPos = LOWORD(lParam);
 	yPos = HIWORD(lParam);
 
-	char* WindowsName = (char*)malloc(512);
-	strcpy(WindowsName, "Level Editor: ");
-
 	int iResults = 0;
+
+	strcpy(WindowsName, "Level Editor: ");
 
 	switch (iMsg)
 	{
@@ -446,20 +536,17 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			if (CurrentFile == "")
 			{
 				CurrentFile = SaveFileAs(g_hWnd, SaveLevelRaw());
-				strcat(WindowsName, CurrentFile);
-				SetWindowText(g_hWnd, WindowsName);
+				ChangeWindowsName(CurrentFile);
 			}
 			else
 			{
 				SaveFile(CurrentFile, (char*)SaveLevelRaw());
-				strcat(WindowsName, CurrentFile);
-				SetWindowText(g_hWnd, WindowsName);
+				ChangeWindowsName(CurrentFile);
 			}
 			break;
 		case 1002:
 			CurrentFile = SaveFileAs(g_hWnd, SaveLevelRaw());
-			strcat(WindowsName, CurrentFile);
-			SetWindowText(g_hWnd, WindowsName);
+			ChangeWindowsName(CurrentFile);
 			break;
 		case 1004:
 			iResults = MessageBox(g_hWnd, "Are you sure wan't to load new level?\nAll unsaved data will errased! Procceed?", "Are you sure?", MB_YESNO);
@@ -469,8 +556,7 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				UnloadScene();
 				CurrentFile = OpenRawFile(g_hWnd);
 				OpenRawLevel(CurrentFile);
-				strcat(WindowsName, CurrentFile);
-				SetWindowText(g_hWnd, WindowsName);
+				ChangeWindowsName(CurrentFile);
 				break;
 			case IDNO:
 				break;
@@ -491,61 +577,88 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		case 1008:
-			if(CurrentFile == "")
+			if (CurrentFile == "")
 			{
 				CurrentFile = SaveFileAs(g_hWnd, SaveLevelRaw());
-				strcat(WindowsName, CurrentFile);
-				SetWindowText(g_hWnd, WindowsName);
+				ChangeWindowsName(CurrentFile);
 			}
 
+			//BaseData
 			std::string str = std::string(CurrentFile);
+			CompileBaseData(str);
+			//END
 
-			vector<std::string> tokens;
-
-			BaseData bd;
-
-			for (auto i = strtok(&str[0], "\\"); i != NULL; i = strtok(NULL, "\\"))
-			{
-				if (FindWord(i, (char*)".rawlvl"))
-				{
-					tokens.push_back(i);
-					
-					std::string str2 = std::string(i);
-
-					auto j = strtok(&str2[0], ".");
-
-					bd.LevelName = (char*)malloc(512);
-
-					strcpy(bd.LevelName, j);
-				}
-			}
-
-			Physic physic;
-			physic.gravity = 10;
-
-			bd.PhysicData = physic;
-
-			CompilerObj->WriteBaseData(&bd);
+			//GeometryData
+			CompileGeometryData();
+			//END
 
 			break;
-		}
-
-		if (lParam == (LPARAM)hBtnFlor && hWnd == hWndMenu)    // если нажали на кнопку
-		{
-			SpriteManager.SetSpriteVisible(true, (char*)"Flor");
-			CurrentCursorSprite = (char*)"Flor";
 		}
 		break;
 	}
 	case WM_LBUTTONDOWN:
 	{
-		printf("Sprite num:%d | x: %i | y: %i | \n", countOn1Scene + 1, (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
-		if (GetFocus() == g_hWnd && CurrentCursorSprite != "")
+		if (GetFocus() == g_hWnd && strcmp(TypeOfObj, "Geom") == 0 && CurrentCursorSprite != "")
 		{
+			printf("OBJ num:%d placed | x: %i | y: %i | \n", countOn1Scene + 1, (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
 			Vector2<CSprite*, Vector2<float, float>> sprite = { SpriteManager.GetSprite(CurrentCursorSprite), {CurrentCursorSpritePosX, CurrentCursorSpritePosY} };
 			SceneSprites[countOn1Scene] = sprite;
 			countOn1Scene++;
 			//SceneTriggers[]
+		}
+
+		if (GetFocus() == g_hWnd && strcmp(TypeOfObj, "Ent") == 0 && CurrentCursorSprite != "")
+		{
+
+		}
+
+		if (GetFocus() == g_hWnd && strcmp(TypeOfObj, "Ent") == 0 && CurrentCursorSprite != "")
+		{
+
+		}
+
+		//Delete ALL
+		if (GetFocus() == g_hWnd && strcmp(TypeOfObj, "Delete") == 0)
+		{
+			//Delete SPRITE
+			printf("Trying to delete sprite on x: %i | y: %i \n", (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
+
+			bool isSprite = false;
+			bool isEntity = false;
+
+			for (auto it = SceneSprites.begin(); it != SceneSprites.end(); it++)
+			{
+				if (it->second.second.first == CurrentCursorSpritePosX && it->second.second.second == CurrentCursorSpritePosY)
+				{
+					SceneSprites.erase(it->first);
+					countOn1Scene--;
+					printf("OBJ num:%d deleted | x: %i | y: %i | \n", countOn1Scene + 1, (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
+					isSprite = true;
+					break;
+				}
+			}
+
+			if (isSprite)
+				return 0;
+
+			//Delete ENTITY
+			printf("Failed. Trying delete entity on x: %i | y: %i instead\n", (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
+			for (auto it = SceneEntity.begin(); it != SceneEntity.end(); it++)
+			{
+				if (it->second.second.first == CurrentCursorSpritePosX && it->second.second.second == CurrentCursorSpritePosY)
+				{
+					SceneEntity.erase(it->first);
+					countOn1Scene--;
+					printf("OBJ num:%d deleted | x: %i | y: %i | \n", countOn1Scene + 1, (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
+					isEntity = true;
+					break;
+				}
+			}
+
+			if (isEntity)
+				return 0;
+
+			printf("Failed... no obj on | x: %i | y: %i | \n", (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
 		}
 	}
 	case WM_HOTKEY:
@@ -555,14 +668,43 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			if (countOn1Scene > 0)
 			{
 				SceneSprites.erase(countOn1Scene - 1);
-				printf("Deleted sprite on scene1 - id: %d \n", countOn1Scene - 1);
+				printf("Deleted obj on scene1 - id: %d \n", countOn1Scene - 1);
 				countOn1Scene--;
 			}
 		}
 	}
 	}
 
-	return DefWindowProc(hWnd, iMsg, wParam, lParam);  //Если нету для нас нужных сообщений, пусть это обрабатывает виндовс
+	return DefWindowProc(hWnd, iMsg, wParam, lParam);
+}
+
+long WINAPI WndProcMenu(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (iMsg)
+	{
+	case WM_DESTROY:
+	{
+		g_bApplicationState = false;
+		return 0;
+	}
+	case WM_COMMAND:
+	{
+		if (lParam == (LPARAM)hBtnFlor && hWnd == hWndMenu)    // если нажали на кнопку
+		{
+			SpriteManager.SetSpriteVisible(true, (char*)"Flor");
+			CurrentCursorSprite = (char*)"Flor";
+			TypeOfObj = (char*)"Geom";
+		}
+		if (lParam == (LPARAM)hBtnDelete && hWnd == hWndMenu)    // если нажали на кнопку
+		{
+			SpriteManager.SetSpriteVisible(false, (char*)"Flor");
+			CurrentCursorSprite = (char*)"Delete";
+			TypeOfObj = (char*)"Delete";
+		}
+	}
+	}
+
+	return DefWindowProc(hWnd, iMsg, wParam, lParam);
 }
 
 bool InitDirect3D(D3DFORMAT ColorFormat, D3DFORMAT DepthFormat)

@@ -1,4 +1,5 @@
 #include <Base_include.h>
+
 #include "../NET.h"
 
 #include <stdlib.h>
@@ -9,10 +10,6 @@
 #pragma warning( disable : 26495 6031 )
 
 #pragma comment(lib,"ws2_32.lib")
-
-FileSystem* ServerFs;
-
-CLogManager LogManagerServer;
 
 CScriptSystem* ScriptSystemServer;
 
@@ -25,8 +22,7 @@ bool Work = true;
 
 void ServerWindows()
 {
-    LogManagerServer = CLogManager();
-    LogManagerServer.Init(true);
+    InitLogManager(true);
 
     SteamGameSocketsInit();
 
@@ -72,16 +68,6 @@ void ServerStop()
     server.Stop();
     if (ServerThread.joinable())
         ServerThread.join();
-}
-
-CLogManager* GetLogObj()
-{
-	return &LogManagerServer;
-}
-
-FileSystem* GetFileSystemObj()
-{
-	return ServerFs;
 }
 
 CScriptSystem* GetScriptSystemObj()

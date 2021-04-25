@@ -2,8 +2,7 @@
 
 #include "lua_include.h"
 
-#include "FileSystem.h"
-#include "CLogManager.h"
+#include "../QCore/FileSystem/FileSystem.h"
 
 //#define RegisterLuaObjN(NameSpace, LuaName, Func) luabridge::getGlobalNamespace(L).beginNamespace(NameSpace).addFunction(LuaName, Func).endNamespace();
 //#define RegisterLuaObjW(LuaName, Func) luabridge::getGlobalNamespace(L).addFunction(LuaName, Func);

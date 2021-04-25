@@ -4,7 +4,7 @@
 
 #include "../Utils.h"
 #include "../NVector.h"
-#include "../FileSystem.h"
+#include "../QCore/FileSystem/FileSystem.h"
 #include "CSprite.h"
 #include <map>
 

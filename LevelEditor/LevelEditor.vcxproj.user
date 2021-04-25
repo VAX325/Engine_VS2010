@@ -13,11 +13,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-w 1366 -h 768</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-w 1336 -h 768</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-w 1366 -h 768</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-w 1336 -h 768</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

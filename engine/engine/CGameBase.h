@@ -11,6 +11,8 @@ public:
 
 	void LoadLevel(char* LevelName) {};
 
+	bool IsLevelLoading() { return !LevelLoaded; };
+
 	bool IsLevelLoaded() { return LevelLoaded; };
 protected:
 

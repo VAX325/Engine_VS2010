@@ -1,4 +1,5 @@
-#include "Base_include.h"
+#include <Base_include.h>
+
 #include "ClientPerems.h"
 #include "Input.h"
 #include "CMouse.h"
@@ -13,14 +14,14 @@ CMouse::CMouse(HWND hWnd, bool bExclusive)
 
 	if (S_OK != hr)
 	{
-		GetLogObjCl()->LogError((char*)"Can't create mouse!", true);
+		GetLogManagerEx()->LogError((char*)"Can't create mouse!", true);
 	}
 
 	hr = m_pDevice->SetDataFormat(&c_dfDIMouse);
 
 	if (S_OK != hr)
 	{
-		GetLogObjCl()->LogError((char*)"Can't set mouse format!", true);
+		GetLogManagerEx()->LogError((char*)"Can't set mouse format!", true);
 	}
 
 	if (bExclusive)
@@ -29,7 +30,7 @@ CMouse::CMouse(HWND hWnd, bool bExclusive)
 
 		if (S_OK != hr)
 		{
-			GetLogObjCl()->LogError((char*)"Can't change cooperative level!", true);
+			GetLogManagerEx()->LogError((char*)"Can't change cooperative level!", true);
 		}
 	}
 	else
@@ -38,7 +39,7 @@ CMouse::CMouse(HWND hWnd, bool bExclusive)
 		
 		if (S_OK != hr)
 		{
-			GetLogObjCl()->LogError((char*)"Can't change cooperative level!", true);
+			GetLogManagerEx()->LogError((char*)"Can't change cooperative level!", true);
 		}
 	}
 
@@ -132,7 +133,7 @@ void CMouse::Acquire()
 
 	if (S_OK != hr)
 	{
-		GetLogObjCl()->LogError((char*)"Can't acquire mouse!", true);
+		GetLogManagerEx()->LogError((char*)"Can't acquire mouse!", true);
 	}
 }
 
@@ -144,6 +145,6 @@ void CMouse::UnAcquire()
 
 	if (S_OK != hr)
 	{
-		GetLogObjCl()->LogError((char*)"Can't unacquire mouse!", true);
+		GetLogManagerEx()->LogError((char*)"Can't unacquire mouse!", true);
 	}
 }
