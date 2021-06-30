@@ -1,19 +1,20 @@
-#include <Base_include.h>
-#include "Interfaces/QRender.h"
-#include "../QCore/QCore.h"
-
-#if IS_WIN32
-#pragma warning( push )
-#pragma warning( disable : 4005)
-#include "DirectX/DirectX.h"
-#pragma warning( pop )
-#endif
+#include "Base_include.h"
+#include "IRenderable.h"
+#include "RenderManager.h"
 
 #if IS_WIN32
 
 #include <Windows.h>
+#pragma comment(lib, "QCore.lib")
+#pragma comment(lib, "QRenderGL.lib")
+#pragma comment(lib, "QRender9.lib")
+//#pragma comment(lib, "QRender11.lib")
+//#pragma comment(lib, "QRender12.lib")
 
-BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
+//#pragma comment(lib, "QRenderLegacyGL.lib")
+//#pragma comment(lib, "QRenderVulkan.lib")
+
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 {
     switch (fdwReason)
     {
@@ -31,76 +32,3 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 #else
 //No Main func on unix or mac
 #endif
-
-struct Supported
-{
-    bool OPENGL;
-#if IS_WIN32
-    bool D3DX9;
-    bool D3DX10;
-    bool D3DX12;
-#endif // IS_WIN32
-    bool VULCAN;
-};
-
-inline Supported CheckForSupport()
-{
-    Supported support = Supported();
-}
-
-int CurrentRenderSpec = 0;
-int GetCurrentRenderSpec()
-{
-    return CurrentRenderSpec;
-}
-
-void PrepareRenderEngine(int ForceToSpecification, Function PreUpdate)
-{
-    if (!IsCoreInitilaized())
-        CoreInit();
-
-    if(ForceToSpecification == OPENGL)
-    {
-        
-    }
-#if IS_WIN32
-    else if(ForceToSpecification == D3DX9)
-    {
-        (void)InitDirectX9(PreUpdate);
-    }
-    else if (ForceToSpecification == D3DX11) 
-    {
-        (void)InitDirectX11(PreUpdate);
-    }
-#ifdef IS_WIN10
-    else if (ForceToSpecification == D3DX12)
-    {
-        (void)InitDirectX12();
-    }
-#endif
-#endif
-    else if (ForceToSpecification == VULCAN)
-    {
-
-    }
-    else
-    {
-#if IS_WIN32
-        //If is windows then use directx
-        CurrentRenderSpec = InitDirectX(PreUpdate);
-#else
-        //If is non windows then use opengl
-        InitOpenGL();
-#endif
-    }
-}
-
-void ShutdownRenderEngine()
-{
-    
-}
-
-void Update()
-{
-    GetGraphicsManager()->Update();
-}

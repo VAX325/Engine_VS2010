@@ -39,6 +39,9 @@ void CLogManager::Init(bool IsServer)
 
 void CLogManager::LogMsg(const char* Msg, ...)
 {
+	if (fout == nullptr)
+		Init();
+
 	time_t now = time(0);
 
 	tm* local = localtime(&now);
@@ -64,8 +67,13 @@ void CLogManager::LogMsg(const char* Msg, ...)
 
 void CLogManager::LogError(const char* Msg, bool needToShutdown, ...)
 {
-	if(needToShutdown)
+#ifdef _DEBUG
+	if (needToShutdown)
 		DEBUG_INVOKE
+#endif
+
+	if (fout == nullptr)
+		Init();
 
 	time_t now = time(0);
 
@@ -75,7 +83,7 @@ void CLogManager::LogError(const char* Msg, bool needToShutdown, ...)
 	MsgBuff[0] = '\0';
 
 	va_list arg;
-	va_start(arg, Msg);
+	va_start(arg, needToShutdown);
 	vsprintf((char*)MsgBuff, Msg, arg);
 	va_end(arg);
 
@@ -104,7 +112,7 @@ void CLogManager::LogError(const char* Msg, bool needToShutdown, ...)
 	free(MsgBuff);
 }
 
-CLogManager* LogManager;
+CLogManager* LogManager = new CLogManager();
 
 void InitLogManager(bool IsServer)
 {

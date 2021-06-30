@@ -24,7 +24,7 @@ void FileSystem::WriteInFile(char* data, char* file)
 	in.close();
 }
 
-char* FileSystem::ReadFromFile(char* file)
+const char* FileSystem::ReadFromFile(const char* file)
 {
 	if (file == NULL)
 	{
@@ -33,16 +33,18 @@ char* FileSystem::ReadFromFile(char* file)
 
 	ifstream out = ifstream(file, ios_base::in);
 
-	out.seekg(0, out.end);
-	int length = (int)out.tellg();
-	out.seekg(0, out.beg);
+	//out.seekg(0, out.end);
+	//int length = (int)out.tellg();
+	//out.seekg(0, out.beg);
 
-	char* buff = (char*)malloc(length);
+	////out.read(buff, out.tellg());
+	//out.read(buff, length);
 
-	//out.read(buff, out.tellg());
-	out.read(buff, length);
+	//out.close();
+	std::string file_contents{ istreambuf_iterator<char>(out), istreambuf_iterator<char>() };
 
-	out.close();
+	const char* buff = (const char*)malloc(sizeof(char) * file_contents.size());
+	strcpy((char*)buff, file_contents.c_str());
 
 	return buff;
 }

@@ -24,28 +24,52 @@
 #include "../UsefullMacro.h"
 
 #include <Windows.h>
-#include "../QRender/Interfaces/QRender.h"
+#include "../QRender/QRender.h"
 
 #pragma comment(lib, "QRender.lib")
 
 #include <Windows.h>
 #include <iostream>
 
-void PreUpdate(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
+RenderEngines render = RenderEngines::SYSTEM_SELECTION;
+
+inline void Console(int argc, const char* argv[])
 {
-	
+	if (argc > 1)
+	{
+		for (size_t i = 0; i < argc; i++)
+		{
+			if (strcmp("-render", argv[i]) == 0)
+			{
+				if (strcmp("dx9", argv[i + 1]) == 0)
+				{
+					render = RenderEngines::DIRECTX9;
+				}
+				else if (strcmp("dx11", argv[i + 1]) == 0)
+				{
+					render = RenderEngines::DIRECTX11;
+				}
+				else if (strcmp("gl", argv[i + 1]) == 0)
+				{
+					render = RenderEngines::OPENGL;
+				}
+				else
+				{
+					render = RenderEngines::OPENGL;
+				}
+			}
+		}
+	}
 }
 
-int main()
+int main(int argc, const char* argv[])
 {
-	PrepareRenderEngine(Specifications::D3DX9, PreUpdate);
+	Console(argc, argv);
 
-	IRenderable* render = GetGraphicsManager()->CreateIRenderable("Sprite.png");
+	RenderManager* render_engine = InitRender(render);
+	IRenderable* rend = render_engine->CreateRenderable(RenderableType::SPRITE, "../gamedata/sprites/ENT.png", 1024/2*0, 768/2*0);
 
-	render->SetX(100);
-	render->SetY(100);
+	render_engine->Render();
 
-	Update();
-
-	ShutdownRenderEngine();
+	return 0;
 }

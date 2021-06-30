@@ -26,7 +26,7 @@ public:
 
 	void WriteInFile(char* data, char* file);
 
-	char* ReadFromFile(char* file);
+	const char* ReadFromFile(const char* file);
 
 	Files GetAllFilesInFolder(char* folder, char* extension);
 

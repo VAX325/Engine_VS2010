@@ -14,6 +14,18 @@
 #pragma warning (Unknown dynamic link import/export semantics.)
 #endif
 
+#if QRENDER9_COMPILING
+#   define QRENDER9_PUBLIC EXPORT
+#else
+#   define QRENDER9_PUBLIC IMPORT
+#endif
+
+#if QRENDERGL_COMPILING
+#   define QRENDERGL_PUBLIC EXPORT
+#else
+#   define QRENDERGL_PUBLIC IMPORT
+#endif
+
 #if QRENDER_COMPILING
 #   define QRENDER_PUBLIC EXPORT
 #else

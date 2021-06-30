@@ -10,6 +10,9 @@
     <Filter Include="FileSystem">
       <UniqueIdentifier>{524c3901-5a74-4e9e-a6ae-3f88282ed9ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{9f429ca8-9ba1-49dd-93cf-cb7f5eba99aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -34,5 +37,11 @@
       <Filter>FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="QCore.h" />
+    <ClInclude Include="QVector2.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="QVector3.h">
+      <Filter>Types</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

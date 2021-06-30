@@ -1,1 +1,0 @@
-If you want to include DirectX 12 when in Base_include write "#define IS_WIN10"
