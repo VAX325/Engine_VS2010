@@ -8,14 +8,14 @@
 
 //using namespace audiere;
 
-#include "../NVector.h"
+#include "../NVarray.h"
 
 class CSoundManager
 {
 private:
 
 	std::map<int, char*> sounds;
-	Vector2	<char*, char*> BuffersBusy;
+	VArray2	<char*, char*> BuffersBusy;
 
 	//AudioDevicePtr device;
 	//OutputStreamPtr firstBuff;

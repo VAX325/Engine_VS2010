@@ -1,24 +1,23 @@
 #pragma once
-#include "CSpriteManager.h"
+#ifndef CLIENTPEREMS_H
+#define CLIENTPEREMS_H
+
 #include "CSoundManager.h"
 #include "../QCore/FileSystem/FileSystem.h"
+#include "../QRender/QRender.h"
 #include "../CScriptSystem.h"
+#include "../xmlparser.h"
 
-#include <Windows.h>
-
-#include <d3dx9.h>
-
-IDirect3DDevice9* GetD3D9Device();
-
-int GetWindowH();
-int GetWindowW();
-
-CSpriteManager* GetSpriteManger();
 CSoundManager* GetSoundObj();
 CScriptSystem* GetScriptSystemObjCl();
+CXMLParser* GetParser();
+
 lua_State* GetLuaStateCl();
-void CallLuaFuncCl(char* LuaFunc);
-LuaFuncPtr* GetLuaFuncPtrCl(char* LuaName);
-HWND GetMainWnd();
+LuaFuncPtr* GetLuaFuncPtrCl(const char* LuaName);
+void CallLuaFuncCl(const char* LuaFunc);
+
+RenderManager* GetRender();
 
 #include "../SharedLua.h"
+
+#endif

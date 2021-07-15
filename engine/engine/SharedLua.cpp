@@ -64,6 +64,6 @@ void InitLuaShared(lua_State* L, CLogManager* LogObj)
 			.addFunction("Error", LogErrorLua)
 		.endNamespace();
 
-	luabridge::getGlobalNamespace(L)
-		.addFunction("GetFPS", LuaGetFPS);
+	//luabridge::getGlobalNamespace(L)
+	//	.addFunction("GetFPS", LuaGetFPS);
 }

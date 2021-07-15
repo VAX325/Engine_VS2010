@@ -5,7 +5,7 @@
 #include <d3d9.h>
 #include <map>
 
-typedef Vector4<float, float, float, float> FLOATVECTOR4;
+typedef VArray4<float, float, float, float> FLOATVECTOR4;
 
 class CSpriteManager
 {

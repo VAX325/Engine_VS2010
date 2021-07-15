@@ -1,7 +1,7 @@
 #include "CSpriteManager.h"
 #include "Main.h"
 
-typedef map<int, Vector2<char*, char*>> txtNtextures;
+typedef map<int, VArray2<char*, char*>> txtNtextures;
 
 void CSpriteManager::AddSprite(LPDIRECT3DDEVICE9 pD3DDevice, LPCSTR Path, char* key, float x, float y, bool NeedToRender, char* Name)
 {
@@ -286,7 +286,7 @@ void CSpriteManager::LoadAllSprites()
 	while (txtit != txt.end() && textureit != textures.end())
 	{
 
-		Vector2<char*, char*> f = { txtit->second, textureit->second };
+		VArray2<char*, char*> f = { txtit->second, textureit->second };
 
 		txtNtextrs.insert(make_pair(i, f));
 

@@ -1,4 +1,4 @@
 #include <stdio.h>
 #include <string>
 
-bool FindWord(char* string, char* word);
+bool FindWord(const char * string, const char * word);

@@ -1,20 +1,19 @@
 #include <Base_include.h>
 
 #include "xmlparser.h"
+
 #include <pugixml/pugixml.hpp>
-#include <Windows.h>
+#include <array>
 
-XMLParser::XMLParser()
+CXMLParser::CXMLParser()
 {
 }
 
-XMLParser::~XMLParser()
+CXMLParser::~CXMLParser()
 {
 }
 
-//#define PredicateFind() struct predicate{char* Find; bool operator()(pugi::xml_attribute attr) const{return strcmp(attr.name(), Find) == 0;}bool operator()(pugi::xml_node node) const{return node.attribute(Find).as_string();} bool operator=(char* Find){}};
-
-pugi::xml_attribute FindAttribute(pugi::xml_node in, char* attribute)
+pugi::xml_attribute FindAttribute(pugi::xml_node in, const char* attribute)
 {
     for (pugi::xml_attribute attrib = in.first_attribute(); attrib; attrib = attrib.next_attribute())
         if (strcmp(attrib.name(), attribute) == 0)
@@ -22,7 +21,7 @@ pugi::xml_attribute FindAttribute(pugi::xml_node in, char* attribute)
     return pugi::xml_attribute();
 }
 
-pugi::xml_attribute FindAttribute(pugi::xml_node_iterator in, char* attribute)
+pugi::xml_attribute FindAttribute(pugi::xml_node_iterator in, const char* attribute)
 {
     for (pugi::xml_attribute attrib = in->first_attribute(); attrib; attrib = attrib.next_attribute())
         if (strcmp(attrib.name(), attribute) == 0)
@@ -30,70 +29,55 @@ pugi::xml_attribute FindAttribute(pugi::xml_node_iterator in, char* attribute)
     return pugi::xml_attribute();
 }
 
-void XMLParser::ParseXML(char* file, char* root, KeysAtrributesNValues* prs)
+std::array<ParsedData*, 15>* CXMLParser::ParseXML(const char* file, const char* root)
 {
-    //KeysAtrributesNValues prs;
-
     pugi::xml_document doc;
-
     pugi::xml_parse_result result = doc.load_file(file);
-
     pugi::xml_node root1 = doc.child(root);
-
     pugi::xml_object_range<pugi::xml_node_iterator> children = root1.children();
-    
-    pugi::xml_node_iterator it = children.begin();
 
-    while(it != children.end() && it->parent() != NULL)
+    std::array<ParsedData*, 15>* prs_array = new std::array<ParsedData*, 15>();
+
+    int j = 0;
+    for(auto it = children.begin(); it != children.end() && it->parent() != NULL; it++)
     {
-        char* NameBuff = (char*)malloc(128);
+        ParsedData* prs = new ParsedData();
 
-        strcpy(NameBuff, (char*)it->name());
-        
-        char* Attributes[10];
-        char* AttributesValues[10];
+        prs->name = _strdup(it->name());
 
-        ZeroMemory(Attributes, sizeof(Attributes));
-        ZeroMemory(AttributesValues, sizeof(AttributesValues));
+        prs->key.push_back(_strdup(it->first_attribute().name()));
+        prs->values.push_back(_strdup(it->first_attribute().value()));
 
-        /*strcpy(Attributes[0], attribName);*/ 
-        Attributes[0] = _strdup((char*)it->first_attribute().name());
-        /*strcpy(AttributesValues[0], (char*)it->first_attribute().value());*/
-        AttributesValues[0] = _strdup((char*)it->first_attribute().value());
-
-        int i = 0;
-        
-        while (FindAttribute(it, Attributes[i]).next_attribute())
+        for (int i = 1 /*Because 0 index is exists!*/; FindAttribute(it, prs->key[i-1]).next_attribute(); i++)
         {
-            Attributes[i+1] = _strdup((char*)FindAttribute(it, Attributes[i]).next_attribute().name());
-            
-            AttributesValues[i+1] = _strdup((char*)FindAttribute(it, Attributes[i]).next_attribute().value());
-
-            //strcat(Attributes[i + 1], (char*)FindAttribute(it, Attributes[i]).next_attribute().name());
-
-            //strcat(AttributesValues[i + 1], (char*)FindAttribute(it, Attributes[i]).next_attribute().value());
-
-            i++;
+            prs->key.push_back(_strdup(FindAttribute(it, prs->key[i - 1]).next_attribute().name()));
+            prs->values.push_back(_strdup((char*)FindAttribute(it, prs->key[i - 1]).next_attribute().value()));
         }
 
-        arr arr1;
-        arr arr2;
+        prs->_size = prs->key.size();
 
-        std::swap(arr1.chr, Attributes);
-        std::swap(arr2.chr, AttributesValues);
-
-        //for(int j = 0; Attributes[j] != NULL; j++)
-        //{
-        
-        Vector2<arr, arr> f = { arr1, arr2 };
-
-        prs->insert(std::make_pair(NameBuff, f));
-        //prs[NameBuff] = { arr1, arr2 };
-        //}
-
-        it++;
+        (*prs_array)[j] = prs;
+        j++;
     }
 
-    //std::swap(&pars, &prs);
-    //return &prs;
+    return prs_array;
+}
+
+std::array<const char*, 2> ParsedData::operator[](size_t index)
+{
+    if (index < _size)
+    {
+        return { key[index], values[index] };
+    }
+    return {0};
+}
+
+const char* ParsedData::Name()
+{
+    return name;
+}
+
+int ParsedData::size()
+{
+    return _size;
 }

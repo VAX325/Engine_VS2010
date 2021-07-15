@@ -77,8 +77,8 @@ public:
 		lua_setglobal(L, LuaName);
 	}
 
-	void CallLuaFunc(lua_State* L, char* LuaName);
-	LuaFuncPtr* GetLuaFuncPtr(lua_State* L, char* LuaName);
+	void CallLuaFunc(lua_State* L, const char* LuaName);
+	LuaFuncPtr* GetLuaFuncPtr(lua_State* L, const char* LuaName);
 private:
 
 	std::map<char*, char*> Scripts;

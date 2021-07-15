@@ -1,30 +1,33 @@
 #pragma once
+#ifndef CBUTTON_H
+#define CBUTTON_H
+
 #include "BaseUIElement.h"
 #include "CUIText.h"
 
 class LuaFuncPtr;
 
-class CButton : public BaseUIElement
+class CUIButton : public BaseUIElement
 {
 public:
 
-	CButton(float x, float y, float w, float h, CSprite* texture);
-	CButton(float x, float y, float w, float h, CSprite* texture, char* Text);
-	CButton(float x, float y, float w, float h, CSprite* texture, CUIText* Text);
-	CButton(float x, float y, float w, float h, CSprite* texture, std::string Text);
+	CUIButton(int x, int y, int w, int h, const char* texture);
+	CUIButton(int x, int y, int w, int h, const char* texture, char* Text);
+	CUIButton(int x, int y, int w, int h, const char* texture, CUIText* Text);
+	CUIButton(int x, int y, int w, int h, const char* texture, std::string Text);
 
-	CButton(float x, float y, float w, float h, CSprite* texture, LuaFuncPtr** OnClickPointer);
-	CButton(float x, float y, float w, float h, CSprite* texture, char* Text, LuaFuncPtr** OnClickPointer);
-	CButton(float x, float y, float w, float h, CSprite* texture, CUIText* Text, LuaFuncPtr** OnClickPointer);
-	CButton(float x, float y, float w, float h, CSprite* texture, std::string Text, LuaFuncPtr** OnClickPointer);
-	~CButton();
+	CUIButton(int x, int y, int w, int h, const char* texture, LuaFuncPtr** OnClickPointer);
+	CUIButton(int x, int y, int w, int h, const char* texture, char* Text, LuaFuncPtr** OnClickPointer);
+	CUIButton(int x, int y, int w, int h, const char* texture, CUIText* Text, LuaFuncPtr** OnClickPointer);
+	CUIButton(int x, int y, int w, int h, const char* texture, std::string Text, LuaFuncPtr** OnClickPointer);
+	~CUIButton();
 
 	bool CheckForClick(int mouseX, int mouseY);
-
-	void Render(LPDIRECT3DDEVICE9 pDirect3DDevice);
 
 private:
 	LuaFuncPtr* clickptr;
 
 	CUIText* text;
 };
+
+#endif

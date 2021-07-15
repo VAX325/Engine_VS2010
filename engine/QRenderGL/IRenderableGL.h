@@ -26,7 +26,11 @@ public:
 	virtual void Render();
 	RenderableType GetType() { return _type; };
 
+	virtual void SetLayer(unsigned int);
+
 private:
+	void Rebuild();
+
 	Texture* texture;
 	ShaderProgram* shaderProgram;
 	GLuint VBO, VAO, EBO;

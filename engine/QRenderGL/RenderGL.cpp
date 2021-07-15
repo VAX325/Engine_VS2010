@@ -38,7 +38,7 @@ RenderGL::RenderGL()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	window = glfwCreateWindow(640, 640, "QEngine", nullptr, nullptr);
+	window = glfwCreateWindow(800, 640, "QEngine", nullptr, nullptr);
 	if (window == nullptr)
 	{
 		GetLogManagerEx()->LogError("Failed to create GLFW window", true);
@@ -89,6 +89,11 @@ void RenderGL::SetPostRender(PostRenderFunction post_function)
 	postFunction = post_function;
 }
 
+void RenderGL::SetShutdown(ShutdownFunction shutdown_function)
+{
+	shutdownFunction = shutdown_function;
+}
+
 void RenderGL::Render()
 {
 	while (!glfwWindowShouldClose(window))
@@ -111,6 +116,9 @@ void RenderGL::Render()
 		if (postFunction)
 			postFunction();
 	}
+
+	if(shutdownFunction)
+		shutdownFunction();
 
 	glfwTerminate();
 }
@@ -140,8 +148,8 @@ IRenderable* RenderGL::CreateRenderable(RenderableType type, ...)
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		va_list args;
 		va_start(args, type);
@@ -149,8 +157,11 @@ IRenderable* RenderGL::CreateRenderable(RenderableType type, ...)
 		const char* path = va_arg(args, const char*);
 		int x = va_arg(args, int);
 		int y = va_arg(args, int);
+		int w = va_arg(args, int);
+		int h = va_arg(args, int);
 		const char* vert = va_arg(args, const char*);
 		const char* frag = va_arg(args, const char*);
+		unsigned int layer = va_arg(args, unsigned int);
 
 		bool default_vert = false;
 		bool default_frag = false;
@@ -179,10 +190,22 @@ IRenderable* RenderGL::CreateRenderable(RenderableType type, ...)
 
 		sprite->x = x;
 		sprite->y = y;
-		sprite->width = width;
-		sprite->height = height;
+		sprite->width = w != -1 ? w : width;
+		sprite->height = h != -1 ? h : height;
+		sprite->layer = layer;
+
+		if(w == -2)
+		{
+			sprite->width = this->width;
+		}
+		if(h == -2)
+		{
+			sprite->height = this->height;
+		}
 
 		va_end(args);
+
+		sprite->Rebuild();
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -191,6 +214,7 @@ IRenderable* RenderGL::CreateRenderable(RenderableType type, ...)
 		sprite->shaderProgram = shaderProgram;
 
 		stbi_image_free(data);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		render_objects.push_back(sprite);
 

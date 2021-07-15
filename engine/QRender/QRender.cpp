@@ -20,7 +20,7 @@ QRENDER_PUBLIC RenderManager* InitRender(RenderEngines render_engine)
 	case RenderEngines::SYSTEM_SELECTION:
 #if IS_WIN32
 		//For now it opengl
-		manager = CreateGLRender();
+		manager = CreateDirect9Render();
 		if (manager != nullptr)
 			return manager;
 		else

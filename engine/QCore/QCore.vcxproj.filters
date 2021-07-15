@@ -13,6 +13,15 @@
     <Filter Include="Types">
       <UniqueIdentifier>{9f429ca8-9ba1-49dd-93cf-cb7f5eba99aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{8cddfb27-fb7a-4bb6-8d35-adaee8972f8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input\DirectInput">
+      <UniqueIdentifier>{898a4c60-b2c9-4110-ba32-5b6306572977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input\Base">
+      <UniqueIdentifier>{350ca9b4-1c28-4efd-b4cf-7d2b0e324b1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -26,6 +35,12 @@
     </ClCompile>
     <ClCompile Include="QCore.cpp">
       <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="CDInput.cpp">
+      <Filter>Input\DirectInput</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseInput.cpp">
+      <Filter>Input\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +57,12 @@
     </ClInclude>
     <ClInclude Include="QVector3.h">
       <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="CDInput.h">
+      <Filter>Input\DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseInput.h">
+      <Filter>Input\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

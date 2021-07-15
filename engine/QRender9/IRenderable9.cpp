@@ -19,6 +19,9 @@ IRenderable9::~IRenderable9()
 
 void IRenderable9::Render()
 {
+	if (!visible)
+		return;
+
 	switch (_type)
 	{
 	case RenderableType::NONE:
@@ -46,4 +49,9 @@ void IRenderable9::Render()
 		GetLogManagerEx()->LogError("IRenderable 0x%08x has no type!", false, this);
 		break;
 	}
+}
+
+void IRenderable9::SetLayer(unsigned int layer)
+{
+	this->layer = layer;
 }

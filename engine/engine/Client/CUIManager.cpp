@@ -4,6 +4,7 @@
 #include "../xmlparser.h"
 #include "../Utils.h"
 #include "ClientPerems.h"
+
 #include <sstream>
 #include <iostream>
 
@@ -17,363 +18,200 @@ CUIManager::~CUIManager()
 
 }
 
+inline CUIText* TextSearch(ParsedData* prs)
+{
+	int x = 0;
+	int y = 0;
+	int w = 0;
+	int h = 0;
+	int color = 0xffffffff;
+
+	const char* text = "null";
+	const char* font = "Arial";
+
+	for(int i = 0; i != prs->size(); i++)
+	{
+		const char* key = (*prs)[i][0];
+		const char* value = (*prs)[i][1];
+
+		if(strcmp(key, "x") == 0)
+		{
+			x = atoi(value);
+		}
+		else if(strcmp(key, "y") == 0)
+		{
+			y = atoi(value);
+		}
+		else if (strcmp(key, "w") == 0)
+		{
+			w = atoi(value);
+		}
+		else if (strcmp(key, "h") == 0)
+		{
+			h = atoi(value);
+		}
+		else if (strcmp(key, "color") == 0)
+		{
+			color = atoi(value);
+		}
+		else if (strcmp(key, "value") == 0)
+		{
+			text = value;
+		}
+		else if (strcmp(key, "font") == 0)
+		{
+			font = value;
+		}
+	}
+
+	CUIText* Text = new CUIText(x, y, w, h, text);
+	Text->SetFont(font);
+	Text->SetColor(color);
+	Text->SetLayer(6);
+
+	return Text;
+}
+
+inline CUIImage* ImageSearch(ParsedData* prs)
+{
+	int x = 0;
+	int y = 0;
+	int w = 0;
+	int h = 0;
+	std::string name = "../gamedata/sprites/UI/";
+	
+	for (int i = 0; i != prs->size(); i++)
+	{
+		const char* key = (*prs)[i][0];
+		const char* value = (*prs)[i][1];
+
+		if (strcmp(key, "x") == 0)
+		{
+			x = atoi(value);
+		}
+		else if (strcmp(key, "y") == 0)
+		{
+			y = atoi(value);
+		}
+		else if (strcmp(key, "w") == 0)
+		{
+			w = atoi(value);
+		}
+		else if (strcmp(key, "h") == 0)
+		{
+			h = atoi(value);
+		}
+		else if (strcmp(key, "name") == 0)
+		{
+			name = name + value;
+			name = name + ".png";
+		}
+	}
+
+	CUIImage* img = new CUIImage(x, y, w, h, name.c_str());
+
+	return img;
+}
+
+inline CUIButton* ButtonSearch(ParsedData* prs)
+{
+	int x = 0;
+	int y = 0;
+	int w = 0;
+	int h = 0;
+
+	std::string name = "null";
+	std::string sprite = "../gamedata/sprites/UI/";
+	std::string text = "";
+
+	LuaFuncPtr* funct_ptr = nullptr;
+
+	for (int i = 0; i != prs->size(); i++)
+	{
+		const char* key = (*prs)[i][0];
+		const char* value = (*prs)[i][1];
+
+		if (strcmp(key, "x") == 0)
+		{
+			x = atoi(value);
+		}
+		else if (strcmp(key, "y") == 0)
+		{
+			y = atoi(value);
+		}
+		else if (strcmp(key, "w") == 0)
+		{
+			w = atoi(value);
+		}
+		else if (strcmp(key, "h") == 0)
+		{
+			h = atoi(value);
+		}
+		else if (strcmp(key, "text") == 0)
+		{
+			text = value;
+		}
+		else if (strcmp(key, "name") == 0) 
+		{
+			sprite = sprite + value;
+			sprite = sprite + ".png";
+		}
+		else if (strcmp(key, "sprite") == 0)
+		{
+			name = value;
+		}
+		else if (strcmp(key, "OnClick") == 0)
+		{
+			funct_ptr = GetLuaFuncPtrCl(value);
+		}
+	}
+
+	CUIButton* btn = new CUIButton(x, y, w, h, sprite.c_str(), text, &funct_ptr);
+	btn->SetLayer(5);
+
+	return btn;
+}
+
 void CUIManager::LoadPanels()
 {
 	_CurrentPanel = UI_NO_PANEL;
 
 	Files configs = GetFileSystemEx()->GetAllFilesInFolder((char*)"../gamedata/configs/ui/", (char*)"xml");
-
-	XMLParser xml_parser;
-
-	auto confit = configs.begin();
+	CXMLParser* xml_parser = GetParser();
 
 	int j = 0;
-
-	while(confit != configs.end())
+	for (auto i = configs.begin(); i != configs.end(); i++)
 	{
-		KeysAtrributesNValues prs;
+		std::string path = "../gamedata/configs/ui/";
+		path = path + i->second;
 
-		char* buff = (char*)malloc(128);
+		std::array<ParsedData*, 15>* prs = xml_parser->ParseXML(path.c_str(), "panel");
 
-		strcpy(buff, "../gamedata/configs/ui/");
+		panels[j] = new CUIPanel(i->second);
 
-		strcat(buff, confit->second);
-
-		xml_parser.ParseXML(buff, (char*)"panel", &prs);
-
-		auto it = prs.begin();
-
-		panels[j] = new CUIPanel(confit->second);
-
-		int findedText = 0;
-		int findedButtonds = 0;
-
-		while (it != prs.end())
+		for(int i = 0; i != prs->size(); i++)
 		{
-			if (FindWord(it->first, (char*)"CText"))
+			if((*prs)[i] == nullptr)
 			{
-				int i = 0;
-
-				float x = 0, y = 0;
-				float w = 0;
-				float h = 0;
-				char* Text = (char*)malloc(64);
-				char* FontName = (char*)malloc(64);
-
-				D3DCOLOR Color;
-
-				ZeroMemory(Text, sizeof(Text));
-
-				while (it->second.first.chr[i] != NULL)
-				{
-					if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-					{
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"x"))
-							{
-								x = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"y"))
-							{
-								y = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"w"))
-							{
-								w = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"h"))
-							{
-								h = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"value"))
-							{
-								strcpy(Text, it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"font"))
-							{
-								strcpy(FontName, it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"color"))
-							{
-								Color = (D3DCOLOR)std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-					}
-				}
-				CUIText* text = new CUIText(x, y, w, h, (std::string)Text);
-				text->SetFont(GetD3D9Device(), FontName);
-				text->SetColor(Color);
-				panels[j]->AddElement(text, Text);
+				break;
 			}
 
-			if (FindWord(it->first, (char*)"CSprite"))
+			if (FindWord((*prs)[i]->Name(), "Text"))
 			{
-				int i = 0;
-
-				float x = 0;
-				float y = 0;
-				float w = 0;
-				float h = 0;
-				char* Name = (char*)malloc(64);
-
-				bool hNeed = false;
-				bool wNeed = false;
-				bool hWindow = false;
-				bool wWindow = false;
-
-				ZeroMemory(Name, sizeof(Name));
-
-				while (it->second.first.chr[i] != NULL)
-				{
-					if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-					{
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"x"))
-							{
-								x = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"y"))
-							{
-								y = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"w"))
-							{
-								w = std::stof(it->second.second.chr[i]);
-								if (w == -1)
-								{
-									wNeed = true;
-								}
-								else if (w == -2)
-								{
-									wWindow = true;
-								}
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"h"))
-							{
-								h = std::stof(it->second.second.chr[i]);
-								if(h == -1)
-								{
-									hNeed = true;
-								}
-								else if(h == -2)
-								{
-									hWindow = true;
-								}
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"name"))
-							{
-								strcpy(Name, it->second.second.chr[i]);
-								i++;
-							}
-						}
-					}
-				}
-
-				char* texturePath = (char*)malloc(128);
-				strcpy(texturePath, "../gamedata/sprites/UI/");
-				strcat(texturePath, Name);
-				strcat(texturePath, ".png");
-
-				CSprite* sprite = new CSprite(GetD3D9Device(), texturePath, GetWindowW(), GetWindowH(), Name);
-
-				if (sprite == NULL)
-				{
-					GetLogManagerEx()->LogError((char*)"Can't find sprite! Please check your .xml configuration file!", true);
-				}
-
-				if (hNeed)
-				{
-					h = sprite->GetH();
-				}
-				if (wNeed)
-				{
-					w = sprite->GetW();
-				}
-
-				if (hWindow)
-				{
-					h = (float)GetWindowH();
-				}
-				if (wWindow)
-				{
-					w = (float)GetWindowW();
-				}
-
-				CUISprite* UISprite = new CUISprite(x, y, (float)GetWindowW(), (float)GetWindowH(), sprite, false);
-				UISprite->SetW(w);
-				UISprite->SetH(h);
-
-				panels[j]->AddElement(UISprite, Name);
+				CUIText* text = TextSearch((*prs)[i]);
+				panels[j]->AddElement(text);
 			}
-
-			if (FindWord(it->first, (char*)"CButton"))
+			else if (FindWord((*prs)[i]->Name(), "Image"))
 			{
-				int i = 0;
-
-				float x = 0, y = 0;
-				float w = 0;
-				float h = 0;
-				char* Name = (char*)malloc(64);
-				char* SpriteName = (char*)malloc(64);
-				char* OnClickName = (char*)malloc(64);
-				char* Text = (char*)malloc(64);
-
-				ZeroMemory(Name, sizeof(Name));
-				ZeroMemory(SpriteName, sizeof(SpriteName));
-				ZeroMemory(OnClickName, sizeof(OnClickName));
-				ZeroMemory(Text, sizeof(Text));
-
-				while (it->second.first.chr[i] != NULL)
-				{
-					if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-					{
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"x"))
-							{
-								x = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"y"))
-							{
-								y = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"w"))
-							{
-								w = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"h"))
-							{
-								h = std::stof(it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"name"))
-							{
-								strcpy(Name, it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"sprite"))
-							{
-								strcpy(SpriteName, it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"text"))
-							{
-								strcpy(Text, it->second.second.chr[i]);
-								i++;
-							}
-						}
-
-						if (it->second.first.chr[i] != NULL && it->second.second.chr[i] != NULL)
-						{
-							if (FindWord(it->second.first.chr[i], (char*)"OnClick"))
-							{
-								strcpy(OnClickName, it->second.second.chr[i]);
-								i++;
-							}
-						}
-					}
-				}
-				char* texturePath = (char*)malloc(128);
-				strcpy(texturePath, "../gamedata/sprites/UI/");
-				strcat(texturePath, SpriteName);
-				strcat(texturePath, ".png");
-				CSprite* sprite = new CSprite(GetD3D9Device(), texturePath, GetWindowW(), GetWindowH(), SpriteName );
-
-				if (sprite == NULL)
-				{
-					GetLogManagerEx()->LogMsg((char*)"Can't find sprite on button. Is good?");
-				}
-				LuaFuncPtr* ptr = GetLuaFuncPtrCl(OnClickName);//(LuaFuncPtr*)malloc(sizeof(LuaFuncPtr));
-				//memcpy(ptr, GetLuaFuncPtrCl(OnClickName), sizeof(LuaFuncPtr));
-
-				CButton* button = new CButton(x, y, w, h, sprite, Text, &ptr);
-
-				panels[j]->AddElement(button, Name);
+				CUIImage* img = ImageSearch((*prs)[i]);
+				panels[j]->AddElement(img);
 			}
-
-			it++;
+			else if (FindWord((*prs)[i]->Name(), "Button"))
+			{
+				CUIButton* btn = ButtonSearch((*prs)[i]);
+				panels[j]->AddElement(btn);
+			}
 		}
-		confit++;
 		j++;
 	}
 }
@@ -382,7 +220,7 @@ void CUIManager::RenderPanels()
 {
 	for(auto it = panels.begin(); it != panels.end(); it++)
 	{
-		it->second->Render(GetD3D9Device());
+		
 	}
 }
 

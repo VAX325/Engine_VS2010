@@ -11,13 +11,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-float vertices[] = {
-	// координаты        // цвета            // текстурные координаты
-	0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // верхн€€ права€
-	0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // нижн€€ права€
-   -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // нижн€€ лева€
-   -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // верхн€€ лева€ 
-};
+//float vertices[] = {
+//	// координаты        // цвета            // текстурные координаты
+//	0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // верхн€€ права€
+//	0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // нижн€€ права€
+//   -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // нижн€€ лева€
+//   -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // верхн€€ лева€ 
+//};
 
 unsigned int indices[] = {
 		0, 1, 3, // первый треугольник
@@ -35,7 +35,7 @@ inline glm::highp_vec3 DisplayToOrtho(int x, int y)
 	float z;
 
 	glGetIntegerv(GL_VIEWPORT, vp);
-	y = vp[3] - y - 1;
+	y = vp[3] - y;// -1;
 
 	glGetDoublev(GL_MODELVIEW_MATRIX, mMatrix);
 	glGetDoublev(GL_PROJECTION_MATRIX, pMatrix);
@@ -49,41 +49,13 @@ inline glm::highp_vec3 DisplayToOrtho(int x, int y)
 	return glm::vec3(ox_f, oy_f, oz_f);
 }
 
-inline glm::highp_vec3 SizeToOrtho(int width, int height)
-{
-	glm::vec3 vect = glm::vec3(0.1f, 0.1f, 0.0f);
-	return vect;
-}
-
 IRenderableGL::IRenderableGL()
 {
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	//  оординатные атрибуты
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	// ÷ветовые атрибуты
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	// јтрибуты текстурных координат
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
-
 	texture = { 0 };
 
 	shaderProgram = nullptr;
+
+	layer = 0;
 }
 
 IRenderableGL::~IRenderableGL()
@@ -92,6 +64,9 @@ IRenderableGL::~IRenderableGL()
 
 void IRenderableGL::Render()
 {
+	if (!visible)
+		return;
+
 	switch (_type)
 	{
 	case RenderableType::NONE:
@@ -113,7 +88,7 @@ void IRenderableGL::Render()
 
 		glm::mat4 trans = glm::mat4(1.0f);
 		trans = glm::translate(trans, ortho_cords);
-		trans = glm::scale(trans, SizeToOrtho(width, height));
+		trans = glm::scale(trans, glm::vec3(1.0f, 1.0f, 1.0f));
 
 		GLuint transformLoc = glGetUniformLocation(shaderProgram->program, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
@@ -129,3 +104,47 @@ void IRenderableGL::Render()
 	}
 }
 
+void IRenderableGL::Rebuild()
+{
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	auto x1Ny1 = DisplayToOrtho(x, y);
+	auto x2Ny2 = DisplayToOrtho(x + width, y + height);
+
+	float layer_f = (5 - layer) / 10;
+
+	float vertices[32] =
+	{
+		x2Ny2.x, x2Ny2.x,  layer_f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+		x2Ny2.x, x1Ny1.x,  layer_f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+		x2Ny2.y, x2Ny2.y,  layer_f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+		x2Ny2.y, x1Ny1.y,  layer_f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	//  оординатные атрибуты
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// ÷ветовые атрибуты
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	// јтрибуты текстурных координат
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+}
+
+void IRenderableGL::SetLayer(unsigned int layer)
+{
+	this->layer = layer;
+}

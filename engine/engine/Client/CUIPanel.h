@@ -1,11 +1,13 @@
 #pragma once
-#include <map>
-#include "../NVector.h"
+#ifndef CUIPANEL_H
+#define CUIPANEL_H
+
+#include "../NVarray.h"
 #include "CButton.h"
 #include "CUIText.h"
-#include "CUISprite.h"
+#include "CUIImage.h"
 
-typedef Vector2<float, float> Cords;
+#include <vector>
 
 class CUIPanel
 {
@@ -14,18 +16,16 @@ public:
 	CUIPanel(char* Name);
 	~CUIPanel();
 
-	void AddElement(CButton* button, char* text);
-	void AddElement(CUIText* text1, char* text);
-	void AddElement(CUISprite* sprite, char* spriteName);
+	void AddElement(CUIText* text);
+	void AddElement(CUIImage* img);
+	void AddElement(CUIButton* button);
 
-	CButton* GetButton(char* name);
-	CUIText* GetText(char* name);
-	CUISprite* GetSprite(char* name);
-
-	std::map<char*, CButton*> GetAllButtons();
-	std::map<char*, CUIText*> GetAllUITexts();
-
-	void Render(LPDIRECT3DDEVICE9 pDirect3DDevice);
+	CUIText* GetText(int index);
+	CUIImage* GetImage(int index);
+	CUIButton* GetButton(int index);
+	
+	//std::map<int, CUIButton*> GetAllButtons();
+	//std::map<int, CUIText*> GetAllUITexts();
 
 	char* GetName();
 
@@ -36,8 +36,14 @@ public:
 private:
 	char* _Name;
 	
-	std::map<char*, CButton*> UIButtons;
-	std::map<char*, CUIText*> UITexts;
-	std::map<char*, CUISprite*> UISprites;
+	int texts;
+	std::vector<CUIText*> UITexts;
+
+	int images;
+	std::vector<CUIImage*> UIImages;
+
+	int buttons;
+	std::vector<CUIButton*> UIButtons;
 };
 
+#endif

@@ -1,20 +1,20 @@
 #include <Base_include.h>
-#include <Windows.h>
+
 #include "Main.h"
 #include "Client/Client.h"
 #include "Server/Server.h"
 
 #include "Utils.h"
 
+#if IS_WIN32
+#include <Windows.h>
+#endif
+
 bool Client;
 
-//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int iCmdShow)
 int main(int argc, char* argv[])
 {
-	//int nArgs;
-	//CommandLineToArgvW(GetCommandLineW(), &nArgs);
-
-	if( argc > 1 )
+	if (argc > 1)
 	{
 		for (int i = 0; i != argc; i++)
 		{
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-bool IsClient() 
+bool IsClient()
 {
 	return Client;
 };

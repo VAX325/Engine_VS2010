@@ -1,27 +1,42 @@
 #pragma once
-#include <map>
-#include "NVector.h"
+#ifndef XMLPARSER_H
+#define XMLPARSER_H
 
 #pragma comment(lib, "pugixml.lib")
 
-//Uber костыль
-struct arr
-{
-	char* chr[10];
-};
+#include <vector>
+#include <array>
 
-//using arr = std::array<char*, 10>;
+class ParsedData;
 
-typedef std::map<char*, Vector2<arr, arr>> KeysAtrributesNValues;
-
-class XMLParser
+class CXMLParser
 {
 public:
-	XMLParser();
-	~XMLParser();
+	CXMLParser();
+	virtual ~CXMLParser();
 
-	void ParseXML(char* file, char* root, KeysAtrributesNValues* prs);
+	std::array<ParsedData*, 15>* ParseXML(const char* file, const char* root);
 
 private:
 
 };
+
+class ParsedData
+{
+public:
+	friend CXMLParser;
+
+	std::array<const char*, 2> operator[](size_t index);
+	
+	const char* Name();
+	int size();
+
+private:
+	const char* name;
+	std::vector<const char*> key;
+	std::vector<const char*> values;
+
+	size_t _size;
+};
+
+#endif

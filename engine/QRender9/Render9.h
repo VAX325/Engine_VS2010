@@ -17,10 +17,12 @@ public:
 	typedef void(*PreRenderFunction)();
 	typedef void(*RenderFunction)();
 	typedef void(*PostRenderFunction)();
+	typedef void(*ShutdownFunction)();
 
 	virtual void SetPreRender(PreRenderFunction pre_function);
 	virtual void SetRender(RenderFunction render_function);
 	virtual void SetPostRender(PostRenderFunction post_function);
+	virtual void SetShutdown(ShutdownFunction shutdown_function);
 
 	virtual void Render();
 

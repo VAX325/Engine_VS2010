@@ -6,54 +6,32 @@
 CUIPanel::CUIPanel(char* Name)
 {
 	_Name = Name;
+
+	texts = 0;
+	buttons = 0;
+	images = 0;
 }
 
 CUIPanel::~CUIPanel()
 {
-
 }
 
-void CUIPanel::AddElement(CButton* button, char* text)
+void CUIPanel::AddElement(CUIText* text)
 {
-	UIButtons[text] = button;
+	UITexts.push_back(text);
+	texts++;
 }
 
-void CUIPanel::AddElement(CUIText* text1, char* text)
+void CUIPanel::AddElement(CUIImage* img)
 {
-	UITexts[text] = text1;
+	UIImages.push_back(img);
+	images++;
 }
 
-void CUIPanel::AddElement(CUISprite* sprite, char* spriteName)
+void CUIPanel::AddElement(CUIButton* button)
 {
-	UISprites[spriteName] = sprite;
-}
-
-std::map<char*, CButton*> CUIPanel::GetAllButtons()
-{
-	return UIButtons;
-}
-
-std::map<char*, CUIText*> CUIPanel::GetAllUITexts()
-{
-	return UITexts;
-}
-
-void CUIPanel::Render(LPDIRECT3DDEVICE9 pDirect3DDevice)
-{
-	for (auto it = UISprites.begin(); it != UISprites.end(); it++)
-	{
-		it->second->Render(pDirect3DDevice);
-	}
-
-	for(auto it = UIButtons.begin(); it != UIButtons.end(); it++)
-	{
-		it->second->Render(pDirect3DDevice);
-	}
-
-	for (auto it = UITexts.begin(); it != UITexts.end(); it++)
-	{
-		it->second->Render(pDirect3DDevice);
-	}
+	UIButtons.push_back(button);
+	buttons++;
 }
 
 char* CUIPanel::GetName()
@@ -63,44 +41,44 @@ char* CUIPanel::GetName()
 
 void CUIPanel::ShowPanel()
 {
-	for (auto buttonsit = UIButtons.begin(); buttonsit != UIButtons.end(); buttonsit++)
+	for (int i = 0; i != UITexts.size() && UITexts.size() != 0; i++)
 	{
-		buttonsit->second->SetVisible(true);
+		UITexts[i]->SetVisible(true);
 	}
 
-	for (auto spriteit = UISprites.begin(); spriteit != UISprites.end(); spriteit++)
+	for (int i = 0; i != UIImages.size() && UIImages.size() != 0; i++)
 	{
-		spriteit->second->SetVisible(true);
+		UIImages[i]->SetVisible(true);
 	}
 
-	for (auto textit = UITexts.begin(); textit != UITexts.end(); textit++)
+	for (int i = 0; i != UIButtons.size() && UIButtons.size() != 0; i++)
 	{
-		textit->second->SetVisible(true);
+		UIButtons[i]->SetVisible(true);
 	}
 }
 
 void CUIPanel::HidePanel()
 {
-	for (auto buttonsit = UIButtons.begin(); buttonsit != UIButtons.end(); buttonsit++)
+	for (int i = 0; i != UITexts.size() && UITexts.size() != 0; i++)
 	{
-		buttonsit->second->SetVisible(false);
+		UITexts[i]->SetVisible(false);
 	}
 
-	for (auto spriteit = UISprites.begin(); spriteit != UISprites.end(); spriteit++)
+	for (int i = 0; i != UIImages.size() && UIImages.size() != 0; i++)
 	{
-		spriteit->second->SetVisible(false);
+		UIImages[i]->SetVisible(false);
 	}
 
-	for (auto textit = UITexts.begin(); textit != UITexts.end(); textit++)
+	for (int i = 0; i != UIButtons.size() && UIButtons.size() != 0; i++)
 	{
-		textit->second->SetVisible(false);
+		UIButtons[i]->SetVisible(false);
 	}
 }
 
 void CUIPanel::CheckForUIEvents(int MouseX, int MouseY)
 {
-	for (auto buttonsit = UIButtons.begin(); buttonsit != UIButtons.end(); buttonsit++)
+	for (int i = 0; i != UIButtons.size() && UIButtons.size() != 0; i++)
 	{
-		buttonsit->second->CheckForClick(MouseX, MouseY);
+		UIButtons[i]->CheckForClick(MouseX, MouseY);
 	}
 }

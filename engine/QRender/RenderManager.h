@@ -31,15 +31,17 @@ public:
 	typedef void(__cdecl* PreRenderFunction)();
 	typedef void(__cdecl* RenderFunction)();
 	typedef void(__cdecl* PostRenderFunction)();
+	typedef void(__cdecl* ShutdownFunction)();
 
 	virtual void SetPreRender(PreRenderFunction pre_function) {};
 	virtual void SetRender(RenderFunction post_function) {};
 	virtual void SetPostRender(PostRenderFunction post_function) {};
+	virtual void SetShutdown(ShutdownFunction shutdown_function) {};
 
 	virtual void Render() {};
 
 	/*
-	1) SPRITE: CreateRenderable(RenderableType::SPRITE, const char* path, int x, int y, const char* shader_vert(optional), const char* shader_frag(optional))
+	1) SPRITE: CreateRenderable(RenderableType::SPRITE, const char* path, int x, int y, int w(optional), int h(optional) const char* shader_vert(optional), const char* shader_frag(optional))
 	2) LINE: 
 	*/
 	virtual IRenderable* CreateRenderable(RenderableType type, ...) { return nullptr; };
@@ -48,6 +50,7 @@ protected:
 	PreRenderFunction preFunction;
 	RenderFunction renderFunction;
 	PostRenderFunction postFunction;
+	ShutdownFunction shutdownFunction;
 
 	std::vector<IRenderable*> render_objects;
 };

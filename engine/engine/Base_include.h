@@ -14,7 +14,10 @@
 #define PLATFORM PLATFORM_UNIX
 #endif
 
-#define TODO __FILE__ "(" $Line ") : TODO: "
+#define Stringize( L )     #L
+#define MakeString( M, L ) M(L)
+#define $Line MakeString( Stringize, __LINE__ )
+#define TODO __FILE__ "(" $Line ")" ": TODO: "
 
 //Use like: #if IS_WIN32
 #define IS_WIN32 PLATFORM == PLATFORM_WINDOWS

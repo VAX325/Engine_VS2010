@@ -1,6 +1,9 @@
 #pragma once
+#ifndef NVARRAY_H
+#define NVARRAY_H
+
 template< class T1, class T2 >
-class Vector2
+class VArray2
 {
 public:
 	T1 first;
@@ -8,7 +11,7 @@ public:
 };
 
 template< class T1, class T2, class T3, class T4 >
-class Vector4
+class VArray4
 {
 public:
 	T1 first;
@@ -16,3 +19,5 @@ public:
 	T3 third;
 	T4 four;
 };
+
+#endif

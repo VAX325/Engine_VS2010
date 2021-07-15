@@ -13,17 +13,11 @@
     <Filter Include="Client">
       <UniqueIdentifier>{9110e474-d72a-4be2-9497-237d7b352629}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Client\Input">
-      <UniqueIdentifier>{4df399e8-1f48-4cb8-b8ab-76fc7090694c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Client\UI">
       <UniqueIdentifier>{87438877-42ad-4056-82f3-f6eec20fb5c8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Client\Sound">
       <UniqueIdentifier>{7a8872e8-dfba-4005-8b37-83c61c35bf03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Client\Sprite">
-      <UniqueIdentifier>{9af450d8-bd17-4b79-8c70-ca3d53e7a14a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Server">
       <UniqueIdentifier>{f7f9bf72-2577-46d3-9d47-9632840cbbdc}</UniqueIdentifier>
@@ -67,17 +61,11 @@
     <Filter Include="Client\UI\Manager">
       <UniqueIdentifier>{c57befa3-bb77-473a-b6e6-eb1dad35894b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Client\UI\UIPanel">
-      <UniqueIdentifier>{5deb35b0-1864-4e2f-8803-7778161d1c8d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Client\UI\Text">
       <UniqueIdentifier>{b2411017-0002-4d8c-b050-0eca62fb5e98}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shared\XMLParser">
       <UniqueIdentifier>{8d089617-7dff-43c4-9e72-2cbfe29b8caf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Client\UI\Sprite">
-      <UniqueIdentifier>{bc202649-370e-469d-b3de-65d75e4614e9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Client\CL Game">
       <UniqueIdentifier>{5170b647-4b24-4715-9430-1e5bab1751f0}</UniqueIdentifier>
@@ -97,6 +85,15 @@
     <Filter Include="Client\Level">
       <UniqueIdentifier>{a06dc22a-78bb-45ef-9bdf-f0a3f6de5352}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Client\UI\Image">
+      <UniqueIdentifier>{127040b3-dc91-4fdf-9ffa-cdebd1e047a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\UI\Panel">
+      <UniqueIdentifier>{5deb35b0-1864-4e2f-8803-7778161d1c8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\Input">
+      <UniqueIdentifier>{46dcd181-c83b-4982-8474-945536a12906}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SharedLua.h">
@@ -111,19 +108,7 @@
     <ClInclude Include="Utils.h">
       <Filter>Shared\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="NVector.h">
-      <Filter>Shared\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Client\Input.h">
-      <Filter>Client\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Client\CSprite.h">
-      <Filter>Client\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Client\CSpriteManager.h">
-      <Filter>Client\Sprite</Filter>
-    </ClInclude>
     <ClInclude Include="Client\CSoundManager.h">
       <Filter>Client\Sound</Filter>
     </ClInclude>
@@ -162,19 +147,13 @@
       <Filter>Client\UI\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Client\CUIPanel.h">
-      <Filter>Client\UI\UIPanel</Filter>
+      <Filter>Client\UI\Panel</Filter>
     </ClInclude>
     <ClInclude Include="Client\CUIText.h">
       <Filter>Client\UI\Text</Filter>
     </ClInclude>
     <ClInclude Include="xmlparser.h">
       <Filter>Shared\XMLParser</Filter>
-    </ClInclude>
-    <ClInclude Include="Client\CUISprite.h">
-      <Filter>Client\UI\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Client\CMouse.h">
-      <Filter>Client\Input</Filter>
     </ClInclude>
     <ClInclude Include="Server\CPhysicWorld.h">
       <Filter>Server\Physics\World</Filter>
@@ -203,6 +182,15 @@
     <ClInclude Include="Client\CGameCL.h">
       <Filter>Client\CL Game</Filter>
     </ClInclude>
+    <ClInclude Include="NVarray.h">
+      <Filter>Shared\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CUIImage.h">
+      <Filter>Client\UI\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\CInput.h">
+      <Filter>Client\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SharedLua.cpp">
@@ -215,15 +203,6 @@
       <Filter>Shared\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Client\Input.cpp">
-      <Filter>Client\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Client\CSpriteManager.cpp">
-      <Filter>Client\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Client\CSprite.cpp">
-      <Filter>Client\Sprite</Filter>
-    </ClCompile>
     <ClCompile Include="Client\CSoundManager.cpp">
       <Filter>Client\Sound</Filter>
     </ClCompile>
@@ -255,19 +234,13 @@
       <Filter>Client\UI\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Client\CUIPanel.cpp">
-      <Filter>Client\UI\UIPanel</Filter>
+      <Filter>Client\UI\Panel</Filter>
     </ClCompile>
     <ClCompile Include="Client\CUIText.cpp">
       <Filter>Client\UI\Text</Filter>
     </ClCompile>
     <ClCompile Include="xmlparser.cpp">
       <Filter>Shared\XMLParser</Filter>
-    </ClCompile>
-    <ClCompile Include="Client\CUISprite.cpp">
-      <Filter>Client\UI\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Client\CMouse.cpp">
-      <Filter>Client\Input</Filter>
     </ClCompile>
     <ClCompile Include="Server\CPhysicWorld.cpp">
       <Filter>Server\Physics\World</Filter>
@@ -292,6 +265,12 @@
     </ClCompile>
     <ClCompile Include="NET_Server.cpp">
       <Filter>Shared\NET</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CUIImage.cpp">
+      <Filter>Client\UI\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\CInput.cpp">
+      <Filter>Client\Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

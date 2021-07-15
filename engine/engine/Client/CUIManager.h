@@ -1,5 +1,9 @@
 #pragma once
+#ifndef CUIMANAGER_H
+#define CUIMANAGER_H
+
 #include "CUIPanel.h"
+
 #include <map>
 
 #define UI_NO_PANEL -1
@@ -34,3 +38,4 @@ private:
 	std::map<int, CUIPanel*> panels;
 };
 
+#endif

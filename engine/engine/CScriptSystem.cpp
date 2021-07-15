@@ -77,7 +77,7 @@ void CScriptSystem::LuaStart(lua_State* L)
 	}
 }
 
-void CScriptSystem::CallLuaFunc(lua_State* L, char* LuaName) 
+void CScriptSystem::CallLuaFunc(lua_State* L, const char* LuaName) 
 {
 	LuaRef LuaFunc = getGlobal(L, LuaName);
 
@@ -89,7 +89,7 @@ void CScriptSystem::CallLuaFunc(lua_State* L, char* LuaName)
 	}
 }
 
-LuaFuncPtr* CScriptSystem::GetLuaFuncPtr(lua_State* L, char* LuaName)
+LuaFuncPtr* CScriptSystem::GetLuaFuncPtr(lua_State* L, const char* LuaName)
 {
 	//LuaRef LuaFunc = getGlobal(L, LuaName);
 

@@ -3,94 +3,70 @@
 #include "BaseUIElement.h"
 #include "ClientPerems.h"
 
-BaseUIElement::BaseUIElement(float x, float y, CSprite* texture, bool visability)
+#include "../../QRender/QRender.h"
+
+BaseUIElement::BaseUIElement(int x, int y, const char* texture, bool visability)
 {
 	this->x = x;
 	this->y = y;
 
-	if(texture != NULL)
+	this->w = 0;
+	this->h = 0;
+
+	if (texture)
 	{
-		Texture = texture;
-
-		w = texture->GetW();
-		h = texture->GetH();
+		Texture = GetRender()->CreateRenderable(RenderableType::SPRITE, texture, x, y, w, h, NULL, NULL, 5);
+		Texture->SetVisability(visability);
 	}
-	else
-	{
-		Texture = NULL;
-
-		this->w = 0;
-		this->h = 0;
-	}
-
-	_visability = visability;
-	GetSpriteManger()->SetSpriteVisible(false, Texture);
 }
 
-BaseUIElement::BaseUIElement(float x, float y, float w, float h, CSprite* texture, bool visability)
+BaseUIElement::BaseUIElement(int x, int y, int w, int h, const char* texture, bool visability)
 {
 	this->x = x;
 	this->y = y;
-
-	Texture = texture;
 
 	this->w = w;
 	this->h = h;
 
-	_visability = visability;
-	GetSpriteManger()->SetSpriteVisible(false, Texture);
+	if(texture)
+	{
+		Texture = GetRender()->CreateRenderable(RenderableType::SPRITE, texture, x, y, w, h, NULL, NULL, 5);
+		Texture->SetVisability(visability);
+	}
 }
 
 BaseUIElement::~BaseUIElement()
 {
-	GetSpriteManger()->SetSpriteVisible(false, Texture);
-
-	x = 0;
-	y = 0;
-
-	Texture = nullptr;
-
-	w = 0;
-	h = 0;
 }
 
 void BaseUIElement::SetVisible(bool visability)
 {
-	_visability = visability;
+	if(Texture)
+		Texture->SetVisability(visability);
 }
 
-bool BaseUIElement::GetCurrentVisability()
+void BaseUIElement::SetLayer(unsigned int layer)
 {
-	return _visability;
+	if(Texture)
+		Texture->SetLayer(layer);
 }
 
-void BaseUIElement::Render(LPDIRECT3DDEVICE9 pDirect3DDevice)
-{
-	if(_visability)
-	{
-		if (Texture != NULL)
-		{
-			Texture->RenderRect(x, y, w, h, D3DCOLOR_ARGB(255, 255, 255, 255));
-		}
-	}
-}
-
-float BaseUIElement::GetW()
+int BaseUIElement::GetW()
 {
 	return w;
 }
 
-float BaseUIElement::GetH()
+int BaseUIElement::GetH()
 {
 	return h;
 }
 
-float BaseUIElement::GetX()
+int BaseUIElement::GetX()
 {
 	return x;
 }
 
-float BaseUIElement::GetY()
+int BaseUIElement::GetY()
 {
 	return y;
 }

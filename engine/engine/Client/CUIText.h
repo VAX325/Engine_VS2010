@@ -1,4 +1,6 @@
 #pragma once
+#ifndef CUITEXT_H
+#define CUITEXT_H
 
 #include "BaseUIElement.h"
 #include <string>
@@ -6,19 +8,17 @@
 class CUIText : public BaseUIElement
 {
 public:
-	CUIText(float w, float h);
-	CUIText(float w, float h, std::string text);
-	CUIText(float x, float y, float w, float h);
-	CUIText(float x, float y, float w, float h, std::string text);
+	CUIText(int w, int h);
+	CUIText(int w, int h, std::string text);
+	CUIText(int x, int y, int w, int h);
+	CUIText(int x, int y, int w, int h, std::string text);
 	~CUIText();
 
-	void Render(LPDIRECT3DDEVICE9 pDirect3DDevice);
-	void SetColor(D3DCOLOR color);
-	void SetFont(LPDIRECT3DDEVICE9 pDirect3DDevice, char* FontName);
+	void SetColor(unsigned int color);
+	void SetFont(const char* FontName);
 
 protected:
-	LPD3DXFONT pFont;
 	std::string Text;
-	D3DCOLOR _color;
 };
 
+#endif

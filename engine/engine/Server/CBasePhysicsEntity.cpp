@@ -3,7 +3,7 @@
 #include "CBasePhysicsEntity.h"
 #include <cmath>
 
-CBasePhysicsEntity::CBasePhysicsEntity(double mass, Vector4<float, float, float, float> CollisionPoints) : CBaseEntity()
+CBasePhysicsEntity::CBasePhysicsEntity(double mass, VArray4<float, float, float, float> CollisionPoints) : CBaseEntity()
 {
 	Mass = mass;
 	CollisionMask = CollisionPoints;

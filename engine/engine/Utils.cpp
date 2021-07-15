@@ -2,9 +2,9 @@
 
 #include "Utils.h"
 
-bool FindWord(char* string, char* word)
+bool FindWord(const char * string, const char * word)
 {
-	char* p;
+	const char* p;
 	if ((p = strstr(string, word)) == NULL)
 		return false;
 	else

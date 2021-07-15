@@ -87,9 +87,9 @@ struct CUSTOMVERTEX
 
 int countOn1Scene = 0;
 //This is make for geometry file
-std::map<int, Vector2<CSprite*, Vector2<float, float>>> SceneSprites;
+std::map<int, VArray2<CSprite*, VArray2<float, float>>> SceneSprites;
 //This is make for entity file
-std::map<int, Vector2<CBaseEntity, Vector2<float, float>>> SceneEntity;
+std::map<int, VArray2<CBaseEntity, VArray2<float, float>>> SceneEntity;
 
 //std::map<Trigger, Vector2<float, float>> SceneTriggers;
 
@@ -601,7 +601,7 @@ long WINAPI WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		if (GetFocus() == g_hWnd && strcmp(TypeOfObj, "Geom") == 0 && CurrentCursorSprite != "")
 		{
 			printf("OBJ num:%d placed | x: %i | y: %i | \n", countOn1Scene + 1, (int)CurrentCursorSpritePosX, (int)CurrentCursorSpritePosY);
-			Vector2<CSprite*, Vector2<float, float>> sprite = { SpriteManager.GetSprite(CurrentCursorSprite), {CurrentCursorSpritePosX, CurrentCursorSpritePosY} };
+			VArray2<CSprite*, VArray2<float, float>> sprite = { SpriteManager.GetSprite(CurrentCursorSprite), {CurrentCursorSpritePosX, CurrentCursorSpritePosY} };
 			SceneSprites[countOn1Scene] = sprite;
 			countOn1Scene++;
 			//SceneTriggers[]

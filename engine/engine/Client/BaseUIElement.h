@@ -1,34 +1,36 @@
 #pragma once
-#include "CSpriteManager.h"
+#ifndef BASEUIELEMENT_H
+#define BASEUIELEMENT_H
+
+class IRenderable;
 
 class BaseUIElement
 {
 public:
 
-	BaseUIElement(float x = 0, float y = 0, CSprite* texture = nullptr, bool visability = false);
-	BaseUIElement(float x = 0, float y = 0, float w = 0, float h = 0, CSprite* texture = nullptr, bool visability = false);
-	~BaseUIElement();
+	BaseUIElement(int x = 0, int y = 0, const char* texture = "", bool visability = true);
+	BaseUIElement(int x = 0, int y = 0, int w = 0, int h = 0, const char* texture = "", bool visability = true);
+	virtual ~BaseUIElement();
 
-	float GetX();
-	float GetY();
+	int GetX();
+	int GetY();
 
-	float GetW();
-	float GetH();
+	int GetW();
+	int GetH();
 
 	void SetVisible(bool visability);
-	bool GetCurrentVisability();
 
-	void Render(LPDIRECT3DDEVICE9 pDirect3DDevice);
+	void SetLayer(unsigned int layer);
 
 protected:
 
-	float w;
-	float h;
+	int w;
+	int h;
 
-	float x;
-	float y;
-
-	bool _visability;
-	CSprite* Texture;
+	int x;
+	int y;
+	
+	IRenderable* Texture;
 };
 
+#endif

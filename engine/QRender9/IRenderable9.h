@@ -17,6 +17,8 @@ public:
 
 	virtual void Render();
 	RenderableType GetType() { return _type; };
+
+	virtual void SetLayer(unsigned int layer);
 private:
 	LPD3DXSPRITE pSprite;
 	LPDIRECT3DTEXTURE9 pTexture;

@@ -40,12 +40,17 @@ void Render9::SetPostRender(PostRenderFunction post_function)
 	postFunction = post_function;
 }
 
+void Render9::SetShutdown(ShutdownFunction shutdown_function)
+{
+	shutdownFunction = shutdown_function;
+}
+
 void Render9::Render()
 {
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
 
-	while (!NeedToClose)
+	while (true)
 	{
 		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
 		{
@@ -59,6 +64,7 @@ void Render9::Render()
 			if (NeedToClose)
 			{
 				Shutdown();
+				break;
 			}
 		}
 	}
@@ -86,6 +92,8 @@ IRenderable* Render9::CreateRenderable(RenderableType type, ...)
 		const char* path = va_arg(args, const char*);
 		int x = va_arg(args, int);
 		int y = va_arg(args, int);
+		int w = va_arg(args, int);
+		int h = va_arg(args, int);
 		//const char* vert = va_arg(args, const char*);
 		//const char* frag = va_arg(args, const char*);
 
@@ -105,13 +113,22 @@ IRenderable* Render9::CreateRenderable(RenderableType type, ...)
 
 		if (FAILED(hr))
 		{
-			GetLogManagerEx()->LogError("Can't create texture from file", false);
+			GetLogManagerEx()->LogError("Can't load the \"%s\"!", false, path);
 		}
 
 		sprite->x = x;
 		sprite->y = y;
-		sprite->width = sprite->tImageInfo.Width;
-		sprite->height = sprite->tImageInfo.Height;
+		sprite->width = w != -1 ? w : sprite->tImageInfo.Width;
+		sprite->height = h != -1 ? h : sprite->tImageInfo.Height;
+
+		if (w == -2)
+		{
+			sprite->width = this->width;
+		}
+		if (h == -2)
+		{
+			sprite->height = this->height;
+		}
 
 		render_objects.push_back(sprite);
 
@@ -155,7 +172,7 @@ inline void Render9::CreateWnd()
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 		CW_USEDEFAULT, CW_USEDEFAULT,
 		800,
-		800,
+		640,
 		NULL,
 		NULL,
 		hInstance,
@@ -163,6 +180,9 @@ inline void Render9::CreateWnd()
 
 	if (hWnd == NULL)
 		GetLogManagerEx()->LogError("Can't create window!", true);
+
+	this->width = 800;
+	this->height = 800;
 }
 
 inline void Render9::CreateDirectX()
@@ -229,6 +249,9 @@ inline void Render9::CreateDirectX()
 
 inline void Render9::Shutdown()
 {
+	if(shutdownFunction)
+		shutdownFunction();
+
 	if (g_pDirect3DDevice != NULL)
 	{
 		g_pDirect3DDevice->Release();
@@ -250,6 +273,9 @@ inline void Render9::Shutdown()
 
 void Render9::RenderIn()
 {
+	if (preFunction)
+		preFunction();
+
 	HRESULT hr = g_pDirect3DDevice->TestCooperativeLevel();
 
 	if (hr == D3DERR_DEVICELOST)
@@ -273,6 +299,9 @@ void Render9::RenderIn()
 
 	g_pDirect3DDevice->EndScene();
 	g_pDirect3DDevice->Present(NULL, NULL, NULL, NULL);
+
+	if(postFunction)
+		postFunction();
 }
 
 Render9* render;
